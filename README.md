@@ -12,4 +12,8 @@
 
 ### routes - file routes
 
+<<<<<<< HEAD
 ![Image](utils/images/home.png)
+=======
+![Images](utils/image/home.png)
+>>>>>>> master
