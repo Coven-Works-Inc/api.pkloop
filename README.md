@@ -12,4 +12,4 @@
 
 ### routes - file routes
 
-![Images](utils/images/home.png)
+![Images](./src/utils/images/home.png)
