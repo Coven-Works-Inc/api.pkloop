@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const mongoose = require('mongoose')
-const Joi = require('joi')
-const Float = require('mongoose-float').loadType(mongoose, 4)
 
 const userSchema = new mongoose.Schema(
   {
@@ -40,9 +38,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: 'NGN'
     },
-    Id: {
+    referralID: {
       type: String,
       required: true
+    },
+    photo: {
+      type: String
     },
     status: {
       type: Number,
@@ -93,4 +94,6 @@ userSchema.methods.generateAuthToken = function () {
   )
 }
 
-export default model('User', User)
+const User = mongoose.model('User', userSchema)
+
+module.exports = User
