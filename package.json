@@ -10,7 +10,8 @@
         "test": "jest --watchAll --verbose"
     },
     "engines": {
-        "node": "12.5.0"
+        "npm": "6.12.0",
+        "node": "10.16.2"
     },
     "keywords": [],
     "author": "",

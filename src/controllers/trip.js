@@ -11,10 +11,10 @@ exports.fetchTrips = async (req, res, next) => {
       .json({ status: 'false', message: 'No available trips' })
   }
 
-  res.status(200).json({ status: true, message: 'success', data: users })
+  res.status(200).json({ status: true, message: 'success', data: trips })
 }
 
-exports.postTrip = async (req, res, next) => {
+exports.postTrips = async (req, res, next) => {
   const location = req.body.location
   const date_of_departure = req.body.dod
   const date_of_arrival = req.body.doa
