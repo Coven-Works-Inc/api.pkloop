@@ -40,7 +40,7 @@ exports.signup = async (req, res) => {
   }
 
   user = new User(
-    _.pick(req.body, ['firstname', 'lastname', 'email', 'password', 'phone'])
+    _.pick(req.body, ['firstname', 'lastname', 'username', 'email', 'password', 'phone'])
   )
 
   // res.json({user})
@@ -64,8 +64,6 @@ exports.signup = async (req, res) => {
     _userId: user._id,
     key: crypto.randomBytes(3).toString('hex')
   })
-
-  console.log(token.key)
 
   // // Save the verification token
   // await token.save()
@@ -120,6 +118,7 @@ exports.confirm = async (req, res) => {
         '_id',
         'firstname',
         'lastname',
+        'username',
         'email',
         'balance',
         'previous_balance',
