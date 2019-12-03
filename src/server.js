@@ -1,5 +1,6 @@
 const express = require('express')
 const winston = require('winston')
+const cors = require('cors')
 
 const bodyParser = require('body-parser')
 

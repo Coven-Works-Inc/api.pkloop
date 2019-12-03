@@ -1,5 +1,5 @@
 const express = require('express')
-const cors = require('cors')
+// const cors = require('cors') 
 const error = require('../middleware/error')
 const users = require('../routes/users')
 const transactions = require('../routes/transactions')
