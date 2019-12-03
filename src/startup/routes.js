@@ -6,7 +6,7 @@ const transactions = require('../routes/transactions')
 const trips = require('../routes/trip')
 
 module.exports = function (app) {
-  // app.use(cors({ origin: '*' }))
+  app.use(cors({ origin: 'http://pkloop.herokuapp.com' }))
   app.use(express.json())
   app.use(error)
   app.use('/api/users', users)
