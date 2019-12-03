@@ -6,7 +6,7 @@ const express = require('express')
 const cors = require('cors')
 
 module.exports = function (app) {
-  app.use(cors())
+  app.use(cors({origin: '*'}))
   app.use(express.json())
   app.use(error)
   app.use('/api/users', users)
