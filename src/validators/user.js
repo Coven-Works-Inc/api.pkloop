@@ -19,8 +19,8 @@ function validateUser(user){
 
 function validateLogin(user) {
     const schema = {
-        username: Joi.string().min(2).max(255).required(),
-        password: Joi.string().min(5).max(50).required()
+        username: Joi.string().min(2).max(30).required(),
+        password: Joi.string().min(5).max(30).required()
     }
 
     return Joi.validate(user, schema);

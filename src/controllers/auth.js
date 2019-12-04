@@ -183,13 +183,13 @@ exports.login = async (req, res, next) => {
 }
 
 exports.resetpassword = async (req, res, next) => {
-  const user = await User.findOne({ email: req.body.email })
+  const user = await User.findOne({username: req.body.username })
   if (!user) {
     return res.status(400).json({
       status: false,
-      message: 'No user with this email address found.'
+      message: 'No user with this username was found.'
     })
-  }
+  } 
 
   const token = crypto.randomBytes(3).toString('hex')
 
@@ -205,7 +205,7 @@ exports.resetpassword = async (req, res, next) => {
   res.status(200).json({
     status: true,
     message:
-      'We are sending instructions to reset your password. If you do not receive an email, check your spam folder or make sure this email address is registered with Pkloop!'
+      'We are sending instructions to reset your password. If you do not receive an email, check your spam folder!'
   })
 }
 
