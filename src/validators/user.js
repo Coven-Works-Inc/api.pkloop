@@ -19,7 +19,7 @@ function validateUser(user){
 
 function validateLogin(user) {
     const schema = {
-        email: Joi.string().email().min(5).max(255).required(),
+        username: Joi.string().min(2).max(255).required(),
         password: Joi.string().min(5).max(50).required()
     }
 
@@ -27,5 +27,7 @@ function validateLogin(user) {
     
 }
 
-exports.validateUser = validateUser
-exports.validateLogin = validateLogin
+module.exports = {
+    validateUser,
+    validateLogin
+}

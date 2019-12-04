@@ -113,19 +113,7 @@ exports.verify = async (req, res) => {
   // We can also redirect here once a token has been generated for the user
   res
     .status(200)
-    .header('x-auth-token', usertoken)
-    .send(
-      _.pick(user, [
-        '_id',
-        'firstname',
-        'lastname',
-        'username',
-        'email',
-        'balance',
-        'previous_balance',
-        'token'
-      ])
-    )
+    .json({status: true, message: "User verification sucessful!"})
 }
 
 exports.resendToken = async (req, res) => {
@@ -167,32 +155,20 @@ exports.resendToken = async (req, res) => {
 // @desc     logs in a user to the app if information is verified
 // @access   Public - can be accessed by anyone to login
 exports.login = async (req, res, next) => {
-  const error = validateLogin(req.body)
+  const {error} = validateLogin(req.body)
   if (error) {
     return res
       .status(400)
       .json({ status: false, message: error.details[0].message })
   }
 
-  const user = await User.findOne({ email: req.body.email })
-  if (!user) {
-    res
-      .status(400)
-      .json({ status: false, message: 'Invalid email or password' })
-  }
+  const user = await User.findOne({ username: req.body.username })
+  if(!user) return res.status(400).json({ status: false, message: 'Invalid email or password' })
 
   const password = await bcrypt.compare(req.body.password, user.password)
-  if (!password) {
-    res
-      .status(400)
-      .json({ status: false, message: 'Invalid email or password' })
-  }
+  if (!password) return res.status(400).json({ status: false, message: 'Invalid email or password' })
 
-  if (!user.isVerified) {
-    res
-      .status(400)
-      .json({ status: false, message: 'Please verify your account first!' })
-  }
+  if (!user.isVerified) return res.status(400).json({ status: false, message: 'Please verify your account first!' })
 
   const token = user.generateAuthToken()
 

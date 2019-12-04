@@ -27,7 +27,7 @@ const getEmailData = (to, name, headers, token, template) => {
         from: 'Pkloop<admin@pkloop.com>',
         to,
         subject: 'Welcome to Pkloop',
-        html: `Welcome to PKLoop, the most efficient platform for parcel delivery. Click on the link to get started <a href="http://${headers}/verify/?token=${token}">link</a>`
+        html: `Welcome to PKLoop, the most efficient platform for parcel delivery. Click on the link to get started <a href="http://${headers}/api/users/verify?token=${token}">link</a>`
       }
       break
     case 'reset':
@@ -35,7 +35,7 @@ const getEmailData = (to, name, headers, token, template) => {
         from: 'PKloop<admin@pkloop.com>',
         to,
         subject: 'Password reset',
-        html: `<p>Hello ${name}, <br/> Someone requested a password reset for your account, if that was you, Click the link below to reset your password, else ignore this message. <br/> <a href="http://${headers}/reset/${token}">link</a> to set a new password.</p>`
+        html: `<p>Hello ${name}, <br/> Someone requested a password reset for your account, if that was you, Click the link below to reset your password, else ignore this message. <br/> <a href="http://${headers}/api/users/reset/${token}">link</a> to set a new password.</p>`
       }
       break
     case 'updatePassword':
