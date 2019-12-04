@@ -78,8 +78,8 @@ exports.signup = async (req, res) => {
   })
 }
 
-exports.confirm = async (req, res) => {
-  const token = await Token.findOne({ key: req.body.token })
+exports.verify = async (req, res) => {
+  const token = await Token.findOne({ key: req.query.token})
   if (!token) {
     return res.status(400).send({ status: false, message: 'Invalid Token' })
   }
@@ -99,6 +99,7 @@ exports.confirm = async (req, res) => {
   }
 
   user.isVerified = true
+  user.status = 1
 
   await token.deleteOne({})
 

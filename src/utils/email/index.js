@@ -27,8 +27,7 @@ const getEmailData = (to, name, headers, token, template) => {
         from: 'Pkloop<admin@pkloop.com>',
         to,
         subject: 'Welcome to Pkloop',
-        html: `To get started, you need to confirm your email address. 
-                This is your unique token: ${token}`
+        html: `Welcome to PKLoop, the most efficient platform for parcel delivery. Click on the link to get started <a href="http://${headers}/verify/?token=${token}">link</a>`
       }
       break
     case 'reset':

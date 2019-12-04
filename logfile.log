@@ -42,3 +42,5 @@
 {"level":"info","message":"Database connected to mongodb://localhost:27017/pkloop...","timestamp":"2019-12-03T15:27:34.791Z"}
 {"level":"info","message":"Database connected to mongodb://localhost:27017/pkloop...","timestamp":"2019-12-03T16:45:45.590Z"}
 {"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2019-12-03T17:19:43.285Z"}
+{"level":"info","message":"Database connected to mongodb://localhost:27017/pkloop...","timestamp":"2019-12-04T10:43:45.187Z"}
+{"level":"error","message":"Unexpected string in JSON at position 129","timestamp":"2019-12-04T10:51:00.827Z"}
