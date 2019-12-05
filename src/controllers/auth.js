@@ -179,7 +179,7 @@ exports.login = async (req, res, next) => {
   res
     .status(200)
     .header('x-auth-token', token)
-    .send(_.pick(user, ['_id', 'firstname', 'lastname', 'email', 'balance']))
+    .send(_.pick(user, ['_id', 'firstname', 'lastname', 'email', 'balance', 'token']))
 }
 
 exports.resetpassword = async (req, res, next) => {
