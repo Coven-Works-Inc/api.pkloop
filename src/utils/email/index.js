@@ -27,7 +27,7 @@ const getEmailData = (to, name, headers, token, template) => {
         from: 'Pkloop<admin@pkloop.com>',
         to,
         subject: 'Welcome to Pkloop',
-        html: `Welcome to PKLoop, the most efficient platform for parcel delivery. Click on the link to get started <a href="http://pkloop.herokuapp.com/api/auth/verify?token=${token}" style="text-decoration: none;">Verify Me</a>`
+        html: `Welcome to PKLoop, the most efficient platform for parcel delivery. Click on the link to get started <a href="http://pkloop.herokuapp.com/verify?token=${token}" style="text-decoration: none;">Verify Me</a>`
       }
       break
     case 'reset':
