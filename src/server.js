@@ -1,6 +1,5 @@
 const express = require('express')
 const winston = require('winston')
-const cors = require('cors')
 
 const bodyParser = require('body-parser')
 
@@ -11,17 +10,10 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*')
-//   res.header(
-//     'Access-Control-Allow-Headers',
-//     'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-auth'
-//   )
-//   if (req.method === 'OPTIONS') {
-//     res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE')
-//     res.status(200).json({})
-//   }
-// })
+const http = require('http')
+setInterval(function () {
+  http.get('http://pkloop.herokuapp.com')
+}, 300000) // every 5 minutes (300000)
 
 require('./startup/logging')()
 require('./startup/routes')(app)

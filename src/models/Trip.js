@@ -3,23 +3,36 @@ const mongoose = require('mongoose')
 const tripSchema = new mongoose.Schema({
   location: {
     type: String,
-    required: true
-  },
-  date_of_departure: {
-    type: Date,
-    required: true
-  },
-  stop_over: {
-    type: String,
-    required: true
+    required: [true, 'Please enter your the location you will be leaving from']
   },
   destination: {
     type: String,
-    required: true
+    required: [true, 'A trip must have a destination']
   },
-  date_of_arrival: {
+  arrivalDate: {
     type: Date,
-    required: true
+    required: [true, 'A trip must have an arrival date']
+  },
+  stopOvers: {
+    type: [String]
+  },
+  parcelSize: {
+    type: String,
+    required: [true, "Please specify the parcel size you'll like to carry"]
+  },
+  parcelWeight: {
+    type: String,
+    required: [
+      true,
+      "Please specify the weight of the parcel you'll like carry"
+    ]
+  },
+  transport: {
+    type: String,
+    required: [true, 'Please specify your transport mode']
+  },
+  additionalInfo: {
+    type: String
   }
 })
 

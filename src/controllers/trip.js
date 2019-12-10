@@ -1,6 +1,8 @@
 const Trip = require('../models/Trip')
 const User = require('../models/User')
 
+const { validateTrip } = require('../validators/trips')
+
 exports.fetchTrips = async (req, res, next) => {
   const trips = await Trip.find()
     .select('location stopover destination')
@@ -15,11 +17,26 @@ exports.fetchTrips = async (req, res, next) => {
 }
 
 exports.postTrips = async (req, res, next) => {
+  const { error } = await validateTrip(req.body)
+
   const location = req.body.location
-  const date_of_departure = req.body.dod
-  const date_of_arrival = req.body.doa
-  const stop_over = req.body.stop_over
   const destination = req.body.destination
+  const arrivalDate = req.body.arrivalDate
+  const stopOver1 = req.body.stopOver1
+  const stopOver2 = req.body.stopOver2
+  const stopOver3 = req.body.stopOver3
+  const stopOver4 = req.body.stopOver4
+  const parcelSize = req.body.parcelSize
+  const parcelWeight = req.body.parcelWeight
+  const transport = req.body.transport
+  const additionalInfo = req.body.additionalInfo
+
+  let stopOvers = [];
+
+  stopOvers.push(stopOver1);
+  stopOvers.push(stopOver2);
+  stopOvers.push(stopOver3);
+  stopOvers.push(stopOver4);
 
   const user = await User.findById(req.user._id)
   if (!user) {
@@ -31,13 +48,16 @@ exports.postTrips = async (req, res, next) => {
 
   const trip = new Trip({
     location,
-    date_of_departure,
-    stop_over,
     destination,
-    date_of_arrival
+    arrivalDate,
+    stopOvers,
+    parcelSize,
+    parcelWeight,
+    transport,
+    additionalInfo
   })
 
-  trip.save()
+  await trip.save()
 
   res.status(200).json({
     status: true,

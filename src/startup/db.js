@@ -5,7 +5,7 @@ const config = require('config')
 module.exports = function () {
   let db
   if (process.env.NODE_ENV === 'development') {
-    db = process.env.DB_DEV
+    db = process.env.DATABASE
   } else {
     db = process.env.DATABASE
   }
