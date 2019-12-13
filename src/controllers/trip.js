@@ -1,12 +1,12 @@
-const Trip = require('../models/Trip')
-const User = require('../models/User')
+const { Trip } = require('../models/Trip')
+const { User } = require('../models/User')
 
 const { validateTrip } = require('../validators/trips')
 
 exports.fetchTrips = async (req, res, next) => {
   const trips = await Trip.find()
-    .select('location stopover destination')
-    .exec()
+  // .select('user location stopover destination')
+  // .exec()
   if (!trips) {
     return res
       .status(404)
@@ -17,7 +17,10 @@ exports.fetchTrips = async (req, res, next) => {
 }
 
 exports.postTrips = async (req, res, next) => {
-  const { error } = await validateTrip(req.body)
+  // const { error } = await validateTrip(req.body)
+  // if (error) {
+  //   return res.status(400).json({ status: false, message: 'Validation Error' })
+  // }
 
   const location = req.body.location
   const destination = req.body.destination
@@ -31,12 +34,20 @@ exports.postTrips = async (req, res, next) => {
   const transport = req.body.transport
   const additionalInfo = req.body.additionalInfo
 
-  let stopOvers = [];
+  let stopOvers = []
 
-  stopOvers.push(stopOver1);
-  stopOvers.push(stopOver2);
-  stopOvers.push(stopOver3);
-  stopOvers.push(stopOver4);
+  // for (let i = 1; i < 4; i++) {
+  //   if ('stopOver' + i !== '') {
+  //     console.log(typeof ('stopOver' + i))
+  //     stopOvers.push(('stopOver' + i).value)
+  //   }
+  // }
+
+  // console.log(stopOvers)
+  stopOvers.push(stopOver1)
+  stopOvers.push(stopOver2)
+  stopOvers.push(stopOver3)
+  stopOvers.push(stopOver4)
 
   const user = await User.findById(req.user._id)
   if (!user) {
@@ -47,6 +58,7 @@ exports.postTrips = async (req, res, next) => {
   }
 
   const trip = new Trip({
+    user: req.user._id,
     location,
     destination,
     arrivalDate,

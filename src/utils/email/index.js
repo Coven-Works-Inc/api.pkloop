@@ -45,6 +45,14 @@ const getEmailData = (to, name, headers, token, template) => {
         subject: 'Password update',
         html: `<p>Hello ${name}, <br/> Someone requested a password update for your account, if that wasn't you. Please contact Kurepay support immediately.</p>`
       }
+      break
+    case 'updatePassword':
+      data = {
+        from: 'PKLoop<jephtino@gmail.com>',
+        to,
+        subject: 'Password update',
+        html: `<p>Hello ${name}, <br/> Your password was updated successfully on our platform. If you did not request for a password update, Please contact Pkloop support immediately.</p>`
+      }
     default:
       data
   }

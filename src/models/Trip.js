@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
+const { Schema, model } = require('mongoose')
 
-const tripSchema = new mongoose.Schema({
+const tripSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   location: {
     type: String,
     required: [true, 'Please enter your the location you will be leaving from']
@@ -36,6 +41,6 @@ const tripSchema = new mongoose.Schema({
   }
 })
 
-const Trip = mongoose.model('Trip', tripSchema)
+const Trip = model('Trip', tripSchema)
 
-module.exports = Trip
+exports.Trip = Trip

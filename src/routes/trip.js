@@ -4,11 +4,11 @@ const tripController = require('../controllers/trip.js')
 
 const auth = require('../middleware/auth')
 
-// tripRouter
-//   .route('/')
-//   .get(tripController.fetchTrips)
-//   .post(tripController.postTrips)
+tripRouter
+  .route('/')
+  .get(tripController.fetchTrips)
+  .post(auth, tripController.postTrips)
 
-tripRouter.post('/', auth, tripController.postTrips)
+// tripRouter.post('/', auth, tripController.postTrips)
 
 module.exports = tripRouter

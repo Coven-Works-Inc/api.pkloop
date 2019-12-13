@@ -12,27 +12,23 @@ function validateTrip (trip) {
       .required(),
     arrivalDate: Joi.date().required(),
     stopOver1: Joi.string()
-      .min(5)
-      .max(255),
+      .regex(/^[a-zA-Z0-9]$/)
+      .optional(),
     stopOver2: Joi.string()
-      .min(5)
-      .max(255),
+      .regex(/^[a-zA-Z0-9]$/)
+      .optional(),
     stopOver3: Joi.string()
-      .min(5)
-      .max(255),
+      .regex(/^[a-zA-Z0-9]$/)
+      .optional(),
     stopOver4: Joi.string()
-      .min(5)
-      .max(255),
+      .regex(/^[a-zA-Z0-9]r$/)
+      .optional(),
     parcelSize: Joi.string().required(),
     parcelWeight: Joi.string().required(),
     transport: Joi.string()
-      .min(5)
       .max(255)
       .required(),
-    additionalInfo: Joi.string()
-      .min(5)
-      .max(255)
-      .required()
+    additionalInfo: Joi.string().max(255)
   }
 
   return Joi.validate(trip, schema)
