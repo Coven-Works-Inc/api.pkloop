@@ -1,33 +1,40 @@
 const jwt = require('jsonwebtoken')
 const config = require('config')
-const mongoose = require('mongoose')
-const Joi = require('joi')
-const Float = require('mongoose-float').loadType(mongoose, 4)
+const { Schema, model } = require('mongoose')
+const { isEmail } = require('validator')
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     firstname: {
       type: String,
-      required: true,
+      required: [true, 'Please enter a firstname'],
       minlength: 2,
       maxlength: 50
     },
     lastname: {
       type: String,
-      required: true,
+      required: [true, 'Please enter a lastname'],
       minlength: 2,
       maxlength: 50
+    },
+    username: {
+      type: String,
+      unique: true,
+      required: [true, 'Please enter a valid username'],
+      minlength: 2,
+      maxlength: 30
     },
     email: {
       type: String,
       required: true,
       unique: true,
       minlength: 5,
-      maxlength: 255
+      maxlength: 255,
+      validator: [isEmail, 'please provide a valid email']
     },
     phone: {
       type: String,
-      required: true,
+      required: [true, 'Please enter a valid phone number'],
       unique: true
     },
     password: {
@@ -40,9 +47,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: 'NGN'
     },
-    Id: {
+    referralID: {
       type: String,
       required: true
+    },
+    photo: {
+      type: String
     },
     status: {
       type: Number,
@@ -93,4 +103,6 @@ userSchema.methods.generateAuthToken = function () {
   )
 }
 
-export default model('User', User)
+const User = model('User', userSchema)
+
+exports.User = User
