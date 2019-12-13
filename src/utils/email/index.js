@@ -40,14 +40,6 @@ const getEmailData = (to, name, headers, token, template) => {
       break
     case 'updatePassword':
       data = {
-        from: 'Kurepay<jephtino@gmail.com>',
-        to,
-        subject: 'Password update',
-        html: `<p>Hello ${name}, <br/> Someone requested a password update for your account, if that wasn't you. Please contact Kurepay support immediately.</p>`
-      }
-      break
-    case 'updatePassword':
-      data = {
         from: 'PKLoop<jephtino@gmail.com>',
         to,
         subject: 'Password update',
