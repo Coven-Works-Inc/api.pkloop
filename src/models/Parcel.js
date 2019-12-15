@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose'
+const { Schema, model } = require('mongoose')
 
-const Parcel = new Schema({
+const parcelSchema = new Schema({
   location: {
     type: String,
     required: true
@@ -23,4 +23,6 @@ const Parcel = new Schema({
   }
 })
 
-export default model('Parcel', Parcel)
+const Parcel = model('Parcel', parcelSchema)
+
+module.exports = Parcel
