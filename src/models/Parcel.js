@@ -1,19 +1,23 @@
 import { Schema, model } from 'mongoose'
 
 const Parcel = new Schema({
-  id: {
+  location: {
     type: String,
     required: true
   },
-  name: {
+  destination: {
     type: String,
     required: true
   },
-  weight: {
+  parcelSize: {
     type: String,
     required: true
   },
-  description: {
+  parcelWeight: {
+    type: String,
+    required: true
+  },
+  additionalInfo: {
     type: String,
     required: true
   }

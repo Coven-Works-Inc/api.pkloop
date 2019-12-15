@@ -4,6 +4,7 @@ const error = require('../middleware/error')
 const users = require('../routes/users')
 const transactions = require('../routes/transactions')
 const trips = require('../routes/trip')
+const parcel = require('../routes/parcel')
 const auth = require('../routes/auth')
 
 module.exports = function (app) {
@@ -14,6 +15,7 @@ module.exports = function (app) {
   app.use('/api/auth', auth)
   app.use('/api/transactions', transactions)
   app.use('/api/trips', trips)
+  app.use('/api/parcel', parcel)
   app.all('*', (req, res, next) => {
     res.status(404).json({
       status: 'fail',
