@@ -3,6 +3,6 @@ const parcelRouter = express.Router()
 const auth = require('../middleware/auth')
 const parcelController = require('../controllers/parcel.js')
 
-parcelRouter.post('/', auth, parcelController.sendParcel)
+parcelRouter.post('/', parcelController.sendParcel)
 
 module.exports = parcelRouter
