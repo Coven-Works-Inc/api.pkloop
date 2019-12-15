@@ -69,6 +69,16 @@ const userSchema = new Schema(
     token: {
       type: String
     },
+    ratingsAverage: {
+      type: Number,
+      default: 4.5,
+      min: [1, 'Ratings must be between 1 and 5'],
+      max: [5, 'Ratings must be between 1 and 5']
+    },
+    ratingsQuantity: {
+      type: Number,
+      default: 0
+    },
     resetToken: String,
     resetTokenExpiration: Date,
     balance: {

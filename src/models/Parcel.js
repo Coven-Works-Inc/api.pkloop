@@ -1,22 +1,28 @@
-import { Schema, model } from 'mongoose'
+const { Schema, model } = require('mongoose')
 
-const Parcel = new Schema({
-  id: {
+const parcelSchema = new Schema({
+  location: {
     type: String,
     required: true
   },
-  name: {
+  destination: {
     type: String,
     required: true
   },
-  weight: {
+  parcelSize: {
     type: String,
     required: true
   },
-  description: {
+  parcelWeight: {
+    type: String,
+    required: true
+  },
+  additionalInfo: {
     type: String,
     required: true
   }
 })
 
-export default model('Parcel', Parcel)
+const Parcel = model('Parcel', parcelSchema)
+
+module.exports = Parcel
