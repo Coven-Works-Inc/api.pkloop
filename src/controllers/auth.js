@@ -1,4 +1,4 @@
-const {User} = require('../models/User')
+const { User } = require('../models/User')
 const crypto = require('crypto')
 const Token = require('../models/Token')
 const _ = require('lodash')
@@ -40,7 +40,14 @@ exports.signup = async (req, res) => {
   }
 
   user = new User(
-    _.pick(req.body, ['firstname', 'lastname', 'username', 'email', 'password', 'phone'])
+    _.pick(req.body, [
+      'firstname',
+      'lastname',
+      'username',
+      'email',
+      'password',
+      'phone'
+    ])
   )
 
   // res.json({user})
@@ -79,7 +86,7 @@ exports.signup = async (req, res) => {
 }
 
 exports.verify = async (req, res) => {
-  const token = await Token.findOne({ key: req.body.token})
+  const token = await Token.findOne({ key: req.body.token })
   if (!token) {
     return res.status(400).send({ status: false, message: 'Invalid Token' })
   }
@@ -113,7 +120,7 @@ exports.verify = async (req, res) => {
   // We can also redirect here once a token has been generated for the user
   res
     .status(200)
-    .json({status: true, message: "User verification sucessful!"})
+    .json({ status: true, message: 'User verification sucessful!' })
 }
 
 exports.resendToken = async (req, res) => {
@@ -155,7 +162,7 @@ exports.resendToken = async (req, res) => {
 // @desc     logs in a user to the app if information is verified
 // @access   Public - can be accessed by anyone to login
 exports.login = async (req, res, next) => {
-  const {error} = validateLogin(req.body)
+  const { error } = validateLogin(req.body)
   if (error) {
     return res
       .status(400)
@@ -163,12 +170,21 @@ exports.login = async (req, res, next) => {
   }
 
   const user = await User.findOne({ username: req.body.username })
-  if(!user) return res.status(400).json({ status: false, message: 'Invalid email or password' })
+  if (!user)
+    return res
+      .status(400)
+      .json({ status: false, message: 'Invalid username or password' })
 
   const password = await bcrypt.compare(req.body.password, user.password)
-  if (!password) return res.status(400).json({ status: false, message: 'Invalid email or password' })
+  if (!password)
+    return res
+      .status(400)
+      .json({ status: false, message: 'Invalid username or password' })
 
-  if (!user.isVerified) return res.status(400).json({ status: false, message: 'Please verify your account first!' })
+  if (!user.isVerified)
+    return res
+      .status(400)
+      .json({ status: false, message: 'Please verify your account first!' })
 
   const token = user.generateAuthToken()
 
@@ -179,21 +195,30 @@ exports.login = async (req, res, next) => {
   res
     .status(200)
     .header('x-auth-token', token)
-    .send(_.pick(user, ['_id', 'firstname', 'lastname', 'email', 'balance', 'token']))
+    .send(
+      _.pick(user, [
+        '_id',
+        'firstname',
+        'lastname',
+        'email',
+        'balance',
+        'token'
+      ])
+    )
 }
 
 exports.resetpassword = async (req, res, next) => {
-  const user = await User.findOne({username: req.body.username })
+  const user = await User.findOne({ username: req.body.username })
   if (!user) {
     return res.status(400).json({
       status: false,
       message: 'No user with this username was found.'
     })
-  } 
+  }
 
   const token = crypto.randomBytes(3).toString('hex')
 
-  user.resendToken = token;
+  user.resendToken = token
   user.resetTokenExpiration = Date.now() + 3600000
 
   await user.save()
@@ -210,31 +235,30 @@ exports.resetpassword = async (req, res, next) => {
 }
 
 exports.newpassword = async (req, res, next) => {
-  const newpassword = req.body.password;
+  const newpassword = req.body.password
   const token = req.body.token
 
-
-  let resetUser;
+  let resetUser
 
   resetUser = await User.findOne({
     resetToken: token,
     resetTokenExpiration: {
-      $gt: Date.now(),
-    },
-  });
+      $gt: Date.now()
+    }
+  })
   if (!resetUser)
     return res.status(400).json({
       status: false,
-      message: "This token is no longer valid.",
-    });
+      message: 'This token is no longer valid.'
+    })
 
-    //Checking if the supplied password and the former one which was forgotten by the user are the same
-    bcrypt.compare(newpassword, resetUser.password)
+  //Checking if the supplied password and the former one which was forgotten by the user are the same
+  bcrypt.compare(newpassword, resetUser.password)
   if (userpassword)
     return res.status(400).json({
       status: false,
-      message: "Your old and new passwords cannot be the same!",
-    });
+      message: 'Your old and new passwords cannot be the same!'
+    })
 
   const salt = await bcrypt.genSalt(10)
   resetUser.password = await bcrypt.hash(newpassword, salt)
@@ -242,61 +266,53 @@ exports.newpassword = async (req, res, next) => {
   if (userpassword)
     return res.status(400).json({
       status: false,
-      message: "Your old and new passwords cannot be the same!",
-    });
-  
-    
-  resetUser.resetToken = undefined;
-  resetUser.resetTokenExpiration = undefined;
+      message: 'Your old and new passwords cannot be the same!'
+    })
 
-  await resetUser.save();
+  resetUser.resetToken = undefined
+  resetUser.resetTokenExpiration = undefined
+
+  await resetUser.save()
 
   res.status(200).json({
     status: true,
-    message: "Password successfully changed.",
-  });
-
+    message: 'Password successfully changed.'
+  })
 }
 
 exports.updatePassword = async (req, res) => {
-  const userId = req.user._id;
-  const oldPassword = req.body.oldPassword;
-  const newPassword = req.body.newPassword;
+  const userId = req.user._id
+  const oldPassword = req.body.oldPassword
+  const newPassword = req.body.newPassword
 
-  const user = await User.findById(userId);
+  const user = await User.findById(userId)
 
-  const userpassword = await bcrypt.compare(oldPassword, user.password);
+  const userpassword = await bcrypt.compare(oldPassword, user.password)
   if (!userpassword)
     return res.status(400).json({
       status: false,
-      message: "The value for your old password is incorrect",
-    });
+      message: 'The value for your old password is incorrect'
+    })
 
-  const passwordCheck = await bcrypt.compare(user.password, newPassword);
+  const passwordCheck = await bcrypt.compare(user.password, newPassword)
 
-  let response;
+  let response
 
   if (oldPassword === newPassword || passwordCheck == true) {
-    response = "Your old and new passwords cannot be the same";
-    res.status(400).json({ status: true, message: response });
+    response = 'Your old and new passwords cannot be the same'
+    res.status(400).json({ status: true, message: response })
   } else {
-    response = "Password Update succesful";
+    response = 'Password Update succesful'
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    const salt = await bcrypt.genSalt(10)
+    user.password = await bcrypt.hash(newPassword, salt)
 
-    await user.save();
+    await user.save()
 
-    let headers = req.headers.host;
+    let headers = req.headers.host
 
-    await sendEmail(
-      user.email,
-      user.firstname,
-      headers,
-      null,
-      "updatePassword"
-    );
+    await sendEmail(user.email, user.firstname, headers, null, 'updatePassword')
 
-    res.status(200).json({ status: true, message: response });
+    res.status(200).json({ status: true, message: response })
   }
-};
+}
