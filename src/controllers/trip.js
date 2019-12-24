@@ -22,8 +22,10 @@ exports.postTrips = async (req, res, next) => {
   //   return res.status(400).json({ status: false, message: 'Validation Error' })
   // }
 
-  const location = req.body.location
-  const destination = req.body.destination
+  const locationCity = req.body.locationCity
+  const locationCountry = req.body.locationCountry
+  const destinationCity = req.body.destinationCity
+  const destinationCountry = req.body.destinationCountry
   const arrivalDate = req.body.arrivalDate
   const stopOver1 = req.body.stopOver1
   const stopOver2 = req.body.stopOver2
@@ -59,8 +61,10 @@ exports.postTrips = async (req, res, next) => {
 
   const trip = new Trip({
     user: req.user._id,
-    location,
-    destination,
+    locationCity,
+    locationCountry,
+    destinationCity,
+    destinationCountry,
     arrivalDate,
     stopOvers,
     parcelSize,
