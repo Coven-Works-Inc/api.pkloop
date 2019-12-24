@@ -6,11 +6,20 @@ const tripSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  location: {
+
+  locationCity: {
     type: String,
     required: [true, 'Please enter your the location you will be leaving from']
   },
-  destination: {
+  locationCountry: {
+    type: String,
+    required: [true, 'Please enter your the location you will be leaving from']
+  },
+  destinationCity: {
+    type: String,
+    required: [true, 'A trip must have a destination']
+  },
+  destinationCountry: {
     type: String,
     required: [true, 'A trip must have a destination']
   },
