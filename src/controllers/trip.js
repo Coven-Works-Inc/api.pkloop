@@ -5,6 +5,7 @@ const { validateTrip } = require('../validators/trips')
 
 exports.fetchTrips = async (req, res, next) => {
   const trips = await Trip.find()
+
   // .select('user location stopover destination')
   // .exec()
   if (!trips) {
