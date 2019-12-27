@@ -9,19 +9,19 @@ const tripSchema = new Schema({
 
   locationCity: {
     type: String,
-    required: [true, 'Please enter your the location you will be leaving from']
+    required: [true, 'A traveler must have a loation City']
   },
   locationCountry: {
     type: String,
-    required: [true, 'Please enter your the location you will be leaving from']
+    required: [true, 'A traveler must have a location Country']
   },
   destinationCity: {
     type: String,
-    required: [true, 'A trip must have a destination']
+    required: [true, 'A traveler must have a destination City']
   },
   destinationCountry: {
     type: String,
-    required: [true, 'A trip must have a destination']
+    required: [true, 'A traveler must have a destination Country']
   },
   arrivalDate: {
     type: Date,
