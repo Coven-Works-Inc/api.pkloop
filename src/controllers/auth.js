@@ -195,17 +195,16 @@ exports.login = async (req, res, next) => {
   res
     .status(200)
     .header('x-auth-token', token)
-    .json({
-      data: _.pick(user, [
+    .send(
+      _.pick(user, [
         '_id',
         'firstname',
         'lastname',
         'email',
         'balance',
         'token'
-      ]),
-      message: 'Successfully logged in, redirecting....'
-    })
+      ])
+    )
 }
 
 exports.resetpassword = async (req, res, next) => {
