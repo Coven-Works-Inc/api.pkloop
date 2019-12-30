@@ -1,5 +1,5 @@
-const { Trip } = require('../models/Trip')
-const { User } = require('../models/User')
+const Trip = require('../models/Trip')
+const User = require('../models/User')
 
 const { validateTrip } = require('../validators/trips')
 

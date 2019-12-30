@@ -92,6 +92,9 @@ const userSchema = new Schema(
     referralCount: {
       type: Number,
       default: 0
+    },
+    passwordChangedAt: {
+      type: Date
     }
   },
   { timestamps: true }
@@ -117,6 +120,19 @@ userSchema.methods.generateAuthToken = function () {
   )
 }
 
+userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
+  if (this.passwordChangedAt) {
+    const changedTimeStamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    )
+
+    return JWTTimeStamp < changedTimeStamp //True means changed, false means not chnaged
+  }
+
+  return false
+}
+
 const User = model('User', userSchema)
 
-exports.User = User
+module.exports = User

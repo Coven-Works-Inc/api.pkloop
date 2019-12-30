@@ -52,4 +52,4 @@ const tripSchema = new Schema({
 
 const Trip = model('Trip', tripSchema)
 
-exports.Trip = Trip
+module.exports = Trip
