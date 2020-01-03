@@ -9,6 +9,7 @@ tripRouter
   .get(tripController.fetchTrips)
   .post(auth, tripController.postTrips)
 
-// tripRouter.post('/', auth, tripController.postTrips)
+//The fetch shippers route is not an authenticated route
+tripRouter.get('/shippers', tripController.fetchShippers)
 
 module.exports = tripRouter
