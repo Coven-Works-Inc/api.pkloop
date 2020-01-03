@@ -1,4 +1,5 @@
 const express = require('express')
+const passport = require('passport')
 const winston = require('winston')
 
 const bodyParser = require('body-parser')
@@ -23,6 +24,8 @@ require('./startup/validation')()
 require('./startup/prod')(app)
 
 const port = process.env.PORT || 8000
+
+app.get(process.env.callbackURL, passport.authenticate('google'))
 
 const server = app.listen(port, () =>
   console.log(`App is listening on port ${port}`)

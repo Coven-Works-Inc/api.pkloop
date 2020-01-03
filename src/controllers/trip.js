@@ -100,8 +100,21 @@ exports.updateTrip = async (req, res, next) => {
 
 exports.cancelTrip = async (req, res, next) => {
   try {
-    await trip.findByIdAndDelete(req.params.id)
+    await Trip.findByIdAndDelete(req.params.id)
     res.status(201).json({ status: false, message: 'deleted' })
+  } catch (error) {
+    res.status(401).json({
+      status: 'fail',
+      message: 'operation failed'
+    })
+  }
+}
+
+exports.fetchShippers = async (req, res, next) => {
+  try {
+    const shippers = await Trip.find({ transport: 'Ship' })
+
+    res.status(200).json({ status: 'false', data: shippers })
   } catch (error) {
     res.status(401).json({
       status: 'fail',

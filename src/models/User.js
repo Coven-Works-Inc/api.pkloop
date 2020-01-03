@@ -5,6 +5,10 @@ const { isEmail } = require('validator')
 
 const userSchema = new Schema(
   {
+    UserId: {
+      type: String,
+      default: this._id
+    },
     firstname: {
       type: String,
       required: [true, 'Please enter a firstname'],
@@ -64,7 +68,8 @@ const userSchema = new Schema(
     },
     isVerified: {
       type: Boolean,
-      default: false
+      default: false,
+      select: false
     },
     token: {
       type: String
@@ -85,6 +90,7 @@ const userSchema = new Schema(
       type: Number,
       default: 0
     },
+
     amountMade: {
       type: String,
       default: 0
