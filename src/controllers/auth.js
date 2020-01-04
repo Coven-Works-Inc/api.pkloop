@@ -175,13 +175,15 @@ exports.login = async (req, res, next) => {
       .status(400)
       .json({ status: false, message: 'Invalid username or password' })
 
-  const password = await bcrypt.compare(req.body.password, user.password)
-  if (!password)
+  const { password, isVerified } = user
+
+  const pass = await bcrypt.compare(req.body.password, password)
+  if (!pass)
     return res
       .status(400)
       .json({ status: false, message: 'Invalid username or password' })
 
-  if (!user.isVerified)
+  if (!isVerified)
     return res
       .status(400)
       .json({ status: false, message: 'Please verify your account first!' })
@@ -190,7 +192,7 @@ exports.login = async (req, res, next) => {
 
   user.token = token
 
-  await user.save
+  await user.save()
 
   res
     .status(200)
