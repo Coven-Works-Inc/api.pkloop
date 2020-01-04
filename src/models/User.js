@@ -68,8 +68,7 @@ const userSchema = new Schema(
     },
     isVerified: {
       type: Boolean,
-      default: false,
-      select: false
+      default: false
     },
     token: {
       type: String

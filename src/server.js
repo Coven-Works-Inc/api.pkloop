@@ -1,6 +1,5 @@
 const express = require('express')
 const passport = require('passport')
-const winston = require('winston')
 
 const bodyParser = require('body-parser')
 
@@ -23,12 +22,12 @@ require('./startup/config')
 require('./startup/validation')()
 require('./startup/prod')(app)
 
-const port = process.env.PORT || 8000
+const PORT = process.env.PORT || 8000
 
 app.get(process.env.callbackURL, passport.authenticate('google'))
 
-const server = app.listen(port, () =>
-  console.log(`App is listening on port ${port}`)
+const server = app.listen(PORT, () =>
+  console.log(`App is listening on port ${PORT}`)
 )
 
 module.exports = server
