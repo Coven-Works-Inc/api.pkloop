@@ -3,7 +3,7 @@ const winston = require('winston')
 
 module.exports = function () {
   let db
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'production') {
     db = process.env.DATABASE
   } else {
     db = process.env.DB_DEV
