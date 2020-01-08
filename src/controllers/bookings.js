@@ -6,6 +6,6 @@ exports.getCheckoutSession = async (req, res) => {
     success_url: `${req.protocol}://${req.get('host')}/`,
     cancel_url: `${req.protocol}://${req.get('host')}/travelers`,
     customer_email: req.user.email,
-    client_reference_id: 
+    client_reference_id: ''
   })
 }
