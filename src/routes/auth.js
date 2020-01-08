@@ -12,7 +12,7 @@ authRouter.post('/verify', authController.verify)
 authRouter.post('/resend', authController.resendToken)
 authRouter.post('/login', authController.login)
 authRouter.post('/reset', authController.resetpassword)
-authRouter.post('/password', authController.newpassword)
+authRouter.post('/password/:token', authController.newpassword)
 // authRouter.get(
 //   '/google',
 //   passport.authenticate('google', {
