@@ -255,8 +255,8 @@ exports.resetpassword = async (req, res, next) => {
 }
 
 exports.newpassword = async (req, res, next) => {
+  const token = req.params.token
   const newpassword = req.body.password
-  const token = req.body.token
 
   let resetUser
 
@@ -267,7 +267,7 @@ exports.newpassword = async (req, res, next) => {
     }
   })
   if (!resetUser)
-    return res.status(400).json({
+    return res.status(200).json({
       status: false,
       message: 'This token is no longer valid.'
     })
@@ -275,19 +275,13 @@ exports.newpassword = async (req, res, next) => {
   //Checking if the supplied password and the former one which was forgotten by the user are the same
   bcrypt.compare(newpassword, resetUser.password)
   if (userpassword)
-    return res.status(400).json({
+    return res.status(200).json({
       status: false,
       message: 'Your old password and new password cannot be the same!'
     })
 
   const salt = await bcrypt.genSalt(10)
   resetUser.password = await bcrypt.hash(newpassword, salt)
-
-  if (userpassword)
-    return res.status(400).json({
-      status: false,
-      message: 'Your old and new passwords cannot be the same!'
-    })
 
   resetUser.resetToken = undefined
   resetUser.resetTokenExpiration = undefined
