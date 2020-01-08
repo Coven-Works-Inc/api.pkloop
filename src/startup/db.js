@@ -6,7 +6,7 @@ module.exports = function () {
   if (process.env.NODE_ENV === 'production') {
     db = process.env.DATABASE
   } else {
-    db = process.env.DB_DEV
+    db = process.env.DATABASE
   }
 
   mongoose

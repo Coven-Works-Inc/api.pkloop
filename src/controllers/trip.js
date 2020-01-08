@@ -5,6 +5,8 @@ const { validateTrip } = require('../validators/trips')
 
 exports.fetchTrips = async (req, res, next) => {
   const trips = await Trip.find()
+    .populate('user', 'photo')
+    .exec()
 
   // .select('user location stopover destination')
   // .exec()

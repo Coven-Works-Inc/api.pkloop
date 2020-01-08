@@ -6,6 +6,7 @@ const transactions = require('../routes/transactions')
 const trips = require('../routes/trip')
 const parcel = require('../routes/parcel')
 const auth = require('../routes/auth')
+const booking = require('../routes/bookings')
 
 module.exports = function (app) {
   app.use(cors())
@@ -14,6 +15,7 @@ module.exports = function (app) {
   app.use('/api/users', users)
   app.use('/api/auth', auth)
   app.use('/api/transactions', transactions)
+  app.use('/api/bookings', booking)
   app.use('/api/trips', trips)
   app.use('/api/parcel', parcel)
   app.all('*', (req, res, next) => {

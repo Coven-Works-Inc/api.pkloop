@@ -12,7 +12,7 @@ app.use(bodyParser.json())
 
 const http = require('http')
 setInterval(function () {
-  http.get('http://pkloop.herokuapp.com')
+  http.get('http://pkloop-api.herokuapp.com')
 }, 300000) // every 5 minutes (300000)
 
 require('./startup/logging')()
@@ -21,6 +21,7 @@ require('./startup/db')()
 require('./startup/config')
 require('./startup/validation')()
 require('./startup/prod')(app)
+require('./services/passport')
 
 const PORT = process.env.PORT || 8000
 

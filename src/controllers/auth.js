@@ -3,6 +3,7 @@ const crypto = require('crypto')
 const Token = require('../models/Token')
 const _ = require('lodash')
 const bcrypt = require('bcryptjs')
+const passport = require('passport')
 
 require('dotenv').config()
 
@@ -39,6 +40,12 @@ exports.signup = async (req, res) => {
     })
   }
 
+  const avatar = gravatar.url(req.body.email, {
+    s: '200', // Size
+    r: 'pg', // Rating
+    d: 'mm' // Default
+  })
+
   user = new User(
     _.pick(req.body, [
       'firstname',
@@ -47,7 +54,10 @@ exports.signup = async (req, res) => {
       'email',
       'password',
       'phone'
-    ])
+    ]),
+    {
+      photo: avatar
+    }
   )
 
   // res.json({user})
@@ -211,30 +221,37 @@ exports.login = async (req, res, next) => {
 }
 
 exports.resetpassword = async (req, res, next) => {
-  const user = await User.findOne({ username: req.body.username })
-  if (!user) {
-    return res.status(400).json({
+  try {
+    const user = await User.findOne({ email: req.body.email })
+    if (!user) {
+      return res.status(400).json({
+        status: false,
+        message: 'No user with this account was found.'
+      })
+    }
+
+    const token = crypto.randomBytes(3).toString('hex')
+
+    user.resendToken = token
+    user.resetTokenExpiration = Date.now() + 3600000
+
+    await user.save()
+
+    let headers = req.headers.host
+
+    sendEmail(user.email, user.firstname, headers, token, 'reset')
+
+    res.status(200).json({
+      status: true,
+      message:
+        'We are sending instructions to reset your password. If you do not receive an email, check your spam folder!'
+    })
+  } catch (error) {
+    res.status(400).json({
       status: false,
-      message: 'No user with this username was found.'
+      message: 'Operation Failed, please try again!'
     })
   }
-
-  const token = crypto.randomBytes(3).toString('hex')
-
-  user.resendToken = token
-  user.resetTokenExpiration = Date.now() + 3600000
-
-  await user.save()
-
-  let headers = req.headers.host
-
-  sendEmail(user.email, user.firstname, headers, token, 'reset')
-
-  res.status(200).json({
-    status: true,
-    message:
-      'We are sending instructions to reset your password. If you do not receive an email, check your spam folder!'
-  })
 }
 
 exports.newpassword = async (req, res, next) => {
@@ -260,7 +277,7 @@ exports.newpassword = async (req, res, next) => {
   if (userpassword)
     return res.status(400).json({
       status: false,
-      message: 'Your old and new passwords cannot be the same!'
+      message: 'Your old password and new password cannot be the same!'
     })
 
   const salt = await bcrypt.genSalt(10)
@@ -319,3 +336,17 @@ exports.updatePassword = async (req, res) => {
     res.status(200).json({ status: true, message: response })
   }
 }
+
+exports.googleauth = passport.authenticate('google', {
+  scope: [
+    'profile',
+    'email',
+    'https://www.googleapis.com/auth/user.phonenumbers.read'
+  ]
+})
+;(exports.googleCallBack = passport.authenticate('google', {
+  failureRedirect: '/'
+})),
+  (req, res) => {
+    res.redirect('/dashboard')
+  }
