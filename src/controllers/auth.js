@@ -224,7 +224,7 @@ exports.resetpassword = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email })
     if (!user) {
-      return res.status(200).json({
+      return res.status(404).json({
         status: true,
         message: 'No user with this account was found.'
       })
