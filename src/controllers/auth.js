@@ -226,7 +226,7 @@ exports.resetpassword = async (req, res, next) => {
     if (!user) {
       return res.status(200).json({
         status: false,
-        message: 'No user with this account was found.'
+        message: 'No user with this accpuount was found.'
       })
     }
 
