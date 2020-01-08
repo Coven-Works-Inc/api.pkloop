@@ -10,3 +10,5 @@ bookingRouter.get(
   auth,
   bookingController.getCheckoutSession
 )
+
+module.exports = bookingRouter
