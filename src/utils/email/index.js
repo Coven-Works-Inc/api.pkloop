@@ -35,7 +35,7 @@ const getEmailData = (to, name, headers, token, template) => {
         from: 'PKloop<admin@pkloop.com>',
         to,
         subject: 'Password reset',
-        html: `<p>Hello ${name}, <br/> Someone requested a password reset for your account, if that was you, Click the link below to reset your password, else ignore this message. <br/> <a href="https://pkloop.herokuapp.com/reset/${token}">link</a> to set a new password.</p>`
+        html: `<p>Hello ${name}, <br/> Someone requested a password reset for your account, if that was you, Click the link below to reset your password, else ignore this message. <br/> <a href="https://pkloop.herokuapp.com/password/${token}">link</a> to set a new password.</p>`
       }
       break
     case 'updatePassword':
