@@ -64,6 +64,7 @@ exports.postTrips = async (req, res, next) => {
 
   const trip = new Trip({
     user: req.user._id,
+    username: user.username,
     locationCity,
     locationCountry,
     destinationCity,
