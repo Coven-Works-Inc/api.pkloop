@@ -6,8 +6,16 @@ const admin = require('../middleware/admin')
 
 const userController = require('../controllers/user')
 
-userRouter.get('/', userController.fetchAllUsers)
-userRouter.patch('/updateUser',auth, userController.updateUser)
-userRouter.post('/updatePicture', auth, userController.updateProfilePicture)
+const {
+  fetchAllUsers,
+  updateUser,
+  updateProfilePicture,
+  updateMyBalance,
+  reduceMyBalance
+} = userController
 
-module.exports = userRouter
+userRouter.get('/', fetchAllUsers)
+userRouter.patch('/updateUser', auth, updateUser)
+userRouter.post('/updatePicture', auth, updateProfilePicture)
+userRouter.post('/updateMyBalance', auth, updateMyBalance)
+userRouter.post('/reduceMyBalance', auth, reduceMyBalance)

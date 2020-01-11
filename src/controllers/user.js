@@ -80,4 +80,8 @@ exports.updateMyBalance = async (req, res) => {
 exports.reduceMyBalance = async (req, res) => {
   const balance = req.body.balance
   const user = await User.findById(req.user.id)
+
+  user.balance = user.balance - balance
+
+  await user.save()
 }
