@@ -17,7 +17,7 @@ const {
 userRouter.get('/', fetchAllUsers)
 userRouter.patch('/updateUser', auth, updateUser)
 userRouter.post('/updatePicture', auth, updateProfilePicture)
-userRouter.post('/updateMyBalance', auth, updateMyBalance)
-userRouter.post('/reduceMyBalance', auth, reduceMyBalance)
+userRouter.put('/updateMyBalance', auth, updateMyBalance)
+userRouter.put('/reduceMyBalance', auth, reduceMyBalance)
 
 module.exports = userRouter
