@@ -106,20 +106,20 @@ exports.updateProfilePicture = async (req, res) => {
   })
 }
 
-exports.updateMyBalance = async (req, res) => {
+exports.updateMyBalance = catchAsync(async (req, res) => {
   const balance = req.body.balance
   const user = await User.findById(req.user._id)
 
   user.balance = user.balance + balance
 
   await user.save()
-}
+})
 
-exports.reduceMyBalance = async (req, res) => {
+exports.reduceMyBalance = catchAsync(async (req, res) => {
   const balance = req.body.balance
   const user = await User.findById(req.user.id)
 
   user.balance = user.balance - balance
 
   await user.save()
-}
+})
