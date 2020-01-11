@@ -27,31 +27,69 @@ exports.fetchAllUsers = async (req, res) => {
     res.status(500).json({ status: true, message: `Operation failed` })
   }
 }
-exports.updateUser = async (req, res) => {
-  const user = await User.findById(req.user._id)
-  if (!user) {
-    return res.status(404).json({ status: true, message: 'No users found' })
-  } else {
-    if (
-      req.body.email &&
-      req.body.firstname &&
-      req.body.lastname &&
-      req.body.phone
-    ) {
-      user.email = req.body.email
-      user.firstname = req.body.firstname
-      user.lastname = req.body.lastname
-      user.phone = req.body.phone
-      user.photo = req.body.photo
+// exports.updateUser = async (req, res) => {
+//   const user = await User.findById(req.user._id)
+//   if (!user) {
+//     return res.status(404).json({ status: true, message: 'No users found' })
+//   } else {
+//     if (
+//       req.body.email &&
+//       req.body.firstname &&
+//       req.body.lastname &&
+//       req.body.phone
+//     ) {
+//       user.email = req.body.email
+//       user.firstname = req.body.firstname
+//       user.lastname = req.body.lastname
+//       user.phone = req.body.phone
+//       user.photo = req.body.photo
 
-      await user.save()
-      return res.status(200).json({
-        status: true,
-        data: user
-      })
-    }
-  }
+//       await user.save()
+//       return res.status(200).json({
+//         status: true,
+//         data: user
+//       })
+//     }
+//   }
+// }
+
+const filterReq = (obj, ...allowedFields) => {
+  const passedObj = {}
+  Object.keys(obj).forEach(el => {
+    if (allowedFields.includes(el)) passedObj[el] = obj[el]
+  })
+
+  return passedObj
 }
+
+exports.updateUser = catchAsync(async (req, res, next) => {
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(
+      new AppError(
+        "You can't modify password here. Use the correct route to do that."
+      )
+    )
+  }
+
+  const filteredObj = filterReq(
+    req.body,
+    'email',
+    'firstname',
+    'lastname',
+    'phone',
+    'photo'
+  )
+
+  const user = await User.findByIdAndUpdate(req.user._id, filteredObj, {
+    new: true,
+    runValidators: true
+  })
+
+  res
+    .status(200)
+    .json({ status: true, data: user, message: 'Update successful' })
+})
+
 exports.updateProfilePicture = async (req, res) => {
   const user = await User.findById(req.user._id)
   const path = Object.values(Object.values(req.files)[0])[0].path
