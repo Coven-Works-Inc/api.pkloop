@@ -19,3 +19,5 @@ userRouter.patch('/updateUser', auth, updateUser)
 userRouter.post('/updatePicture', auth, updateProfilePicture)
 userRouter.post('/updateMyBalance', auth, updateMyBalance)
 userRouter.post('/reduceMyBalance', auth, reduceMyBalance)
+
+module.exports = userRouter
