@@ -114,6 +114,8 @@ exports.updateMyBalance = catchAsync(async (req, res) => {
   user.balance = user.balance + balance
 
   await user.save()
+
+  res.status(200).json({status: true, message: 'Balance updated successfully'});
 })
 
 exports.reduceMyBalance = catchAsync(async (req, res) => {
@@ -123,4 +125,6 @@ exports.reduceMyBalance = catchAsync(async (req, res) => {
   user.balance = user.balance - balance
 
   await user.save()
+
+  res.status(200).json({status: true, message: 'Balance updated successfully'});
 })
