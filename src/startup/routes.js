@@ -7,6 +7,7 @@ const trips = require('../routes/trip')
 const parcel = require('../routes/parcel')
 const auth = require('../routes/auth')
 const booking = require('../routes/bookings')
+const support = require('../routes/support')
 
 module.exports = function (app) {
   app.use(cors())
@@ -18,6 +19,7 @@ module.exports = function (app) {
   app.use('/api/bookings', booking)
   app.use('/api/trips', trips)
   app.use('/api/parcel', parcel)
+  app.use('/api/support', support)
   app.all('*', (req, res, next) => {
     res.status(404).json({
       status: 'fail',

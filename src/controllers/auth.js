@@ -214,7 +214,8 @@ exports.login = async (req, res, next) => {
         'lastname',
         'email',
         'balance',
-        'token'
+        'token',
+        'photo'
       ]),
       message: 'log in successful, redirecting...'
     })

@@ -6,6 +6,10 @@ const tripSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
+  username: {
+    type: String,
+    required: [true, 'Username of trip poster']
+  },
 
   locationCity: {
     type: String,
