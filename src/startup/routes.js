@@ -8,11 +8,16 @@ const parcel = require('../routes/parcel')
 const auth = require('../routes/auth')
 const booking = require('../routes/bookings')
 const support = require('../routes/support')
+const { CLIENT_ORIGIN } = require('../../config/config')
+const formData = require('express-form-data')
 
 module.exports = function (app) {
-  app.use(cors())
+  app.use(cors({
+    origin: CLIENT_ORIGIN
+  }))
   app.use(express.json())
   app.use(error)
+  app.use(formData.parse())
   app.use('/api/users', users)
   app.use('/api/auth', auth)
   app.use('/api/transactions', transactions)
