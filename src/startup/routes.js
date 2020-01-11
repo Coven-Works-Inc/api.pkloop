@@ -12,9 +12,7 @@ const { CLIENT_ORIGIN } = require('../../config/config')
 const formData = require('express-form-data')
 
 module.exports = function (app) {
-  app.use(cors({
-    origin: CLIENT_ORIGIN
-  }))
+  app.use(cors())
   app.use(express.json())
   app.use(error)
   app.use(formData.parse())
