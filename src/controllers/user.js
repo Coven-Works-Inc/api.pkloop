@@ -1,4 +1,12 @@
 const User = require('../models/User')
+const cloudinary = require('cloudinary')
+require('dotenv').config
+
+cloudinary.config = ({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+})
 
 exports.fetchAllUsers = async (req, res) => {
   try {
@@ -39,4 +47,20 @@ exports.updateUser = async (req, res) => {
     }
   }
   
+}
+exports.updateProfilePicture = async(req, res) => {
+    const user = await User.findById(req.user.id)
+    const path = Object.values(Object.values(req.files)[0])[0].path
+    if(!user) return res.status(404).json({message: 'Please login to continue'})
+    await cloudinary.uploader.upload(path)
+    .then(photo => {
+      user.photo = photo
+      await user.save()
+      return res.status(200).json({
+        status: true,
+        message: 'image successfully uploaded',
+        data: user
+      })
+    })
+
 }

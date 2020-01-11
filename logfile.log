@@ -294,3 +294,6 @@
 {"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-08T19:09:36.523Z"}
 {"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-11T04:03:33.544Z"}
 {"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-11T04:19:30.597Z"}
+{"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-11T09:18:46.378Z"}
+{"level":"info","message":"Database connected to mongodb+srv://external_user:h0rph0rp@cluster0-zy6wo.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-11T09:37:00.160Z"}
+{"level":"info","message":"Database connected to mongodb+srv://external_user:h0rph0rp@cluster0-zy6wo.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-11T09:57:58.920Z"}
