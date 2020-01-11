@@ -1,6 +1,6 @@
 const express = require('express')
 const passport = require('passport')
-
+const rateLimit = require('express-rate-limit')
 const bodyParser = require('body-parser')
 
 require('dotenv').config()
@@ -22,6 +22,16 @@ require('./startup/config')
 require('./startup/validation')()
 require('./startup/prod')(app)
 require('./services/passport')
+
+//monitoring request rates here
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 64 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour'
+})
+
+//Using the rate middleware to protect the api from multiple requests
+app.use(/^api/, limiter)
 
 const PORT = process.env.PORT || 8000
 

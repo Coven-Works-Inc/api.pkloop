@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const cloudinary = require('cloudinary')
+const catchAsync = require('../utils/catchAsync')
 require('dotenv').config
 
 cloudinary.config = {
