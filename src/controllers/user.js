@@ -96,8 +96,10 @@ exports.updateProfilePicture = async (req, res) => {
   const path = Object.values(Object.values(req.files)[0])[0].path
   if (!user)
     return res.status(404).json({ message: 'Please login to continue' })
-  await cloudinary.uploader.upload(path).then(async photo => {
-    user.photo = photo
+  await cloudinary.v2.uploader.upload(path, (err) => {
+    res.status(500).json({ message: 'Unable to upload image', err})
+  }).then(async photo => {
+    user.photo = photo.secure_url
     await user.save()
     return res.status(200).json({
       status: true,
