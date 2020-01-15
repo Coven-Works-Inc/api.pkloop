@@ -122,7 +122,9 @@ userSchema.methods.generateAuthToken = function () {
       localCurrency: this.localCurrency,
       status: this.status,
       isVerified: this.isVerified,
-      balance: this.balance
+      balance: this.balance,
+      photo: this.photo,
+      username: this.username
     },
     config.get('jwtPrivateKey'),
     { expiresIn: 3600 }
