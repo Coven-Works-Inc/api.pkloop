@@ -97,7 +97,8 @@ exports.updateProfilePicture = async (req, res) => {
   if (!user)
     return res.status(404).json({ message: 'Please login to continue' })
   await cloudinary.v2.uploader.upload(path, async (err, photo) => {
-    if(err) return res.status(500).json({ message: 'Unable to upload image', err})
+    if (err)
+      return res.status(500).json({ message: 'Unable to upload image', err })
     user.photo = photo.secure_url
     await user.save()
     return res.status(200).json({
@@ -109,23 +110,31 @@ exports.updateProfilePicture = async (req, res) => {
 }
 
 exports.updateMyBalance = catchAsync(async (req, res) => {
-  const balance = parseInt(req.body.balance)
+  const amount = parseInt(req.body.amount)
   const user = await User.findById(req.user._id)
 
-  user.balance = user.balance + balance
+  user.balance = user.balance + amount
 
   await user.save()
 
-  res.status(200).json({ status: true, message: 'Balance updated successfully', data: user.balance});
+  res.status(200).json({
+    status: true,
+    message: 'Balance updated successfully',
+    data: user.balance
+  })
 })
 
 exports.reduceMyBalance = catchAsync(async (req, res) => {
-  const balance = parseInt(req.body.balance)
+  const amount = parseInt(req.body.amount)
   const user = await User.findById(req.user.id)
 
-  user.balance = user.balance - balance
+  user.balance = user.balance - amount
 
   await user.save()
 
-  res.status(200).json({status: true, message: 'Balance updated successfully', data: user.balance});
+  res.status(200).json({
+    status: true,
+    message: 'Balance updated successfully',
+    data: user.balance
+  })
 })
