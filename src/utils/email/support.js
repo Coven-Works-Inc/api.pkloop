@@ -11,7 +11,7 @@ var transporter = nodemailer.createTransport({
 const sendMail = (sender, subject, message) => {
   var mailOptions = {
     from: sender, //replace with your email
-    to: 'jephtino@gmail.com', //replace with your email
+    to: 'contact@mypkloop.com', //replace with your email
     subject: subject,
     html: `${message}`
   }
