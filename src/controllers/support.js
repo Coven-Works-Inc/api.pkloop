@@ -20,7 +20,7 @@ const postSupport = async (req, res) => {
   })
   await support.save()
 
-  sendMail(email, subject, message)
+  await sendMail(email, subject, message)
 
   res.status(200).json({ status: true, message: 'Success', data: support })
 }
