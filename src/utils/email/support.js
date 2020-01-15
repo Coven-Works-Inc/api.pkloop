@@ -3,8 +3,8 @@ var nodemailer = require('nodemailer') //importing node mailer
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'jephtino@gmail.com', //replace with your email
-    pass: 'character94' //replace with your password
+    user: process.env.MAIL, //replace with your email
+    pass: process.env.MAIL_PASSWORD //replace with your password
   }
 })
 
