@@ -333,15 +333,15 @@ exports.updatePassword = async (req, res) => {
 }
 
 exports.googleauth = passport.authenticate('google', {
-  scope: [
-    'profile',
-    'email',
-    'https://www.googleapis.com/auth/user.phonenumbers.read'
-  ]
+  scope: ['profile', 'email']
 })
+
 ;(exports.googleCallBack = passport.authenticate('google', {
-  failureRedirect: '/'
+  failureRedirect: '/',
+  session: false
 })),
   (req, res) => {
-    res.redirect('/dashboard')
+
+    const token = req.user.token
+    res.redirect('https://pkloop.herokuapp.com?token=' + token)
   }

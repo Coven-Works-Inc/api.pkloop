@@ -34,19 +34,9 @@ const fetchTransactions = async (req, res, next) => {
 }
 
 const fetchMyTransactions = async (req, res, next) => {
-  let transactions = await Transaction.find({ user: req.user._id })
+  const transactions = await Transaction.find({ user: req.user._id })
 
-  let message
-
-  if (transactions.length === 0) {
-    transactions = []
-    message = 'No transactions found'
-  } else {
-    ;(payload = transactions),
-      (message = `Found ${transactions.length} transactions`)
-  }
-
-  return res.status(200).json({ status: true, transactions, message })
+  res.status(200).json({ status: true, data: transactions })
 }
 
 module.exports = {
