@@ -8,6 +8,7 @@ const userController = require('../controllers/user')
 
 const {
   fetchAllUsers,
+  fetchUser,
   updateUser,
   updateProfilePicture,
   updateMyBalance,
@@ -15,7 +16,7 @@ const {
 } = userController
 
 userRouter.get('/', fetchAllUsers)
-userRouter.get('/fetchUser', auth, fetchAllUsers)
+userRouter.get('/fetchUser', auth, fetchUser)
 userRouter.patch('/updateUser', auth, updateUser)
 userRouter.post('/updatePicture', auth, updateProfilePicture)
 userRouter.put('/updateMyBalance', auth, updateMyBalance)
