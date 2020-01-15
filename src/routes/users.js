@@ -15,6 +15,7 @@ const {
 } = userController
 
 userRouter.get('/', fetchAllUsers)
+userRouter.get('/fetchUser', auth, fetchAllUsers)
 userRouter.patch('/updateUser', auth, updateUser)
 userRouter.post('/updatePicture', auth, updateProfilePicture)
 userRouter.put('/updateMyBalance', auth, updateMyBalance)

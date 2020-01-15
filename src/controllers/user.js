@@ -28,6 +28,7 @@ exports.fetchAllUsers = async (req, res) => {
     res.status(500).json({ status: true, message: `Operation failed` })
   }
 }
+
 // exports.updateUser = async (req, res) => {
 //   const user = await User.findById(req.user._id)
 //   if (!user) {
@@ -62,6 +63,12 @@ const filterReq = (obj, ...allowedFields) => {
 
   return passedObj
 }
+
+exports.fetchUser = catchAsync(async (req, res) => {
+  const user = await User.findById(req.user._id)
+
+  res.status(200).json({ status: true, data: user })
+})
 
 exports.updateUser = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
