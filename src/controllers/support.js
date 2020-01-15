@@ -19,18 +19,18 @@ const postSupport = async (req, res) => {
 }
 
 const fetchSupport = async (req, res, next) => {
-  let support = await Support.find({ user: req.user._id })
+  let tickets = await Support.find({ user: req.user._id })
 
   let message
 
-  if (support.length === 0) {
-    support = []
+  if (tickets.length === 0) {
+    tickets = []
     message = 'No support ticket found'
   } else {
-    message = `Found ${support.length} support tickets`
+    message = `Found ${tickets.length} support tickets`
   }
 
-  return res.status(200).json({ status: true, support, message })
+  return res.status(200).json({ status: true, tickets, message })
 }
 
 module.exports = {
