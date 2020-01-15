@@ -10,7 +10,7 @@ const booking = require('../routes/bookings')
 const support = require('../routes/support')
 const { CLIENT_ORIGIN } = require('../../config/config')
 const AppError = require('../utils/appError')
-const globalErrorHandler = require('../middleware/errorHandler')
+// const globalErrorHandler = require('../middleware/errorHandler')
 const formData = require('express-form-data')
 
 module.exports = function (app) {
@@ -30,5 +30,5 @@ module.exports = function (app) {
       new AppError(`Can't find the url ${req.originalUrl} on the server`, 404)
     )
   })
-  app.use(globalErrorHandler)
+  // app.use(globalErrorHandler)
 }
