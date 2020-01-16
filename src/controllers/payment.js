@@ -16,10 +16,13 @@ exports.getpay = (req, res) => {
 }
 
 exports.postpay = (req, res) => {
-  const body = {
-    source: req.body.token.id,
-    amount: req.body.amount,
-    currency: 'usd'
-  }
-  stripe.charges.create(body, stripeChargeCallback(res))
+  // const body = {
+  //   source: req.body.token.id,
+  //   amount: req.body.amount,
+  //   currency: 'usd'
+  // }
+
+  console.log('receiving stripe shit')
+
+  // stripe.charges.create(req.body, stripeChargeCallback(res))
 }
