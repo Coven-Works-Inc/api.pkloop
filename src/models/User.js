@@ -5,6 +5,31 @@ const { Schema, model } = require('mongoose')
 const { isEmail } = require('validator')
 const gravatar = require('gravatar')
 
+const chatSchema = new Schema({
+  text: String,
+  sender: String,
+  dateSent: Date,
+  isOwn: Boolean
+})
+const senderSchema = new Schema({
+  username: String,
+  id: String,
+  firstname: String,
+  lastname: String,
+  email: String,
+  phone: String,
+  country: String
+})
+
+const travelerSchema = new Schema({
+  username: String,
+  id: String,
+  firstname: String,
+  lastname: String,
+  email: String,
+  phone: String,
+  country: String
+})
 const userSchema = new Schema({
   UserId: {
     type: String,
@@ -106,7 +131,10 @@ const userSchema = new Schema({
   },
   passwordChangedAt: {
     type: Date
-  }
+  },
+  chat: [chatSchema],
+  traveler: [travelerSchema],
+  sender: [senderSchema]
 })
 
 // We validate the user here and generate a token for the user
