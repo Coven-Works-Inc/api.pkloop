@@ -5,7 +5,7 @@ exports.connectTravelers = async (req, res) => {
     const sender = await User.findOne({ username: req.body.senderUsername })
     const travelerData = {
         username: traveler.username,
-        id: traveler._id,
+        id: traveler.UserId,
         firstname: traveler.firstname,
         lastname: traveler.lastname,
         email: traveler.email,
@@ -14,7 +14,7 @@ exports.connectTravelers = async (req, res) => {
     }
     const senderData = {
         username: sender.username,
-        id: sender._id,
+        id: sender.UserId,
         firstname: sender.firstname,
         lastname: sender.lastname,
         email: sender.email,
