@@ -21,8 +21,8 @@ exports.connectTravelers = async (req, res) => {
         phone: sender.phone,
         country: sender.country
     }
-    sender.traveler = travelerData
-    traveler.sender = senderData
+    sender.traveler.push(travelerData)
+    traveler.sender.push(senderData)
     await traveler.save()
     await sender.save()
     res.status(200).json({
