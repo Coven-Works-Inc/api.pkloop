@@ -17,6 +17,7 @@ exports.getpay = (req, res) => {
 
 exports.postpay = (req, res) => {
   const body = {
+    description: req.body.description,
     source: req.body.source,
     amount: req.body.amount,
     currency: 'usd'
