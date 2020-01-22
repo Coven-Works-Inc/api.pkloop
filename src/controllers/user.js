@@ -1,7 +1,8 @@
 const User = require('../models/User')
 const catchAsync = require('../utils/catchAsync')
-
 require('dotenv').config
+
+
 
 exports.fetchAllUsers = async (req, res) => {
   try {
@@ -68,28 +69,6 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     .status(200)
     .json({ status: true, data: user, message: 'Update successful' })
 })
-
-exports.updateProfilePicture = async (req, res) => {
-  console.log(req.file)
-
-  res.status(200).json({ status: true, data: req.files, message: 'done' })
-}
-
-// const user = await User.findById(req.user._id)
-// const path = Object.values(Object.values(req.files)[0])[0].path
-// if (!user)
-//   return res.status(404).json({ message: 'Please login to continue' })
-// await cloudinary.v2.uploader.upload(path, async (err, photo) => {
-//   if (err)
-//     return res.status(500).json({ message: 'Unable to upload image', err })
-//   user.photo = photo.secure_url
-//   await user.save()
-//   return res.status(200).json({
-//     status: true,
-//     message: 'image successfully uploaded',
-//     data: user
-//   })
-// })
 
 exports.updateMyBalance = catchAsync(async (req, res) => {
   const amount = parseInt(req.body.amount)

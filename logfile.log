@@ -473,3 +473,12 @@
 {"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:17:13.762Z"}
 {"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:17:51.079Z"}
 {"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:18:59.214Z"}
+{"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:20:41.825Z"}
+{"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:25:43.505Z"}
+{"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:27:03.695Z"}
+{"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:27:23.247Z"}
+{"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:27:52.900Z"}
+{"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:29:37.365Z"}
+{"level":"error","message":"ENOENT: no such file or directory, open 'uploads/images/profile/img-1579696581197.JPG'","timestamp":"2020-01-22T12:36:21.206Z"}
+{"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:37:13.734Z"}
+{"level":"info","message":"Database connected to mongodb+srv://jephtah:Character94%40@pkloop-qa5ko.mongodb.net/test?retryWrites=true&w=majority...","timestamp":"2020-01-22T12:41:36.725Z"}
