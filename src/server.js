@@ -1,53 +1,57 @@
 const express = require('express')
 const passport = require('passport')
+const catchAsync = require('./utils/catchAsync')
 const rateLimit = require('express-rate-limit')
 const bodyParser = require('body-parser')
 require('dotenv').config()
-
 const multer = require('multer');
 
-//CONFIGURING MULTER FOR FILE UPLOADS
-const path = require('path');
 
-//Set Storage engine
-const storage = multer.diskStorage({
-  destination: './uploads/images/profile',
-  filename: function(req, file, cb){
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+const multerStorage = multer.diskStorage({
+  destination:(req, file, cb) => {
+    cb(null, './public/uploads');
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `user-img-${Date.now()}.${ext}`);
   }
 });
 
-//Initialize the upload variable
-const upload = multer({
-  storage: storage,
-  limits: {fileSize: 1000000 },
-  fileFilter: function (req, file, cb) {
-    checkFileType(file, cb)
+const multerFilter = (req, file, cb) => {
+  if(file.mimetype.startsWith('image')){
+    cb(null, true)
+  } else{
+    cb(new AppError('Not an Image!, please upload only images.', 400), false)
   }
+}
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
 })
 
-//Check file type
-function checkFileType(file, cb){
-  //Allowed ext
-  const filetypes = /jpeg|jpg|png|gif/;
-  
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  //Check mime
-  const mimeType = filetypes.test(file.mimetype);
-  
-  if (mimeType && extname ){
-    return cb(null, true)
-  }else{
-    cb('Error: Images Only!')
-  }
-  
-}
+// const resizeUserPhoto = catchAsync(async (req, res, next) => {
+//   if (!req.file) return next();
+//
+//   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+//
+//   await sharp(req.file.buffer)
+//       .resize(500, 500)
+//       .toFormat('jpeg')
+//       .jpeg({ quality: 90 })
+//       .toFile(`public/img/users/${req.file.filename}`);
+//
+//   next();
+// });
+
 const app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-app.use('/api/profile/upload', upload.single('img'), (req, res) => {
+app.use('/api/profile/upload',
+    upload.single('img'),
+    (req, res) => {
   res.status(200).json({status: true, message: 'Done'})
 })
 
