@@ -7,17 +7,19 @@ const userController = require('../controllers/user')
 
 const {
   fetchAllUsers,
+  updateUser,
   fetchUser,
-  updateProfilePicture,
+  uploadUserPhoto,
   updateMyBalance,
   reduceMyBalance
 } = userController
 
-userRouter.get('/', fetchAllUsers)
+userRouter.get('/', auth, fetchAllUsers)
 userRouter.get('/fetchUser', auth, fetchUser)
-userRouter.patch('/updateMe', auth, userController.updateUser)
-userRouter.post('/updatePicture', updateProfilePicture)
+userRouter.post('/updateMe', auth, updateUser)
 userRouter.put('/updateMyBalance', auth, updateMyBalance)
 userRouter.put('/reduceMyBalance', auth, reduceMyBalance)
+
+
 
 module.exports = userRouter
