@@ -27,4 +27,4 @@ const supportSchema = new Schema(
 )
 const Support = model('Support', supportSchema)
 
-module.exports = Support
+module.exports = Support;

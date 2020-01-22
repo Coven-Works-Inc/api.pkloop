@@ -93,9 +93,21 @@ const userSchema = new Schema({
     type: Number,
     default: 0
   },
-  country: {
+  street: {
     type: String,
     default: false
+  },
+  city: {
+    type: String,
+    default: false
+  },
+  state: {
+    type: String,
+    default: false
+  },
+  country: {
+    type: String,
+    default: 'United States'
   },
   isVerified: {
     type: Boolean,
