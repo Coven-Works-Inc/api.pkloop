@@ -1,6 +1,5 @@
 const express = require('express')
 const userRouter = express.Router()
-
 const auth = require('../middleware/auth')
 const admin = require('../middleware/admin')
 
@@ -9,7 +8,6 @@ const userController = require('../controllers/user')
 const {
   fetchAllUsers,
   fetchUser,
-  updateUser,
   updateProfilePicture,
   updateMyBalance,
   reduceMyBalance
@@ -17,8 +15,8 @@ const {
 
 userRouter.get('/', fetchAllUsers)
 userRouter.get('/fetchUser', auth, fetchUser)
-userRouter.patch('/updateUser', auth, updateUser)
-userRouter.post('/updatePicture', auth, updateProfilePicture)
+userRouter.patch('/updateMe', auth, userController.updateUser)
+userRouter.post('/updatePicture', updateProfilePicture)
 userRouter.put('/updateMyBalance', auth, updateMyBalance)
 userRouter.put('/reduceMyBalance', auth, reduceMyBalance)
 
