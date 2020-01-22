@@ -1,13 +1,7 @@
 const User = require('../models/User')
-const cloudinary = require('cloudinary')
 const catchAsync = require('../utils/catchAsync')
-require('dotenv').config
 
-cloudinary.config = {
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET
-}
+require('dotenv').config
 
 exports.fetchAllUsers = async (req, res) => {
   try {
@@ -28,32 +22,6 @@ exports.fetchAllUsers = async (req, res) => {
     res.status(500).json({ status: true, message: `Operation failed` })
   }
 }
-
-// exports.updateUser = async (req, res) => {
-//   const user = await User.findById(req.user._id)
-//   if (!user) {
-//     return res.status(404).json({ status: true, message: 'No users found' })
-//   } else {
-//     if (
-//       req.body.email &&
-//       req.body.firstname &&
-//       req.body.lastname &&
-//       req.body.phone
-//     ) {
-//       user.email = req.body.email
-//       user.firstname = req.body.firstname
-//       user.lastname = req.body.lastname
-//       user.phone = req.body.phone
-//       user.photo = req.body.photo
-
-//       await user.save()
-//       return res.status(200).json({
-//         status: true,
-//         data: user
-//       })
-//     }
-//   }
-// }
 
 const filterReq = (obj, ...allowedFields) => {
   const passedObj = {}
@@ -85,7 +53,10 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     'firstname',
     'lastname',
     'phone',
-    'photo'
+    'photo',
+    'street',
+    'city',
+    'state'
   )
 
   const user = await User.findByIdAndUpdate(req.user._id, filteredObj, {
@@ -99,22 +70,26 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 })
 
 exports.updateProfilePicture = async (req, res) => {
-  const user = await User.findById(req.user._id)
-  const path = Object.values(Object.values(req.files)[0])[0].path
-  if (!user)
-    return res.status(404).json({ message: 'Please login to continue' })
-  await cloudinary.v2.uploader.upload(path, async (err, photo) => {
-    if (err)
-      return res.status(500).json({ message: 'Unable to upload image', err })
-    user.photo = photo.secure_url
-    await user.save()
-    return res.status(200).json({
-      status: true,
-      message: 'image successfully uploaded',
-      data: user
-    })
-  })
+  console.log(req.file)
+
+  res.status(200).json({ status: true, data: req.files, message: 'done' })
 }
+
+// const user = await User.findById(req.user._id)
+// const path = Object.values(Object.values(req.files)[0])[0].path
+// if (!user)
+//   return res.status(404).json({ message: 'Please login to continue' })
+// await cloudinary.v2.uploader.upload(path, async (err, photo) => {
+//   if (err)
+//     return res.status(500).json({ message: 'Unable to upload image', err })
+//   user.photo = photo.secure_url
+//   await user.save()
+//   return res.status(200).json({
+//     status: true,
+//     message: 'image successfully uploaded',
+//     data: user
+//   })
+// })
 
 exports.updateMyBalance = catchAsync(async (req, res) => {
   const amount = parseInt(req.body.amount)

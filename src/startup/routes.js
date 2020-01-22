@@ -22,7 +22,6 @@ module.exports = function (app) {
   app.use('/api/users', users)
   app.use('/api/auth', auth)
   app.use('/api/transactions', transactions)
-  // app.use('/api/bookings', booking)
   app.use('/api/trips', trips)
   app.use('/api/payments', payments)
   app.use('/api/chat', chat)

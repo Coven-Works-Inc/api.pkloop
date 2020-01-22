@@ -10,6 +10,8 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
+app.use(express.static(__dirname + '/public'))
+
 const http = require('http')
 setInterval(function () {
   http.get('http://pkloop-api.herokuapp.com')
