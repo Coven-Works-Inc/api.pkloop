@@ -10,12 +10,19 @@ const postTransaction = async (req, res, next) => {
     with: req.body.with,
     role: req.body.role
   })
+  
+  const travelerTransaction = new Transaction({
+    user: req.body.travelerId,
+    status: req.body.status,
+    with: req.body.senderName,
+    role: 'Traveller'
+  })
 
   await transaction.save()
+  await travelerTransaction.save()
 
-  res.status(200).json({ status: true, data: transaction })
+  res.status(200).json({ status: true, sender: transaction, traveller: travelerTransaction })
 }
-
 const fetchTransactions = async (req, res, next) => {
   const transactions = await Transaction.find()
 
