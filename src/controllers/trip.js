@@ -126,6 +126,6 @@ exports.fetchShippers = async (req, res, next) => {
   }
 }
 exports.getTrip = async (req, res) => {
-  const trip = await Trip.findById(req.body.id)
+  const trip = await Trip.findById(req.params.id)
   res.status(200).json({ status: true, data: trip })
 }

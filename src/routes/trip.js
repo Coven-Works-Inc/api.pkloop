@@ -6,7 +6,7 @@ const auth = require('../middleware/auth')
 
 tripRouter.get('/', tripController.fetchTrips)
 tripRouter.post('/', auth, tripController.postTrips)
-tripRouter.get('/trip', tripController.getTrip)
+tripRouter.get('/trip/:id', tripController.getTrip)
 
 //The fetch shippers route is not an authenticated route
 tripRouter.get('/shippers', tripController.fetchShippers)
