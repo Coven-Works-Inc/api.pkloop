@@ -4,10 +4,9 @@ const tripController = require('../controllers/trip.js')
 
 const auth = require('../middleware/auth')
 
-tripRouter
-  .route('/')
-  .get(tripController.fetchTrips)
-  .post(auth, tripController.postTrips)
+tripRouter.get('/', tripController.fetchTrips)
+tripRouter.post(auth, tripController.postTrips)
+tripRouter.get('/trip', tripController.getTrip)
 
 //The fetch shippers route is not an authenticated route
 tripRouter.get('/shippers', tripController.fetchShippers)
