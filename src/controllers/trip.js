@@ -129,3 +129,13 @@ exports.getTrip = async (req, res) => {
   const trip = await Trip.findById(req.params.id)
   res.status(200).json({ status: true, data: trip })
 }
+exports.addReceiver = async (req, res) => {
+  const trip = await Trip.findById(req.body.id) 
+  const receiver = {
+    fullname: req.body.fullname,
+    address: req.body.address,
+    phone: req.body.phone
+  }
+  trip.receiver = receiver
+  res.status(200).json({ status: true, trip: trip })
+}
