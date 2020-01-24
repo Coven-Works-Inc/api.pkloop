@@ -11,21 +11,28 @@ const postTransaction = async (req, res, next) => {
     status: req.body.status,
     with: req.body.with,
     role: req.body.role,
-    tripId: req.body.tripId,
+    tripId: req.body.tripId
   })
-  
+
   const travelerTransaction = new Transaction({
     user: req.body.travelerId,
     status: req.body.status,
     with: req.body.senderName,
     role: 'Traveller',
-    tripId: req.body.tripId,
+    tripId: req.body.tripId
   })
 
   await transaction.save()
   await travelerTransaction.save()
 
-  res.status(200).json({ status: true, sender: transaction, traveller: travelerTransaction, trip})
+  res
+    .status(200)
+    .json({
+      status: true,
+      sender: transaction,
+      traveller: travelerTransaction,
+      trip
+    })
 }
 const fetchTransactions = async (req, res, next) => {
   const transactions = await Transaction.find()
@@ -50,18 +57,18 @@ const fetchMyTransactions = async (req, res, next) => {
   res.status(200).json({ status: true, data: transactions })
 }
 
-const completeTravelerTransaction = () => {
+const completeTravelerTransaction = async () => {
   const transaction = await Transaction.find({ tripId: req.body.id })
   transaction.travelerComplete = true
   await transaction.save()
-  res.status(200).json({ status: true, transaction})
+  res.status(200).json({ status: true, transaction })
 }
 
-const completeSenderTransaction = () => {
+const completeSenderTransaction = async () => {
   const transaction = await Transaction.find({ tripId: req.body.id })
   transaction.senderComplete = true
   await transaction.save()
-  res.status(200).json({ status: true, transaction})
+  res.status(200).json({ status: true, transaction })
 }
 module.exports = {
   postTransaction,
@@ -70,4 +77,3 @@ module.exports = {
   completeSenderTransaction,
   completeTravelerTransaction
 }
-
