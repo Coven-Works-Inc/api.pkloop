@@ -8,7 +8,7 @@ const transactionSchema = new Schema({
 
   status: {
     type: String,
-    enum: ['Pending', 'Declined', 'Completed'],
+    enum: ['Pending', 'Declined', 'Completed', 'Accepted'],
     default: 'Pending'
   },
   with: {
@@ -24,6 +24,14 @@ const transactionSchema = new Schema({
   },
   tripId: {
     type: Schema.Types.ObjectId
+  },
+  senderComplete: {
+    type: Boolean,
+    default: false
+  },
+  travelerComplete: {
+    type: Boolean,
+    default: false
   }
 })
 
