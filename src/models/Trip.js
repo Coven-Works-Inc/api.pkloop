@@ -1,6 +1,12 @@
 const mongoose = require('mongoose')
 const { Schema, model } = require('mongoose')
 
+
+const receiver = new Schema({
+  fullname: String,
+  address: String,
+  phone: String
+})
 const tripSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
@@ -51,7 +57,8 @@ const tripSchema = new Schema({
   },
   additionalInfo: {
     type: String
-  }
+  },
+  receiver: receiver
 })
 
 const Trip = model('Trip', tripSchema)
