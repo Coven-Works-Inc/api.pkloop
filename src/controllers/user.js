@@ -127,7 +127,7 @@ exports.updateMyBalance = catchAsync(async (req, res) => {
 })
 
 exports.reduceMyBalance = catchAsync(async (req, res) => {
-  const amount = Number(req.body.amount)
+  const amount = parseInt(req.body.amount)
   const user = await User.findById(req.user._id)
 
   user.balance = user.balance - amount
