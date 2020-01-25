@@ -57,14 +57,14 @@ const fetchMyTransactions = async (req, res, next) => {
   res.status(200).json({ status: true, data: transactions })
 }
 
-const completeTravelerTransaction = async () => {
+const completeTravelerTransaction = async (req, res) => {
   const transaction = await Transaction.find({ tripId: req.body.id })
   transaction.travelerComplete = true
   await transaction.save()
   res.status(200).json({ status: true, transaction })
 }
 
-const completeSenderTransaction = async () => {
+const completeSenderTransaction = async (req, res) => {
   const transaction = await Transaction.find({ tripId: req.body.id })
   transaction.senderComplete = true
   await transaction.save()
