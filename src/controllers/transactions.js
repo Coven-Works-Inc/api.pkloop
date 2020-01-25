@@ -61,6 +61,7 @@ const completeTravelerTransaction = async (req, res) => {
   await Transaction.updateMany({ tripId: req.body.id}, {$set: { travelerComplete: true, status: 'Completed' } })
   const user = await User.findById(req.body.traveler)
   user.balance += req.body.earning
+  await user.save()
   res.status(200).json({ status: true, user })
 }
 
