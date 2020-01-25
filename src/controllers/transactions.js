@@ -58,15 +58,13 @@ const fetchMyTransactions = async (req, res, next) => {
 }
 
 const completeTravelerTransaction = async (req, res) => {
-  const transaction = await Transaction.find({ tripId: req.body.id })
-  transaction.travelerComplete = true
+  const transaction = await Transaction.updateMany({ tripId: req.body.id}, {$set: { travelerComplete: true}})
   await transaction.save()
   res.status(200).json({ status: true, transaction })
 }
 
 const completeSenderTransaction = async (req, res) => {
-  const transaction = await Transaction.find({ tripId: req.body.id })
-  transaction.senderComplete = true
+  const transaction = await Transaction.updateMany({ tripId: req.body.id}, {$set: { senderComplete: true}})
   await transaction.save()
   res.status(200).json({ status: true, transaction })
 }
