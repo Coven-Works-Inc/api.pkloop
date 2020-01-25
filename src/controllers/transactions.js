@@ -58,13 +58,21 @@ const fetchMyTransactions = async (req, res, next) => {
 }
 
 const completeTravelerTransaction = async (req, res) => {
-  const response = await Transaction.updateMany({ tripId: req.body.id}, {$set: { travelerComplete: true}})
+  const response = await Transaction.updateMany({ tripId: req.body.id}, {$set: { travelerComplete: true, status: 'Completed'}, })
   res.status(200).json({ status: true, response })
 }
 
 const completeSenderTransaction = async (req, res) => {
   const response = await Transaction.updateMany({ tripId: req.body.id}, {$set: { senderComplete: true}})
-  res.status(200).json({ status: true, response })
+  const transaction = await Transaction.find({ tripId: req.body.Id })
+  const user = await User.findById(req.user._id)
+  if(transaction.travelerComplete === true){
+      user.balance += Number(req.body.earning)
+      res.status(200).json({ status: true, data: { user, transaction}})
+  }
+  else {
+    res.status(200).json({ status: true, message: 'Transaction is not yet marked complete by sender'})
+  }
 }
 module.exports = {
   postTransaction,
