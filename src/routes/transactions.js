@@ -11,7 +11,7 @@ transRouter.get(
   auth,
   transController.fetchMyTransactions
 )
-transRouter.put('/completesender', transController.completeSenderTransaction)
-transRouter.put('/completetraveler', transController.completeTravelerTransaction)
+transRouter.put('/completesender', auth, transController.completeSenderTransaction)
+transRouter.put('/completetraveler', auth, transController.completeTravelerTransaction)
 
 module.exports = transRouter
