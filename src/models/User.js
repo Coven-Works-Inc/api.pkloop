@@ -132,7 +132,6 @@ const userSchema = new Schema({
     type: Number,
     default: 0
   },
-
   amountMade: {
     type: String,
     default: 0
@@ -184,9 +183,6 @@ userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
   return false
 }
 
-{
-  timestamps: true
-}
 const User = model('User', userSchema)
 
 module.exports = User
