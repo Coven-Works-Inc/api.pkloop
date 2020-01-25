@@ -58,7 +58,11 @@ const tripSchema = new Schema({
   additionalInfo: {
     type: String
   },
-  receiver: receiver
+  receiver: receiver,
+  earning: {
+    type: Number,
+    default: 0
+  }
 })
 
 const Trip = model('Trip', tripSchema)
