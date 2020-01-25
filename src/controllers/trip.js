@@ -137,5 +137,6 @@ exports.addReceiver = async (req, res) => {
     phone: req.body.phone
   }
   trip.receiver = receiver
+  await trip.save()
   res.status(200).json({ status: true, trip: trip })
 }
