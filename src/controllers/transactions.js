@@ -58,15 +58,13 @@ const fetchMyTransactions = async (req, res, next) => {
 }
 
 const completeTravelerTransaction = async (req, res) => {
-  const transaction = await Transaction.updateMany({ tripId: req.body.id}, {$set: { travelerComplete: true}})
-  await transaction.save()
-  res.status(200).json({ status: true, transaction })
+  const response = await Transaction.updateMany({ tripId: req.body.id}, {$set: { travelerComplete: true}})
+  res.status(200).json({ status: true, response })
 }
 
 const completeSenderTransaction = async (req, res) => {
-  const transaction = await await Transaction.updateMany({ tripId: req.body.id}, {$set: { senderComplete: true}})
-  await transaction.save()
-  res.status(200).json({ status: true, transaction })
+  const response = await Transaction.updateMany({ tripId: req.body.id}, {$set: { senderComplete: true}})
+  res.status(200).json({ status: true, response })
 }
 module.exports = {
   postTransaction,
