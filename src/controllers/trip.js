@@ -140,3 +140,10 @@ exports.addReceiver = async (req, res) => {
   await trip.save()
   res.status(200).json({ status: true, trip: trip })
 }
+exports.addEarning = async (req, res) => {
+  const trip = await Trip.findById(req.body.id)
+  const earning = req.body.earning
+  trip.earning = earning
+  await trip.save()
+  res.status(200).json({ status: true, trip: trip })
+}
