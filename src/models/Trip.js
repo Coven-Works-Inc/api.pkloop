@@ -66,6 +66,30 @@ const tripSchema = new Schema({
   complete: {
     type: Boolean,
     default: false
+  },
+  tipAdded: {
+    type: Boolean,
+    default: false
+  },
+  insuranceAdded: {
+    type: Boolean,
+    default: false
+  },
+  tipAmount : {
+    type: Number,
+    default: 0
+  },
+  insuranceAmount : {
+    type: Number,
+    default: 0
+  },
+  totalCost: {
+    type: Number,
+    default: 0
+  },
+  parcelCost: {
+    type: Number,
+    default: 0
   }
 })
 
