@@ -63,7 +63,7 @@ const completeTravelerTransaction = async (req, res) => {
 }
 
 const updateTransactionDetails = async (req, res) => {
-  const trip = await trip.findById(req.body.id)
+  const trip = await Trip.findById(req.body.id)
   trip.tipAmount = req.body.tipAmount,
   trip.tipAdded = req.body.tipAdded,
   trip.insuranceAmount = req.body.insuranceAmount,
