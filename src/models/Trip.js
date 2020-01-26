@@ -62,6 +62,10 @@ const tripSchema = new Schema({
   earning: {
     type: Number,
     default: 0
+  },
+  complete: {
+    type: Boolean,
+    default: false
   }
 })
 
