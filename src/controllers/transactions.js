@@ -64,6 +64,11 @@ const completeTravelerTransaction = async (req, res) => {
 
 const updateTransactionDetails = async (req, res) => {
   const trip = await trip.findById(req.body.id)
+  if(!trip){
+    res.status(400).json({
+      message: 'trip not found'
+    })
+  }
   trip.tipAmount = req.body.tipAmount,
   trip.tipAdded = req.body.tipAdded,
   trip.insuranceAmount = req.body.insuranceAmount,
