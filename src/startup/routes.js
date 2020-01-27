@@ -13,6 +13,7 @@ const { CLIENT_ORIGIN } = require('../../config/config')
 const AppError = require('../utils/appError')
 // const globalErrorHandler = require('../middleware/errorHandler')
 const formData = require('express-form-data')
+const proxy = require('http-proxy-middleware')
 
 module.exports = function (app) {
   app.use(cors())
@@ -27,10 +28,14 @@ module.exports = function (app) {
   app.use('/api/chat', chat)
   app.use('/api/parcel', parcel)
   app.use('/api/support', support)
-  app.all('*', (req, res, next) => {
-    next(
-      new AppError(`Can't find the url ${req.originalUrl} on the server`, 404)
-    )
-  })
+  app.use('/chat', 
+          proxy({
+            target: 'http://localhost:4000'
+          }))
+  // app.all('*', (req, res, next) => {
+  //   next(
+  //     new AppError(`Can't find the url ${req.originalUrl} on the server`, 404)
+  //   )
+  // })
   // app.use(globalErrorHandler)
 }
