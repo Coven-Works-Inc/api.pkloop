@@ -63,16 +63,15 @@ const completeTravelerTransaction = async (req, res) => {
 }
 
 const updateTransactionDetails = async (req, res) => {
-  await Trip.findByIdAndUpdate(req.body.id, {
-    $set: {
-      tipAmount: req.body.tipAmount,
-      tipAdded: req.body.tipAdded,
-      insuranceAmount: req.body.insuranceAmount,
-      insuranceAdded: req.body.insuranceAdded,
-      totalCost: req.body.totalCost,
-      parcelCost: req.body.parcelCost
-    }
-  })
+  const trip = await trip.findById(req.body.id)
+  trip.tipAmount = req.body.tipAmount,
+  trip.tipAdded = req.body.tipAdded,
+  trip.insuranceAmount = req.body.insuranceAmount,
+  trip.insuranceAdded = req.body.insuranceAdded,
+  trip.totalCost = req.body.totalCost,
+  trip.parcelCost = req.body.parcelCost
+  await trip.save()
+  res.status(200).json({ trip })
 }
 const completeSenderTransaction = async (req, res) => {
   const trip = await Trip.findById(req.body.id)
