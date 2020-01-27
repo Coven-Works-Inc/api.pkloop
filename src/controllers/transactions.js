@@ -62,11 +62,26 @@ const completeTravelerTransaction = async (req, res) => {
   res.status(200).json({ status: true })
 }
 
+const updateTransactionDetails = async (req, res) => {
+  await Transaction.updateMany({
+    tripId: req.body.id,
+  }, {
+    $set: {
+      tipAmount: req.body.tipAmount,
+      tipAdded: req.body.tipAdded,
+      insuranceAmount: req.body.insuranceAmount,
+      insuranceAdded: req.body.insuranceAdded,
+      totalCost: req.body.totalCost,
+      parcelCost: req.body.parcelCost
+    }
+  })
+}
 const completeSenderTransaction = async (req, res) => {
   const trip = await Trip.findById(req.body.id)
   const user = await User.findById(req.user._id)
   if(trip.complete){
       user.balance += Number(req.body.earning)
+      user.amountMade += Number(req.body.earning)
       await user.save()
       res.status(200).json({
         status: true,
@@ -83,5 +98,6 @@ module.exports = {
   fetchTransactions,
   fetchMyTransactions,
   completeSenderTransaction,
-  completeTravelerTransaction
+  completeTravelerTransaction,
+  updateTransactionDetails
 }
