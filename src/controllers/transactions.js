@@ -63,9 +63,7 @@ const completeTravelerTransaction = async (req, res) => {
 }
 
 const updateTransactionDetails = async (req, res) => {
-  await Transaction.updateMany({
-    tripId: req.body.id,
-  }, {
+  await Trip.findByIdAndUpdate(req.body.id, {
     $set: {
       tipAmount: req.body.tipAmount,
       tipAdded: req.body.tipAdded,
