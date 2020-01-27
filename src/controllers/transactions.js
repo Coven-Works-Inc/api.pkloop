@@ -66,7 +66,8 @@ const completeSenderTransaction = async (req, res) => {
   const trip = await Trip.findById(req.body.id)
   const user = await User.findById(req.user._id)
   if(trip.complete){
-      user.balance += Number(req.body.earning)
+      user.balance = user.balance + req.body.earning
+      await user.save()
       res.status(200).json({
         status: true,
         user,
