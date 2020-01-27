@@ -7,6 +7,13 @@ const receiver = new Schema({
   address: String,
   phone: String
 })
+const message = new Schema({
+  text: String,
+  isOwn: {
+    type: String,
+    enum: ['traveler', 'sender']
+  }
+})
 const tripSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
@@ -90,7 +97,8 @@ const tripSchema = new Schema({
   parcelCost: {
     type: Number,
     default: 0
-  }
+  },
+  messages: [message]
 })
 
 const Trip = model('Trip', tripSchema)
