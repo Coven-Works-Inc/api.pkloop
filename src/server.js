@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 const multer = require('multer');
+const chatServer = require('./chat/index')
 
 
 const multerStorage = multer.diskStorage({
@@ -81,6 +82,7 @@ app.use(/^api/, limiter)
 const PORT = process.env.PORT || 8000
 
 app.get(process.env.callbackURL, passport.authenticate('google'))
+
 
 const server = app.listen(PORT, () =>
   console.log(`App is listening on port ${PORT}`)
