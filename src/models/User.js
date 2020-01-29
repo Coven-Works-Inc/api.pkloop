@@ -31,8 +31,8 @@ const travelerSchema = new Schema({
   country: String
 })
 const notificationsSchema = new Schema({
-  user: String,
-  text: String
+  sender: String,
+  message: String
 })
 const userSchema = new Schema({
   UserId: {

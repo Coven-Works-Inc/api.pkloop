@@ -13,8 +13,8 @@ authRouter.post('/resend', authController.resendToken)
 authRouter.post('/login', authController.login)
 authRouter.post('/reset', authController.resetpassword)
 authRouter.post('/password/:token', authController.newpassword)
-authRouter.get('/google-login', authController.googleauth)
-authRouter.get('/google/callback', authController.googleCallBack)
+authRouter.post('/google-login', authController.googleauth)
+// authRouter.get('/google/callback', authController.googleCallBack)
 authRouter.post('/update', auth, authController.updatePassword)
 
 module.exports = authRouter

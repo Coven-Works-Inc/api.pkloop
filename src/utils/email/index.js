@@ -77,7 +77,7 @@ const getEmailData = (to, name, headers, token, template) => {
       data = {
         from: 'PKLoop<jephtino@gmail.com>',
         to,
-        subject: 'Pendind request denied',
+        subject: 'Pending request denied',
         html: `<p>Hello ${name}, <br />Your pending request has been declined</p>`
       }
     case 'declineTraveler':
@@ -87,7 +87,7 @@ const getEmailData = (to, name, headers, token, template) => {
         subject: 'New Traveler connected',
         html: `<p>Hello ${name}, <br />You've declined this transaction</p>`
       }
-    default: 
+    default:
       data
   }
   return data
