@@ -95,12 +95,11 @@ const connectTraveler = async(req, res) => {
   const trip = await Trip.findById(req.body.tripId)
   const user = await User.findById(req.body.id)
   const senderMail = req.user.email
-  const traveler = req.body.travelerMail
   let headers = req.headers.host
   await user.notifications.push('A sender has connected with you, respond by accepting or rejecting')
   trip.earning = req.body.earning
   sendEmail(senderMail, req.user.username, headers, null, 'connectSender')
-  sendEmail(traveler, req.body.username, headers, null, 'connectSender')
+  sendEmail(user.email, req.body.username, headers, null, 'connectSender')
   await user.save()
   await trip.save()
   res.status(200).json({ message: 'Connection successful', user, trip })
