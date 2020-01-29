@@ -109,10 +109,10 @@ const respondAction = async (req, res) => {
   const action = req.body.action
   if(action === 'accept'){
     sendEmail(req.user.email, req.user.username, headers, null, 'acceptTraveler')
-    sendEmail(user.email, req.body.username, headers, null, 'acceptSender')
+    sendEmail(user.email, user.username, headers, null, 'acceptSender')
   } else if(action === 'decline') {
     sendEmail(req.user.email, req.user.username, headers, null, 'declineTraveler')
-    sendEmail(user.email, req.body.username, headers, null, 'declineSender')
+    sendEmail(user.email, user.username, headers, null, 'declineSender')
   }
 }
 module.exports = {
