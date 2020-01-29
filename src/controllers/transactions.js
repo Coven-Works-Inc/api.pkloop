@@ -93,7 +93,7 @@ const completeSenderTransaction = async (req, res) => {
 }
 const connectTraveler = async(req, res) => {
   const trip = await Trip.findById(req.body.tripId)
-  const user = await User.findById(req.body.id)
+  const user = await User.findOne({ username: req.body.username })
   const senderMail = req.user.email
   let headers = req.headers.host
   await user.notifications.push({ id: req.body.id, text: `${req.body.username} has connected with you, respond by accepting or rejecting` })
