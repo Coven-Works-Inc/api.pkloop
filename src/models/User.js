@@ -30,6 +30,10 @@ const travelerSchema = new Schema({
   phone: String,
   country: String
 })
+const notificationsSchema = new Schema({
+  user: String,
+  text: String
+})
 const userSchema = new Schema({
   UserId: {
     type: String,
@@ -146,7 +150,7 @@ const userSchema = new Schema({
   chat: [chatSchema],
   traveler: [travelerSchema],
   sender: [senderSchema],
-  notifications: [String]
+  notifications: [notificationsSchema]
 })
 
 // We validate the user here and generate a token for the user

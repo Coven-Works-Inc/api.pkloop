@@ -49,7 +49,7 @@ const getEmailData = (to, name, headers, token, template) => {
       data = {
         from: 'PKLoop<jephtino@gmail.com>',
         to,
-        subject: 'New Traveler connected',
+        subject: 'New sender connected',
         html: `<p>Hello ${name}, <br /> A new sender has connected to you, login to your dashboard to accept or decline this request</p>`
       }
     case 'connectSender':
@@ -58,6 +58,34 @@ const getEmailData = (to, name, headers, token, template) => {
         to,
         subject: 'New Traveler connected',
         html: `<p>Hello ${name}, <br />You've connected to a traveler, we will let you know when they respond to your request</p>`
+      }
+    case 'acceptSender':
+      data = {
+        from: 'PKLoop<jephtino@gmail.com>',
+        to,
+        subject: 'Transaction accepted',
+        html: `<p>Hello ${name}, <br />Your transaction request is accepted</p>`
+      }
+    case 'acceptTraveler':
+      data = {
+        from: 'PKLoop<jephtino@gmail.com>',
+        to,
+        subject: 'Transaction accepted',
+        html: `<p>Hello ${name}, <br />You've succesfully accepted this transaction</p>`
+      }
+    case 'declineSender':
+      data = {
+        from: 'PKLoop<jephtino@gmail.com>',
+        to,
+        subject: 'Pendind request denied',
+        html: `<p>Hello ${name}, <br />Your pending request has been declined</p>`
+      }
+    case 'declineTraveler':
+      data = {
+        from: 'PKLoop<jephtino@gmail.com>',
+        to,
+        subject: 'New Traveler connected',
+        html: `<p>Hello ${name}, <br />You've declined this transaction</p>`
       }
     default: 
       data

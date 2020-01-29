@@ -93,10 +93,10 @@ const completeSenderTransaction = async (req, res) => {
 }
 const connectTraveler = async(req, res) => {
   const trip = await Trip.findById(req.body.tripId)
-  const user = await User.findById(req.body.id)
+  const user = await User.findOne({ username: req.body.username })
   const senderMail = req.user.email
   let headers = req.headers.host
-  await user.notifications.push('A sender has connected with you, respond by accepting or rejecting')
+  await user.notifications.push({ id: req.body.id, text: `${req.body.username} has connected with you, respond by accepting or rejecting` })
   trip.earning = req.body.earning
   sendEmail(senderMail, req.user.username, headers, null, 'connectSender')
   sendEmail(user.email, req.body.username, headers, null, 'connectTraveler')
@@ -104,7 +104,17 @@ const connectTraveler = async(req, res) => {
   await trip.save()
   res.status(200).json({ message: 'Connection successful', user, trip })
 }
-
+const respondAction = async (req, res) => {
+  const user = await User.findById(req.body.id)
+  const action = req.body.action
+  if(action === 'accept'){
+    sendEmail(req.user.email, req.user.username, headers, null, 'acceptTraveler')
+    sendEmail(user.email, user.username, headers, null, 'acceptSender')
+  } else if(action === 'decline') {
+    sendEmail(req.user.email, req.user.username, headers, null, 'declineTraveler')
+    sendEmail(user.email, user.username, headers, null, 'declineSender')
+  }
+}
 module.exports = {
   postTransaction,
   fetchTransactions,
@@ -112,5 +122,6 @@ module.exports = {
   completeSenderTransaction,
   completeTravelerTransaction,
   updateTransactionDetails,
-  connectTraveler
+  connectTraveler,
+  respondAction
 }
