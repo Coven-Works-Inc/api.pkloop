@@ -149,6 +149,7 @@ const respondAction = async (req, res) => {
     //Also send a mail to traveler with secret passcode only and sender details.
     sendEmail(
       sender.email,
+      sender.phone,
       sender.username,
       traveler.username,
       traveler.email,
@@ -173,6 +174,7 @@ const respondAction = async (req, res) => {
     // Do not send any mail to traveler, there is no need for that
     sendEmail(
       sender.email,
+      sender.phone,
       sender.username,
       traveler.username,
       null,
