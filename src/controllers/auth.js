@@ -3,6 +3,7 @@ const crypto = require('crypto')
 const Token = require('../models/Token')
 const _ = require('lodash')
 const bcrypt = require('bcryptjs')
+const { OAuth2Client } = require('google-auth-library')
 const passport = require('passport')
 
 require('dotenv').config()
@@ -332,16 +333,111 @@ exports.updatePassword = async (req, res) => {
   }
 }
 
-exports.googleauth = passport.authenticate('google', {
-  scope: ['profile', 'email']
-})
+// exports.googleauth = passport.authenticate('google', {
+//   scope: ['profile', 'email']
+// })
 
-;(exports.googleCallBack = passport.authenticate('google', {
-  failureRedirect: '/',
-  session: false
-})),
-  (req, res) => {
+// ;(exports.googleCallBack = passport.authenticate('google', {
+//   failureRedirect: '/',
+//   session: false
+// })),
+//   (req, res) => {
 
-    const token = req.user.token
-    res.redirect('https://pkloop.herokuapp.com?token=' + token)
-  }
+//     const token = req.user.token
+//     res.redirect('https://pkloop.herokuapp.com?token=' + token)
+//   }
+
+const client = new OAuth2Client(process.env.clientID)
+exports.googleauth = (req, res) => {
+  const { idToken } = req.body
+
+  client
+    .verifyIdToken({ idToken, audience: process.env.clientID })
+    .then(async response => {
+      //console.log('Google Login Response', response)
+      const { email_verified, name, email } = response.payload
+
+      if (email_verified) {
+        const user = await User.findOne({ email: email })
+        if (!user) return res.status(404).json({ message: 'User not found!' })
+        const token = user.generateAuthToken()
+        user.token = token
+        await user.save()
+
+        return res
+          .status(200)
+          .header('x-auth-token', token)
+          .json({
+            data: _.pick(user, [
+              '_id',
+              'firstname',
+              'lastname',
+              'email',
+              'balance',
+              'token',
+              'photo'
+            ]),
+            message: 'log in successful, redirecting...'
+          })
+      }
+      //     // if (email_verified) {
+      //     //   User.findOne({ email_verified }).exec(async (err, user) => {
+      //     //     if (user) {
+      //     //       const token = user.generateAuthToken()
+      //     //       user.token = token
+      //     //       await user.save()
+
+      //     //       return res
+      //     //         .status(200)
+      //     //         .header('x-auth-token', token)
+      //     //         .json({
+      //     //           data: _.pick(user, [
+      //     //             '_id',
+      //     //             'firstname',
+      //     //             'lastname',
+      //     //             'email',
+      //     //             'balance',
+      //     //             'token',
+      //     //             'photo'
+      //     //           ]),
+      //     //           message: 'log in successful, redirecting...'
+      //     //         })
+      //     //     } else {
+      //     //       let password = email + process.env.JWT_SECRET
+
+      //     //       user = new User({ name, email, password })
+      //     //       user.save((err, savedUser) => {
+      //     //         if (err) {
+      //     //           console.log('Error from creating new user with Google', err)
+      //     //           return res
+      //     //             .status(400)
+      //     //             .json({ error: 'User sign up with Google Failed' })
+      //     //         }
+      //     //         const token = savedUser.generateAuthToken()
+      //     //         savedUser.token = token
+
+      //     //         return res
+      //     //           .status(200)
+      //     //           .header('x-auth-token', token)
+      //     //           .json({
+      //     //             data: _.pick(savedUser, [
+      //     //               '_id',
+      //     //               'firstname',
+      //     //               'lastname',
+      //     //               'email',
+      //     //               'balance',
+      //     //               'token',
+      //     //               'photo'
+      //     //             ]),
+      //     //             message: 'log in successful, redirecting...'
+      //     //           })
+      //     //       })
+      //     //     }
+      //     //   })
+      //     // } else {
+      //     //   return res.status(400).json({
+      //     //     error: 'Google login failed, try again'
+      //     //   })
+      //     // }
+    })
+}

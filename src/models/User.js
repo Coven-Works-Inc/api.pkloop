@@ -132,6 +132,9 @@ const userSchema = new Schema({
     type: Number,
     default: 0
   },
+  notifications: {
+    type: [String]
+  },
   amountMade: {
     type: String,
     default: 0

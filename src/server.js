@@ -4,24 +4,24 @@ const catchAsync = require('./utils/catchAsync')
 const rateLimit = require('express-rate-limit')
 const bodyParser = require('body-parser')
 require('dotenv').config()
-const multer = require('multer');
+const multer = require('multer')
 const chatServer = require('./chat/index')
-
+const cors = require('cors')
 
 const multerStorage = multer.diskStorage({
-  destination:(req, file, cb) => {
-    cb(null, './public/uploads');
+  destination: (req, file, cb) => {
+    cb(null, './public/uploads')
   },
   filename: (req, file, cb) => {
-    const ext = file.mimetype.split('/')[1];
-    cb(null, `user-img-${Date.now()}.${ext}`);
+    const ext = file.mimetype.split('/')[1]
+    cb(null, `user-img-${Date.now()}.${ext}`)
   }
-});
+})
 
 const multerFilter = (req, file, cb) => {
-  if(file.mimetype.startsWith('image')){
+  if (file.mimetype.startsWith('image')) {
     cb(null, true)
-  } else{
+  } else {
     cb(new AppError('Not an Image!, please upload only images.', 400), false)
   }
 }
@@ -50,10 +50,14 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-app.use('/api/profile/upload',
-    upload.single('img'),
-    (req, res) => {
-  res.status(200).json({status: true, message: 'Done'})
+if ((process.env.NODE_ENV = 'development')) {
+  app.use(cors({ origin: `http://localhost:3000` }))
+} else {
+  app.use(cors())
+}
+
+app.use('/api/profile/upload', upload.single('img'), (req, res) => {
+  res.status(200).json({ status: true, message: 'Done' })
 })
 
 const http = require('http')
@@ -82,7 +86,6 @@ app.use(/^api/, limiter)
 const PORT = process.env.PORT || 8000
 
 app.get(process.env.callbackURL, passport.authenticate('google'))
-
 
 const server = app.listen(PORT, () =>
   console.log(`App is listening on port ${PORT}`)
