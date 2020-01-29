@@ -45,6 +45,20 @@ const getEmailData = (to, name, headers, token, template) => {
         subject: 'Password update',
         html: `<p>Hello ${name}, <br/> Your password was updated successfully on our platform. If you did not request for a password update, Please contact Pkloop support immediately.</p>`
       }
+    case 'connectTraveler':
+      data = {
+        from: 'PKLoop<jephtino@gmail.com>',
+        to,
+        subject: 'New Traveler connected',
+        html: `<p>Hello ${name}, <br /> A new sender has connected to you, login to your dashboard to accept or decline this request</p>`
+      }
+    case 'connectSender':
+      data = {
+        from: 'PKLoop<jephtino@gmail.com>',
+        to,
+        subject: 'New Traveler connected',
+        html: `<p>Hello ${name}, <br />You've connected to a traveler, we will let you know when they respond to your request</p>`
+      }
     default:
       data
   }

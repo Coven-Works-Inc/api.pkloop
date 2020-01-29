@@ -1,7 +1,8 @@
 const Transaction = require('../models/Transaction')
 const User = require('../models/User')
 const Trip = require('../models/Trip')
-
+const { sendEmail } = require('../utils/email')
+const uuid = require('uuid/v4')
 const postTransaction = async (req, res, next) => {
   const user = await User.findById(req.user._id)
   const trip = await Trip.findById(req.body.tripId)
@@ -90,11 +91,27 @@ const completeSenderTransaction = async (req, res) => {
     res.status(200).json({ status: true, message: 'Transaction is not yet marked complete by sender', trip})
   }
 }
+const connectTraveler = async(req, res) => {
+  const trip = await Trip.findById(req.body.tripId)
+  const user = await User.findById(req.body.id)
+  const senderMail = req.user.email
+  const traveler = req.body.travelerMail
+  let headers = req.headers.host
+  await user.notifications.push('A sender has connected with you, respond by accepting or rejecting')
+  trip.earning = req.body.earning
+  sendEmail(senderMail, req.user.username, headers, null, 'connectSender')
+  sendEmail(traveler, req.body.username, headers, null, 'connectSender')
+  await user.save()
+  await trip.save()
+  res.status(200).json({ message: 'Connection successful', user, trip })
+}
+
 module.exports = {
   postTransaction,
   fetchTransactions,
   fetchMyTransactions,
   completeSenderTransaction,
   completeTravelerTransaction,
-  updateTransactionDetails
+  updateTransactionDetails,
+  connectTraveler
 }

@@ -5,7 +5,6 @@ const rateLimit = require('express-rate-limit')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 const multer = require('multer');
-const chatServer = require('./chat/index')
 
 
 const multerStorage = multer.diskStorage({
