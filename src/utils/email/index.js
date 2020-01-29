@@ -59,7 +59,7 @@ const getEmailData = (to, name, headers, token, template) => {
         subject: 'New Traveler connected',
         html: `<p>Hello ${name}, <br />You've connected to a traveler, we will let you know when they respond to your request</p>`
       }
-    default:
+    default: 
       data
   }
   return data
