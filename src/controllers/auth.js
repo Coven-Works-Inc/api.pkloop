@@ -2,9 +2,11 @@ const User = require('../models/User')
 const crypto = require('crypto')
 const Token = require('../models/Token')
 const _ = require('lodash')
+const gravatar = require('gravatar')
 const bcrypt = require('bcryptjs')
 const { OAuth2Client } = require('google-auth-library')
 const passport = require('passport')
+const sendMail = require('../utils/email/auth')
 
 require('dotenv').config()
 
@@ -47,19 +49,7 @@ exports.signup = async (req, res) => {
     d: 'mm' // Default
   })
 
-  user = new User(
-    _.pick(req.body, [
-      'firstname',
-      'lastname',
-      'username',
-      'email',
-      'password',
-      'phone'
-    ]),
-    {
-      photo: avatar
-    }
-  )
+  user = new User(req.body)
 
   // res.json({user})
 
@@ -74,7 +64,7 @@ exports.signup = async (req, res) => {
 
     ref.referralCount += 1
 
-    ref.save()
+    await ref.save()
   }
 
   // Create a verification token for this user
@@ -88,10 +78,11 @@ exports.signup = async (req, res) => {
 
   let headers = req.headers.host
 
-  sendEmail(user.email, user.firstname, headers, token.key, 'welcome')
+  sendMail(user.email, user.firstname, token.key)
 
   res.status(200).send({
     status: true,
+    data: user,
     message: 'A verification email has been sent to ' + user.email + '.'
   })
 }

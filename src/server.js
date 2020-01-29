@@ -3,9 +3,9 @@ const passport = require('passport')
 const catchAsync = require('./utils/catchAsync')
 const rateLimit = require('express-rate-limit')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 require('dotenv').config()
-const multer = require('multer');
-
+const multer = require('multer')
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {

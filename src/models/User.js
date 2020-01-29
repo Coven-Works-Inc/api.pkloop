@@ -31,8 +31,8 @@ const travelerSchema = new Schema({
   country: String
 })
 const notificationsSchema = new Schema({
-  user: String,
-  text: String
+  sender: String,
+  message: String
 })
 const userSchema = new Schema({
   UserId: {
@@ -135,9 +135,6 @@ const userSchema = new Schema({
   balance: {
     type: Number,
     default: 0
-  },
-  notifications: {
-    type: [String]
   },
   amountMade: {
     type: String,
