@@ -30,7 +30,8 @@ module.exports = function (app) {
   app.use('/api/support', support)
   app.use('/chat', 
           proxy({
-            target: 'http://localhost:4000'
+            target: 'http://localhost:5000',
+            changeOrigin: true,
           }))
   // app.all('*', (req, res, next) => {
   //   next(
