@@ -98,7 +98,8 @@ const tripSchema = new Schema({
     type: Number,
     default: 0
   },
-  messages: [message]
+  messages: [message],
+  secret: String
 })
 
 const Trip = model('Trip', tripSchema)

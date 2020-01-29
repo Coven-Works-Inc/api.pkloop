@@ -4,9 +4,8 @@ const catchAsync = require('./utils/catchAsync')
 const rateLimit = require('express-rate-limit')
 const bodyParser = require('body-parser')
 require('dotenv').config()
-const multer = require('multer')
-const chatServer = require('./chat/index')
-const cors = require('cors')
+const multer = require('multer');
+
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
