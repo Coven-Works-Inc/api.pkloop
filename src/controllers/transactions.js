@@ -99,7 +99,6 @@ const connectTraveler = async(req, res) => {
   let headers = req.headers.host
   await user.notifications.push('A sender has connected with you, respond by accepting or rejecting')
   trip.earning = req.body.earning
-  trip.secret = uuid()
   sendEmail(senderMail, req.user.username, headers, null, 'connectSender')
   sendEmail(traveler, req.body.username, headers, null, 'connectSender')
   await user.save()
