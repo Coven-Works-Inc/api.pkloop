@@ -95,7 +95,6 @@ const connectTraveler = async(req, res) => {
   const trip = await Trip.findById(req.body.tripId)
   const user = await User.findById(req.body.id)
   const senderMail = req.user.email
-  const traveler = req.body.travelerMail
   let headers = req.headers.host
   await user.notifications.push('A sender has connected with you, respond by accepting or rejecting')
   trip.earning = req.body.earning
