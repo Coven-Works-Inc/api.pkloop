@@ -35,7 +35,7 @@ exports.signup = async (req, res) => {
       .send({ status: false, message: 'Email already exists!' })
   }
 
-  let user = await User.findOne({ username: req.body.username })
+  user = await User.findOne({ username: req.body.username })
   if (user) {
     return res
       .status(400)
