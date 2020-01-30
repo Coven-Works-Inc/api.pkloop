@@ -1,7 +1,8 @@
 const Transaction = require('../models/Transaction')
 const User = require('../models/User')
 const Trip = require('../models/Trip')
-const sendEmail = require('../utils/email/trips')
+const senderMail = require('../utils/email/trips/sender')
+const travelerMail = require('../utils/email/trips/traveler')
 const uuid = require('uuid/v4')
 const postTransaction = async (req, res, next) => {
   const user = await User.findById(req.user._id)
@@ -154,27 +155,28 @@ const respondAction = async (req, res) => {
         //Traveler accepts transaction, send a notification to sender
         //with acceptance notice and secret passcode
         //Also send a mail to traveler with secret passcode only and sender details.
-        sendEmail(
+        console.log(sender.email)
+        console.log(sender.username)
+        console.log(traveler.email)
+        await senderMail(
           sender.email,
           sender.phone,
           sender.username,
           traveler.username,
           traveler.email,
           traveler.phone,
-          null,
-          null,
-          'senderAccept'
+          '',
+          ''
         )
-        sendEmail(
+        await travelerMail(
           sender.email,
           sender.phone,
-          null,
+          '',
           traveler.username,
           traveler.email,
           traveler.phone,
-          null,
-          null,
-          'travelerAccept'
+          '',
+          ''
         )
       } else if (action === 'decline') {
         //If Traveler declines transaction, send a mail to sender with rejection notice
@@ -184,14 +186,18 @@ const respondAction = async (req, res) => {
           sender.phone,
           sender.username,
           traveler.username,
-          null,
-          null,
-          null,
-          null,
+          '',
+          '',
+          '',
+          '',
           'senderReject'
         )
       }
-    } catch (error) {}
+
+      res.status(200).json({ status: true, message: 'message sent' })
+    } catch (error) {
+      console.log('Process failed: ', error)
+    }
   } else {
     res.status(400).json({ error: 'sender Id is null' })
   }
