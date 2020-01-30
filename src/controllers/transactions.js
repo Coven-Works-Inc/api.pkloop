@@ -122,11 +122,14 @@ const completeSenderTransaction = async (req, res) => {
 // }
 
 const sendConnect = async (req, res) => {
-  const subject = req.body.subject
+  const trip = await Trip.findById(req.body.tripId)
+  let sender = await User.findById(req.user._id)
+  let traveler = await User.findById(req.body.travelerId)
+
   const message = req.body.message
 
-  let sender = await User.findById(req.user._id)
-  let traveler = await User.findById(req.travelerId)
+  trip.requestStatus = 'requested'
+  await trip.save()
 
   await traveler.notifications.push({
     sender: sender.email,
