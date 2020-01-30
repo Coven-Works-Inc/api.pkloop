@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema, model } = require('mongoose')
+const crypto = require('crypto')
 
 const receiver = new Schema({
   fullname: String,
@@ -72,7 +73,7 @@ const tripSchema = new Schema({
   requestStatus: {
     type: String,
     enum: ['listed', 'requesed', 'accepted'],
-    default: listed
+    default: 'listed'
   },
   tipAdded: {
     type: Boolean,
@@ -98,8 +99,16 @@ const tripSchema = new Schema({
     type: Number,
     default: 0
   },
+  secretCode: {
+    type: String
+  },
   messages: [message],
   secret: String
+})
+
+tripSchema.pre('save', function (next) {
+  this.secretCode = crypto.randomBytes(4).toString('hex')
+  next()
 })
 
 const Trip = model('Trip', tripSchema)

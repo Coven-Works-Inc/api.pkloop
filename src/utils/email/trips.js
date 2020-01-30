@@ -8,7 +8,7 @@ const sendMail = async (
   travelerusername,
   traveleremail,
   travelerphone,
-  subject,
+  code,
   message,
   template
 ) => {

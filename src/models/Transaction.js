@@ -5,18 +5,16 @@ const transactionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-
   status: {
     type: String,
-    enum: ['Pending', 'Declined', 'Completed', 'Accepted'],
-    default: 'Pending'
+    enum: ['In Process', 'Completed'],
+    default: 'In Process'
   },
-  with: {
+  traveler: {
     type: String
   },
-  role: {
-    type: String,
-    required: [true, 'Please enter user role in transaction']
+  sender: {
+    type: String
   },
   date: {
     type: Date,
@@ -25,13 +23,16 @@ const transactionSchema = new Schema({
   tripId: {
     type: Schema.Types.ObjectId
   },
-  senderComplete: {
-    type: Boolean,
-    default: false
+  amountDue: {
+    type: Number,
+    default: 0
   },
-  travelerComplete: {
-    type: Boolean,
-    default: false
+  tripCode: {
+    type: String
+  },
+  amountPaid: {
+    type: Number,
+    default: 0
   }
 })
 

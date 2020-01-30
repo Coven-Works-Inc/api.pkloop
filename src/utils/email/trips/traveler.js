@@ -1,5 +1,13 @@
 const sgMail = require('@sendgrid/mail')
+const crypto = require('crypto')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+
+const key = crypto.randomBytes(4).toString('hex')
+const senderKey = key.substring(0, 4)
+const travelerKey = key.substring(4, 8)
+
+console.log(`Whole Key: ${key}`)
+console.log(`sender: ${senderKey}, traveler: ${travelerKey}`)
 
 const sendMail = async (
   senderemail,
@@ -8,13 +16,13 @@ const sendMail = async (
   travelerusername,
   traveleremail,
   travelerphone,
-  subject,
+  code,
   message
 ) => {
   const emailData = {
     from: process.env.EMAIL_FROM,
     to: traveleremail,
-    subject: 'Request Update',
+    subject: 'Trip Details',
     html: `
          Hello ${travelerusername}, Thank you for accepting to help 
          ${senderusername}  carry a parcel.
@@ -27,7 +35,7 @@ const sendMail = async (
         <b>${senderusername}'s</b> Phone: ${senderphone}
          <br />
         <br />
-  Also, your secret code for this transaction is [<b>065Ad0</b>].
+  Also, your secret code for this transaction is [${code}].
   <br />
   <br />
   Please, do ensure to obtain the last three digits of this code from the receiver of the parcel upon delivery.

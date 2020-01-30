@@ -3,7 +3,9 @@ const User = require('../models/User')
 const Trip = require('../models/Trip')
 const senderMail = require('../utils/email/trips/sender')
 const travelerMail = require('../utils/email/trips/traveler')
+const rejectMail = require('../utils/email/trips/reject')
 const uuid = require('uuid/v4')
+
 const postTransaction = async (req, res, next) => {
   const user = await User.findById(req.user._id)
   const trip = await Trip.findById(req.body.tripId)
@@ -99,13 +101,18 @@ const completeSenderTransaction = async (req, res) => {
 const connectTraveler = async (req, res) => {
   const trip = await Trip.findById(req.body.tripId)
   const traveler = await User.findOne({ username: req.body.username })
+
+  trip.requestStatus = 'requested'
+  await trip.save()
+
   const senderMail = req.user.email
+
   let headers = req.headers.host
   await user.notifications.push({
     id: req.body.id,
     text: `${req.body.username} has connected with you, respond by accepting or rejecting`
   })
-  trip.earning = req.body.earning
+
   sendEmail(senderMail, req.user.username, headers, null, 'connectSender')
   sendEmail(user.email, req.body.username, headers, null, 'connectTraveler')
   await user.save()
@@ -141,23 +148,37 @@ const sendTransaction = async (req, res) => {
 const respondAction = async (req, res) => {
   const traveler = await User.findById(req.user._id)
   const sender = await User.findById(req.body.senderId)
-  console.log(req.body)
+  const trip = await Trip.findById(req.body.tripId)
 
   if (req.body.senderId !== null || req.body.senderId == undefined) {
     try {
       //Since the traveler is logged in, get Id from req.user
-
       //Pick the senderId from the action/comp and name it senderId before sending to the back
       //For Clarity
-      req.body.senderId
-      const action = req.body.action
       if (action === 'accept') {
+        const transaction = new Transaction({
+          user: req.user._id,
+          status: 'In Process',
+          traveler: traveler.username,
+          sender: sender.username,
+          date: Date.now(),
+          tripId: trip._id,
+          tripCode: trip.secretCode,
+          amountDue: req.body.amount
+        })
+        await transaction.save()
+
+        const tripKey = trip.secretCode
+        const senderKey = tripKey.subString(0, 4)
+        const travelerKey = tripKey.subString(4, 8)
+        trip.requestStatus = 'accepted'
+
+        await trip.save()
+
         //Traveler accepts transaction, send a notification to sender
         //with acceptance notice and secret passcode
         //Also send a mail to traveler with secret passcode only and sender details.
-        console.log(sender.email)
-        console.log(sender.username)
-        console.log(traveler.email)
+
         await senderMail(
           sender.email,
           sender.phone,
@@ -165,7 +186,7 @@ const respondAction = async (req, res) => {
           traveler.username,
           traveler.email,
           traveler.phone,
-          '',
+          senderKey,
           ''
         )
         await travelerMail(
@@ -175,13 +196,15 @@ const respondAction = async (req, res) => {
           traveler.username,
           traveler.email,
           traveler.phone,
-          '',
+          travelerKey,
           ''
         )
       } else if (action === 'decline') {
+        trip.requestStatus = 'listed'
+        await trip.save()
         //If Traveler declines transaction, send a mail to sender with rejection notice
         // Do not send any mail to traveler, there is no need for that
-        sendEmail(
+        await rejectMail(
           sender.email,
           sender.phone,
           sender.username,
@@ -189,8 +212,7 @@ const respondAction = async (req, res) => {
           '',
           '',
           '',
-          '',
-          'senderReject'
+          ''
         )
       }
 

@@ -16,16 +16,7 @@ const sendMail = async (
     to: senderemail,
     subject: 'Request update',
     html: `
-        Hello ${senderusername}, your request to ${travelerusername} on the pkloop platform was just accepted. You can reach the traveler via email or phone to decide on meeting point and other necessary details.
-
-            Traveler Email: ${traveleremail}
-      Traveler Phone: ${travelerphone}
-
-      Also, your secret code for this transaction is [${code}], ensure this is only given to the traveler upon receipt by the receiver of your parcel.
-
-      Please ensure to keep with all the instructions on the pkloop platform to ensure safe delivery of your parcel.
-
-      The gods be with you.`
+        Hello ${senderusername}, your request to one of the travelers on the pkloop platform has been declined by the traveler. Kindly Login again to take a necessary action concerning your request.`
   }
 
   try {
