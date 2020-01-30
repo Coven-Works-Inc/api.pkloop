@@ -138,52 +138,62 @@ const sendTransaction = async (req, res) => {
 }
 
 const respondAction = async (req, res) => {
-  //Since the traveler is logged in, get Id from req.user
   const traveler = await User.findById(req.user._id)
-  //Pick the senderId from the action/comp and name it senderId before sending to the back
-  //For Clarity
   const sender = await User.findById(req.body.senderId)
-  const action = req.body.action
-  if (action === 'accept') {
-    //Traveler accepts transaction, send a notification to sender
-    //with acceptance notice and secret passcode
-    //Also send a mail to traveler with secret passcode only and sender details.
-    sendEmail(
-      sender.email,
-      sender.phone,
-      sender.username,
-      traveler.username,
-      traveler.email,
-      traveler.phone,
-      null,
-      null,
-      'senderAccept'
-    )
-    sendEmail(
-      sender.email,
-      sender.phone,
-      null,
-      traveler.username,
-      traveler.email,
-      traveler.phone,
-      null,
-      null,
-      'travelerAccept'
-    )
-  } else if (action === 'decline') {
-    //If Traveler declines transaction, send a mail to sender with rejection notice
-    // Do not send any mail to traveler, there is no need for that
-    sendEmail(
-      sender.email,
-      sender.phone,
-      sender.username,
-      traveler.username,
-      null,
-      null,
-      null,
-      null,
-      'senderReject'
-    )
+  console.log(req.body)
+
+  if (req.body.senderId !== null || req.body.senderId == undefined) {
+    try {
+      //Since the traveler is logged in, get Id from req.user
+
+      //Pick the senderId from the action/comp and name it senderId before sending to the back
+      //For Clarity
+      req.body.senderId
+      const action = req.body.action
+      if (action === 'accept') {
+        //Traveler accepts transaction, send a notification to sender
+        //with acceptance notice and secret passcode
+        //Also send a mail to traveler with secret passcode only and sender details.
+        sendEmail(
+          sender.email,
+          sender.phone,
+          sender.username,
+          traveler.username,
+          traveler.email,
+          traveler.phone,
+          null,
+          null,
+          'senderAccept'
+        )
+        sendEmail(
+          sender.email,
+          sender.phone,
+          null,
+          traveler.username,
+          traveler.email,
+          traveler.phone,
+          null,
+          null,
+          'travelerAccept'
+        )
+      } else if (action === 'decline') {
+        //If Traveler declines transaction, send a mail to sender with rejection notice
+        // Do not send any mail to traveler, there is no need for that
+        sendEmail(
+          sender.email,
+          sender.phone,
+          sender.username,
+          traveler.username,
+          null,
+          null,
+          null,
+          null,
+          'senderReject'
+        )
+      }
+    } catch (error) {}
+  } else {
+    res.status(400).json({ error: 'sender Id is null' })
   }
 }
 module.exports = {
