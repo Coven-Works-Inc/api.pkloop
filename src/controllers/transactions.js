@@ -4,6 +4,7 @@ const Trip = require('../models/Trip')
 const senderMail = require('../utils/email/trips/sender')
 const travelerMail = require('../utils/email/trips/traveler')
 const rejectMail = require('../utils/email/trips/reject')
+const sendConnectEmail = require('../utils/email/trips/connect')
 const uuid = require('uuid/v4')
 
 const postTransaction = async (req, res, next) => {
@@ -98,29 +99,29 @@ const completeSenderTransaction = async (req, res) => {
     })
   }
 }
-const connectTraveler = async (req, res) => {
-  const trip = await Trip.findById(req.body.tripId)
-  const traveler = await User.findOne({ username: req.body.username })
+// const connectTraveler = async (req, res) => {
+//   const trip = await Trip.findById(req.body.tripId)
+//   const traveler = await User.findOne({ username: req.body.username })
 
-  trip.requestStatus = 'requested'
-  await trip.save()
+//   trip.requestStatus = 'requested'
+//   await trip.save()
 
-  const senderMail = req.user.email
+//   const senderMail = req.user.email
 
-  let headers = req.headers.host
-  await user.notifications.push({
-    id: req.body.id,
-    text: `${req.body.username} has connected with you, respond by accepting or rejecting`
-  })
+//   let headers = req.headers.host
+//   await user.notifications.push({
+//     id: req.body.id,
+//     text: `${req.body.username} has connected with you, respond by accepting or rejecting`
+//   })
 
-  sendEmail(senderMail, req.user.username, headers, null, 'connectSender')
-  sendEmail(user.email, req.body.username, headers, null, 'connectTraveler')
-  await user.save()
-  await trip.save()
-  res.status(200).json({ message: 'Connection successful', user, trip })
-}
+//   sendEmail(senderMail, req.user.username, headers, null, 'connectSender')
+//   sendEmail(user.email, req.body.username, headers, null, 'connectTraveler')
+//   await user.save()
+//   await trip.save()
+//   res.status(200).json({ message: 'Connection successful', user, trip })
+// }
 
-const sendTransaction = async (req, res) => {
+const sendConnect = async (req, res) => {
   const subject = req.body.subject
   const message = req.body.message
 
@@ -133,15 +134,15 @@ const sendTransaction = async (req, res) => {
     message
   })
 
-  sendEmail(
-    null,
-    null,
+  sendConnectEmail(
+    '',
+    '',
+    sender.username,
     traveler.username,
     traveler.email,
-    null,
-    subject,
-    message,
-    'sendTrans'
+    traveler.phone,
+    '',
+    message
   )
 }
 
@@ -231,6 +232,6 @@ module.exports = {
   completeSenderTransaction,
   completeTravelerTransaction,
   updateTransactionDetails,
-  connectTraveler,
-  respondAction
+  respondAction,
+  sendConnect
 }
