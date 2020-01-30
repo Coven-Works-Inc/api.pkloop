@@ -14,7 +14,7 @@ authRouter.post('/login', authController.login)
 authRouter.post('/reset', authController.resetpassword)
 authRouter.post('/password/:token', authController.newpassword)
 authRouter.post('/google-login', authController.googleauth)
-// authRouter.get('/google/callback', authController.googleCallBack)
+authRouter.post('/facebook-login', authController.googleauth)
 authRouter.post('/update', auth, authController.updatePassword)
 
 module.exports = authRouter
