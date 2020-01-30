@@ -97,7 +97,7 @@ const completeSenderTransaction = async (req, res) => {
 }
 const connectTraveler = async (req, res) => {
   const trip = await Trip.findById(req.body.tripId)
-  const user = await User.findOne({ username: req.body.username })
+  const traveler = await User.findOne({ username: req.body.username })
   const senderMail = req.user.email
   let headers = req.headers.host
   await user.notifications.push({
@@ -119,9 +119,10 @@ const sendTransaction = async (req, res) => {
   let sender = await User.findById(req.user._id)
   let traveler = await User.findById(req.travelerId)
 
-  traveler.notifications.push({
+  await traveler.notifications.push({
     sender: sender.email,
-    message: `${sender.username} has a pending request for you, respond or reject by accepting`
+    notify: `${sender.username} has a pending request for you, respond or reject by accepting`,
+    message
   })
 
   sendEmail(
