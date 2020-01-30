@@ -11,10 +11,18 @@ transRouter.get(
   auth,
   transController.fetchMyTransactions
 )
-transRouter.post('/completetraveler', auth, transController.completeTravelerTransaction)
-transRouter.post('/completesender', auth, transController.completeSenderTransaction)
+transRouter.post(
+  '/completetraveler',
+  auth,
+  transController.completeTravelerTransaction
+)
+transRouter.post(
+  '/completesender',
+  auth,
+  transController.completeSenderTransaction
+)
 transRouter.post('/updatetrans', auth, transController.updateTransactionDetails)
-transRouter.post('/connect', auth, transController.connectTraveler)
+transRouter.post('/connect', auth, transController.sendConnect)
 transRouter.post('/respond', auth, transController.respondAction)
 
 module.exports = transRouter
