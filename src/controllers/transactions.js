@@ -142,7 +142,7 @@ const respondAction = async (req, res) => {
   const traveler = await User.findById(req.user._id)
   //Pick the senderId from the action/comp and name it senderId before sending to the back
   //For Clarity
-  const sender = await User.findById(req.senderId)
+  const sender = await User.findById(req.body.senderId)
   const action = req.body.action
   if (action === 'accept') {
     //Traveler accepts transaction, send a notification to sender
