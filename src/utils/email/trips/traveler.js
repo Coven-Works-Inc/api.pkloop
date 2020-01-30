@@ -1,5 +1,13 @@
 const sgMail = require('@sendgrid/mail')
+const crypto = require('crypto')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+
+const key = crypto.randomBytes(4).toString('hex')
+const senderKey = key.substring(0, 4)
+const travelerKey = key.substring(4, 8)
+
+console.log(`Whole Key: ${key}`)
+console.log(`sender: ${senderKey}, traveler: ${travelerKey}`)
 
 const sendMail = async (
   senderemail,
@@ -8,21 +16,34 @@ const sendMail = async (
   travelerusername,
   traveleremail,
   travelerphone,
-  subject,
+  code,
   message
 ) => {
   const emailData = {
     from: process.env.EMAIL_FROM,
     to: traveleremail,
-    subject: 'Request Update',
+    subject: 'Trip Details',
     html: `
-         Hello ${travelerusername}, Thank you for accepting to help ${senderusername}  carry a parcel.Here are some contact details you may be needing for your client.
-
-            Client Email: ${senderemail}
-          Client Phone: ${senderphone}
-
-  Also, your secret code for this transaction is 065, ensure to obtain the last three digist of this code from the receiver of the parcel upon delivery.Use this to redeem your payment on pkloop.
-
+         Hello ${travelerusername}, Thank you for accepting to help 
+         ${senderusername}  carry a parcel.
+         <br />
+         <br />
+         Here are some contact details you may be needing for your client.
+        <br />
+        <br />
+        <b>${senderusername}'s</b> Mail: ${senderemail}<br/>
+        <b>${senderusername}'s</b> Phone: ${senderphone}
+         <br />
+        <br />
+  Also, your secret code for this transaction is [${code}].
+  <br />
+  <br />
+  Please, do ensure to obtain the last three digits of this code from the receiver of the parcel upon delivery.
+  <br/>
+  <br />
+  Use this to redeem your payment on pkloop.
+         <br />
+        <br />
   Please ensure to keep with all the instructions on the pkloop platform to ensure safe delivery of your parcel.`
   }
 

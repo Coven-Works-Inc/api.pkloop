@@ -347,7 +347,7 @@ exports.updatePassword = async (req, res) => {
 //   }
 
 const client = new OAuth2Client(process.env.clientID)
-exports.googleauth = (req, res) => {
+exports.googleLogin = (req, res) => {
   const { idToken } = req.body
 
   client
@@ -439,4 +439,43 @@ exports.googleauth = (req, res) => {
       //     //   })
       //     // }
     })
+}
+
+exports.facebookLogin = async (req, res) => {
+  console.log('FACEBOOK LOGIN REQ BODY', req.body)
+  const { userID, accessToken } = req.body
+
+  const url = `https://graph.facebook.com/v2.11/${userID}/?fields=id,name,email&access_token=${accessToken}`
+
+  try {
+    const response = await axios.get(url)
+    const { email, name } = response
+
+    const user = await User.findOne({ email })
+    if (!user) return res.status(404).json({ message: 'User not found' })
+
+    const token = user.generateAuthToken()
+    user.token = token
+    await user.save()
+
+    return res
+      .status(200)
+      .header('x-auth-token', token)
+      .json({
+        data: _.pick(user, [
+          '_id',
+          'firstname',
+          'lastname',
+          'email',
+          'balance',
+          'token',
+          'photo'
+        ]),
+        message: 'log in successful, redirecting...'
+      })
+  } catch (error) {
+    res.json({
+      error: 'Facebook login failed. Try later'
+    })
+  }
 }
