@@ -347,7 +347,7 @@ exports.updatePassword = async (req, res) => {
 //   }
 
 const client = new OAuth2Client(process.env.clientID)
-exports.googleauth = (req, res) => {
+exports.googleLogin = (req, res) => {
   const { idToken } = req.body
 
   client

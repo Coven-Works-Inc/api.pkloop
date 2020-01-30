@@ -13,8 +13,8 @@ authRouter.post('/resend', authController.resendToken)
 authRouter.post('/login', authController.login)
 authRouter.post('/reset', authController.resetpassword)
 authRouter.post('/password/:token', authController.newpassword)
-authRouter.post('/google-login', authController.googleauth)
-authRouter.post('/facebook-login', authController.googleauth)
+authRouter.post('/google-login', authController.googleLogin)
+authRouter.post('/facebook-login', authController.facebookLogin)
 authRouter.post('/update', auth, authController.updatePassword)
 
 module.exports = authRouter
