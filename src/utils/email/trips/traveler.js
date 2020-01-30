@@ -16,13 +16,26 @@ const sendMail = async (
     to: traveleremail,
     subject: 'Request Update',
     html: `
-         Hello ${travelerusername}, Thank you for accepting to help ${senderusername}  carry a parcel.Here are some contact details you may be needing for your client.
-
-            Client Email: ${senderemail}
-          Client Phone: ${senderphone}
-
-  Also, your secret code for this transaction is 065, ensure to obtain the last three digist of this code from the receiver of the parcel upon delivery.Use this to redeem your payment on pkloop.
-
+         Hello ${travelerusername}, Thank you for accepting to help 
+         ${senderusername}  carry a parcel.
+         <br />
+         <br />
+         Here are some contact details you may be needing for your client.
+        <br />
+        <br />
+        <b>${senderusername}'s</b> Mail: ${senderemail}<br/>
+        <b>${senderusername}'s</b> Phone: ${senderphone}
+         <br />
+        <br />
+  Also, your secret code for this transaction is [<b>065Ad0</b>].
+  <br />
+  <br />
+  Please, do ensure to obtain the last three digits of this code from the receiver of the parcel upon delivery.
+  <br/>
+  <br />
+  Use this to redeem your payment on pkloop.
+         <br />
+        <br />
   Please ensure to keep with all the instructions on the pkloop platform to ensure safe delivery of your parcel.`
   }
 

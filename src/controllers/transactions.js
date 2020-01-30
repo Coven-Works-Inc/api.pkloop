@@ -171,7 +171,7 @@ const respondAction = async (req, res) => {
         await travelerMail(
           sender.email,
           sender.phone,
-          '',
+          sender.username,
           traveler.username,
           traveler.email,
           traveler.phone,

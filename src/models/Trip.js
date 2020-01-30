@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema, model } = require('mongoose')
 
-
 const receiver = new Schema({
   fullname: String,
   address: String,
@@ -70,9 +69,10 @@ const tripSchema = new Schema({
     type: Number,
     default: 0
   },
-  complete: {
-    type: Boolean,
-    default: false
+  requestStatus: {
+    type: String,
+    enum: ['listed', 'requesed', 'accepted'],
+    default: listed
   },
   tipAdded: {
     type: Boolean,
@@ -82,11 +82,11 @@ const tripSchema = new Schema({
     type: Boolean,
     default: false
   },
-  tipAmount : {
+  tipAmount: {
     type: Number,
     default: 0
   },
-  insuranceAmount : {
+  insuranceAmount: {
     type: Number,
     default: 0
   },
