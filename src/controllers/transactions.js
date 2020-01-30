@@ -232,7 +232,6 @@ module.exports = {
   completeSenderTransaction,
   completeTravelerTransaction,
   updateTransactionDetails,
-  connectTraveler,
   respondAction,
   sendConnect
 }
