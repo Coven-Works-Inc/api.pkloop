@@ -32,7 +32,11 @@ const travelerSchema = new Schema({
 })
 const notificationsSchema = new Schema({
   sender: String,
-  message: String
+  message: String,
+  notify: String,
+  tripId: String,
+  amount: Number,
+  username: String
 })
 const userSchema = new Schema({
   UserId: {
@@ -168,7 +172,8 @@ userSchema.methods.generateAuthToken = function () {
       isVerified: this.isVerified,
       balance: this.balance,
       photo: this.photo,
-      username: this.username
+      username: this.username,
+      notifications: this.notifications
     },
     config.get('jwtPrivateKey'),
     { expiresIn: 3600 }

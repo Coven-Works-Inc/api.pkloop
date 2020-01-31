@@ -24,5 +24,7 @@ transRouter.post(
 transRouter.post('/updatetrans', auth, transController.updateTransactionDetails)
 transRouter.post('/connect', auth, transController.sendConnect)
 transRouter.post('/respond', auth, transController.respondAction)
+transRouter.post('/redeemcode', auth, transController.redeemCode)
+transRouter.post('/addtip', auth, transController.addTip)
 
 module.exports = transRouter
