@@ -82,7 +82,7 @@ const limiter = rateLimit({
 //Using the rate middleware to protect the api from multiple requests
 app.use(/^api/, limiter)
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 5000
 
 app.get(process.env.callbackURL, passport.authenticate('google'))
 

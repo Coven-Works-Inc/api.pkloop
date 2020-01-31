@@ -4,5 +4,7 @@ yarn.lock
 package-lock.json
 ./logfile.log
 ./uncaughtExceptions.log
-
 *.log
+.DS_Store
+
+
