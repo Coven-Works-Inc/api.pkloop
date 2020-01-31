@@ -134,7 +134,8 @@ const sendConnect = async (req, res) => {
   await traveler.notifications.push({
     sender: sender.email,
     notify: `${sender.username} has a pending request for you, respond or reject by accepting`,
-    message
+    message,
+    tripId: req.body.tripId
   })
 
   sendConnectEmail(
@@ -147,6 +148,7 @@ const sendConnect = async (req, res) => {
     '',
     message
   )
+  traveler.save()
 }
 
 const respondAction = async (req, res) => {

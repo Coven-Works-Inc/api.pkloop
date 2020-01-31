@@ -72,7 +72,7 @@ const tripSchema = new Schema({
   },
   requestStatus: {
     type: String,
-    enum: ['listed', 'requesed', 'accepted'],
+    enum: ['listed', 'requested', 'accepted'],
     default: 'listed'
   },
   tipAdded: {
