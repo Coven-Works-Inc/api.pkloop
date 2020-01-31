@@ -2,5 +2,6 @@
 
 *.log
 
+*.DS_Store
 #Ignoring env files
 .env
