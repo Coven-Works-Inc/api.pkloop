@@ -1,6 +1,7 @@
 const Transaction = require('../models/Transaction')
 const User = require('../models/User')
 const Trip = require('../models/Trip')
+const RedeemCode = require('../models/RedeemCode')
 const senderMail = require('../utils/email/trips/sender')
 const travelerMail = require('../utils/email/trips/traveler')
 const rejectMail = require('../utils/email/trips/reject')
@@ -132,10 +133,12 @@ const sendConnect = async (req, res) => {
   await trip.save()
 
   await traveler.notifications.push({
-    sender: sender.email,
+    sender: sender._id,
+    username: sender.username,
     notify: `${sender.username} has a pending request for you, respond or reject by accepting`,
     message,
-    tripId: req.body.tripId
+    tripId: req.body.tripId,
+    amount: req.body.amount
   })
 
   sendConnectEmail(
@@ -155,6 +158,7 @@ const respondAction = async (req, res) => {
   const traveler = await User.findById(req.user._id)
   const sender = await User.findById(req.body.senderId)
   const trip = await Trip.findById(req.body.tripId)
+  const action = req.body.action
 
   if (req.body.senderId !== null || req.body.senderId == undefined) {
     try {
@@ -175,12 +179,17 @@ const respondAction = async (req, res) => {
         await transaction.save()
 
         const tripKey = trip.secretCode
-        const senderKey = tripKey.subString(0, 4)
-        const travelerKey = tripKey.subString(4, 8)
+        const senderKey = tripKey.substring(0, 4)
+        const travelerKey = tripKey.substring(4, 8)
         trip.requestStatus = 'accepted'
 
         await trip.save()
-
+        const code = new RedeemCode({
+          userId: req.body.senderId,
+          amount: req.body.amount,
+          code: tripKey
+        })
+        await code.save()
         //Traveler accepts transaction, send a notification to sender
         //with acceptance notice and secret passcode
         //Also send a mail to traveler with secret passcode only and sender details.
@@ -230,6 +239,33 @@ const respondAction = async (req, res) => {
     res.status(400).json({ error: 'sender Id is null' })
   }
 }
+const redeemCode = async (req, res) => {
+  const traveler = await User.findById(req.user._id)
+  const code = await RedeemCode.findOne({ code: req.body.code })
+  if(!code){
+    res.status(400).json({ error: 'redeem code has been used or invalid'})
+  } else {
+    console.log(traveler._id)
+    traveler.balance += code.amount
+    await RedeemCode.deleteOne({ code: req.body.code })
+    await traveler.save()
+    res.status(200).json({ status: true, message: `Your balance has been credited with $${code.amount}`})
+  }
+
+}
+const addTip = async (req, res) => {
+  const traveler = await User.findOne({ email: req.body.email })
+  const sender = await User.findById(req.user._id)
+  if(sender.balance >= req.body.amount) {
+    traveler.balance += req.body.amount
+    sender.balance -= req.body.amount
+    await traveler.save()
+    await sender.save()
+    res.status(200).json({ status: true, message: 'Tip succesfully added'})
+  } else {
+    res.status(400).json({ status: true, message: 'insufficient balance'})
+  }
+}
 module.exports = {
   postTransaction,
   fetchTransactions,
@@ -238,5 +274,7 @@ module.exports = {
   completeTravelerTransaction,
   updateTransactionDetails,
   respondAction,
-  sendConnect
+  sendConnect,
+  redeemCode,
+  addTip
 }

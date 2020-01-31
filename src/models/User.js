@@ -34,7 +34,9 @@ const notificationsSchema = new Schema({
   sender: String,
   message: String,
   notify: String,
-  tripId: String
+  tripId: String,
+  amount: Number,
+  username: String
 })
 const userSchema = new Schema({
   UserId: {
