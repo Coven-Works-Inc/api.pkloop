@@ -25,7 +25,6 @@ const sendMail = async (
 
   try {
     await sgMail.send(emailData)
-
     return 'mail sending success'
   } catch {
     return 'mail sending failure'
