@@ -148,7 +148,7 @@ const sendConnect = async (req, res) => {
     '',
     message
   )
-  traveler.save()
+  await traveler.save()
 }
 
 const respondAction = async (req, res) => {
