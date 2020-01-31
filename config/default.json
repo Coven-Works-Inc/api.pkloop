@@ -1,0 +1,4 @@
+{
+    "jwtPrivateKey": "23456",
+    "db": "mongodb://localhost/pkloop"
+}
