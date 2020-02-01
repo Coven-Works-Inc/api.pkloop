@@ -7,6 +7,12 @@ const travelerMail = require('../utils/email/trips/traveler')
 const rejectMail = require('../utils/email/trips/reject')
 const sendConnectEmail = require('../utils/email/trips/connect')
 const uuid = require('uuid/v4')
+const axios = require('axios')
+const qs = require('querystring')
+
+require('dotenv').config()
+
+const URL = process.env.INSURANCE_URL
 
 const postTransaction = async (req, res, next) => {
   const user = await User.findById(req.user._id)
@@ -266,6 +272,36 @@ const addTip = async (req, res) => {
     res.status(400).json({ status: true, message: 'insufficient balance'})
   }
 }
+const payInsurance = async(req, res) => {
+  const user = await User.findById(req.user._id)
+  const parcelItem = req.body.item || 'parcel'
+  await axios({
+    method: 'post',
+    url: URL,
+    data: qs.stringify({
+        client_id: process.env.INSURANCE_CLIENT_ID,
+        api_key: process.env.INSURANCE_KEY,
+        customer_name: `${user.firstname} ${user.lastname}`,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        items_ordered: parcelItem,
+        currency: "USD",
+        subtotal: req.body.total,
+        coverage_amount: req.body.amount,
+        order_number: uuid()
+    }),
+    headers: {
+        'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+    }
+}).then(response => {
+       res.status(200).json({ data: response.data})
+    })
+    .catch(err => {
+      res.status(400).json({ message: 'transaction failed', err})
+      console.log(err)
+    })
+}
 module.exports = {
   postTransaction,
   fetchTransactions,
@@ -276,5 +312,6 @@ module.exports = {
   respondAction,
   sendConnect,
   redeemCode,
-  addTip
+  addTip,
+  payInsurance
 }
