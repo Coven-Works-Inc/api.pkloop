@@ -4,6 +4,7 @@ const Trip = require('../models/Trip')
 const RedeemCode = require('../models/RedeemCode')
 const senderMail = require('../utils/email/trips/sender')
 const travelerMail = require('../utils/email/trips/traveler')
+const tipEmail = require('../utils/email/trips/tip')
 const rejectMail = require('../utils/email/trips/reject')
 const sendConnectEmail = require('../utils/email/trips/connect')
 const uuid = require('uuid/v4')
@@ -220,6 +221,9 @@ const respondAction = async (req, res) => {
           travelerKey,
           ''
         )
+        await traveler.notifications.pull(req.body.notifId)
+        await traveler.save()
+
       } else if (action === 'decline') {
         trip.requestStatus = 'listed'
         await trip.save()
@@ -235,6 +239,8 @@ const respondAction = async (req, res) => {
           '',
           ''
         )
+        await traveler.notifications.pull(req.body.notifId)
+        await traveler.save()
       }
 
       res.status(200).json({ status: true, message: 'message sent' })
@@ -268,6 +274,7 @@ const addTip = async (req, res) => {
     await traveler.save()
     await sender.save()
     res.status(200).json({ status: true, message: 'Tip succesfully added'})
+    await tipEmail(sender.username, traveler.username, traveler.email, req.body.amount)
   } else {
     res.status(400).json({ status: true, message: 'insufficient balance'})
   }
