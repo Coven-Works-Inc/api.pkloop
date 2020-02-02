@@ -239,6 +239,8 @@ const respondAction = async (req, res) => {
           '',
           ''
         )
+        await traveler.notifications.pull(req.body.notifId)
+        await traveler.save()
       }
 
       res.status(200).json({ status: true, message: 'message sent' })
