@@ -49,11 +49,13 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-if ((process.env.NODE_ENV = 'development')) {
-  app.use(cors({ origin: `http://localhost:3000` }))
-} else {
-  app.use(cors())
-}
+// if ((process.env.NODE_ENV = 'development')) {
+//   app.use(cors({ origin: `http://localhost:3000` }))
+// } else {
+//   app.use(cors())
+// }
+
+app.use(cors())
 
 app.use('/api/profile/upload', upload.single('img'), (req, res) => {
   res.status(200).json({ status: true, message: 'Done' })
@@ -61,7 +63,7 @@ app.use('/api/profile/upload', upload.single('img'), (req, res) => {
 
 const http = require('http')
 setInterval(function () {
-  http.get('http://pkloop-api.herokuapp.com')
+  http.get('http://mypkloop/.com/api')
 }, 300000) // every 5 minutes (300000)
 
 require('./startup/logging')()
