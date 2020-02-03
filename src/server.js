@@ -49,13 +49,13 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-// if ((process.env.NODE_ENV = 'development')) {
-//   app.use(cors({ origin: `http://localhost:3000` }))
-// } else {
-//   app.use(cors())
-// }
-
-app.use(cors())
+if ((process.env.NODE_ENV = 'development')) {
+  app.use(cors({ origin: `http://localhost:3000` }))
+} else if ((process.env.NODE_ENV = 'production')) {
+  app.use(cors({ origin: `https://mypkloop.com` }))
+} else {
+  app.use(cors())
+}
 
 app.use('/api/profile/upload', upload.single('img'), (req, res) => {
   res.status(200).json({ status: true, message: 'Done' })
