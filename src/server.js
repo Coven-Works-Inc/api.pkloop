@@ -1,5 +1,4 @@
 const express = require('express')
-const passport = require('passport')
 const catchAsync = require('./utils/catchAsync')
 const rateLimit = require('express-rate-limit')
 const bodyParser = require('body-parser')
@@ -72,7 +71,6 @@ require('./startup/db')()
 require('./startup/config')
 require('./startup/validation')()
 require('./startup/prod')(app)
-require('./services/passport')
 
 //monitoring request rates here
 const limiter = rateLimit({
@@ -85,8 +83,6 @@ const limiter = rateLimit({
 app.use(/^api/, limiter)
 
 const PORT = process.env.PORT || 5000
-
-app.get(process.env.callbackURL, passport.authenticate('google'))
 
 const server = app.listen(PORT, () =>
   console.log(`App is listening on port ${PORT}`)

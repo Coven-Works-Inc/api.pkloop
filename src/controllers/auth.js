@@ -178,47 +178,51 @@ exports.login = async (req, res, next) => {
       .json({ status: false, message: error.details[0].message })
   }
 
-  const user = await User.findOne({ username: req.body.username })
-  if (!user)
-    return res
-      .status(400)
-      .json({ status: false, message: 'Invalid username or password' })
+  try {
+    const user = await User.findOne({ username: req.body.username })
+    if (!user)
+      return res
+        .status(400)
+        .json({ status: false, message: 'Invalid username or password' })
 
-  const { password, isVerified } = user
+    const { password, isVerified } = user
 
-  const pass = await bcrypt.compare(req.body.password, password)
-  if (!pass)
-    return res
-      .status(400)
-      .json({ status: false, message: 'Invalid username or password' })
+    const pass = await bcrypt.compare(req.body.password, password)
+    if (!pass)
+      return res
+        .status(400)
+        .json({ status: false, message: 'Invalid username or password' })
 
-  if (!isVerified)
-    return res
-      .status(400)
-      .json({ status: false, message: 'Please verify your account first' })
+    if (!isVerified)
+      return res
+        .status(400)
+        .json({ status: false, message: 'Please verify your account first' })
 
-  const token = user.generateAuthToken()
+    const token = user.generateAuthToken()
 
-  user.token = token
+    user.token = token
 
-  await user.save()
+    await user.save()
 
-  res
-    .status(200)
-    .header('x-auth-token', token)
-    .json({
-      data: _.pick(user, [
-        '_id',
-        'firstname',
-        'lastname',
-        'email',
-        'balance',
-        'token',
-        'photo',
-        'notifications'
-      ]),
-      message: 'log in successful, redirecting...'
-    })
+    res
+      .status(200)
+      .header('x-auth-token', token)
+      .json({
+        data: _.pick(user, [
+          '_id',
+          'firstname',
+          'lastname',
+          'email',
+          'balance',
+          'token',
+          'photo',
+          'notifications'
+        ]),
+        message: 'log in successful, redirecting...'
+      })
+  } catch (error) {
+    res.status(500).send({ status: false, message: 'Error logging in' })
+  }
 }
 
 exports.resetpassword = async (req, res, next) => {
