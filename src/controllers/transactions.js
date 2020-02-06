@@ -145,7 +145,7 @@ const sendConnect = async (req, res) => {
     notify: `${sender.username} has a pending request for you, respond or reject by accepting`,
     message,
     tripId: req.body.tripId,
-    amount: req.body.amount
+    amount: req.body.amount * 0.76
   })
 
   sendConnectEmail(
@@ -156,7 +156,8 @@ const sendConnect = async (req, res) => {
     traveler.email,
     traveler.phone,
     '',
-    message
+    message,
+    req.body.tip
   )
   await traveler.save()
 }
