@@ -7,7 +7,7 @@ const sendMail = async (email, firstname, token) => {
     to: email,
     subject: `Account activation link`,
     html: `
-            Hello ${firstname}!, Welcome to PKLoop, the most efficient platform for parcel delivery. Click on the link to get started <a href="https://mypkloop.com/#/verify?token=${token}" style="text-decoration: none;">Verify Me</a>
+            Hello ${firstname}!, Welcome to PKLoop, the most efficient platform for parcel delivery. Click on the link to get started <a href="https://mypkloop.com/verify?token=${token}" style="text-decoration: none;">Verify Me</a>
         `
   }
 
