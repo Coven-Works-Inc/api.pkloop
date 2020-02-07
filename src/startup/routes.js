@@ -28,11 +28,11 @@ module.exports = function (app) {
   app.use('/api/chat', chat)
   app.use('/api/parcel', parcel)
   app.use('/api/support', support)
-  app.use('/chat', 
-          proxy({
-            target: 'http://localhost:5000',
-            changeOrigin: true,
-          }))
+  // app.use('/chat', 
+  //         proxy({
+  //           target: 'http://localhost:5000',
+  //           changeOrigin: true,
+  //         }))
   // app.all('*', (req, res, next) => {
   //   next(
   //     new AppError(`Can't find the url ${req.originalUrl} on the server`, 404)
