@@ -62,7 +62,7 @@ app.use('/api/profile/upload', upload.single('img'), (req, res) => {
 
 const http = require('http')
 setInterval(function () {
-  http.get('http://mypkloop/.com/api')
+  http.get('http://mypkloop.com/api')
 }, 300000) // every 5 minutes (300000)
 
 require('./startup/logging')()
