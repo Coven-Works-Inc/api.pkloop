@@ -27,5 +27,6 @@ transRouter.post('/respond', auth, transController.respondAction)
 transRouter.post('/redeemcode', auth, transController.redeemCode)
 transRouter.post('/addtip', auth, transController.addTip)
 transRouter.post('/payinsurance', auth, transController.payInsurance)
+transRouter.get('/notif', auth, transController.fetchNotif)
 
 module.exports = transRouter

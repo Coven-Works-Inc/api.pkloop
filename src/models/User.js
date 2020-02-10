@@ -36,7 +36,9 @@ const notificationsSchema = new Schema({
   notify: String,
   tripId: String,
   amount: Number,
-  username: String
+  username: String,
+  parcelWeight: Number,
+  tip: Number
 })
 const userSchema = new Schema({
   UserId: {

@@ -145,7 +145,9 @@ const sendConnect = async (req, res) => {
     notify: `${sender.username} has a pending request for you, respond or reject by accepting`,
     message,
     tripId: req.body.tripId,
-    amount: req.body.amount * 0.76
+    amount: req.body.amount * 0.76,
+    parcelWeight: Number(req.body.parcelWeight),
+    tip: Number(req.body.tip)
   })
 
   sendConnectEmail(
@@ -184,7 +186,18 @@ const respondAction = async (req, res) => {
           tripCode: trip.secretCode,
           amountDue: req.body.amount
         })
+        const senderTransaction = new Transaction({
+          user: req.body.senderId,
+          status: 'In Process',
+          traveler: traveler.username,
+          sender: sender.username,
+          date: Date.now(),
+          tripId: trip._id,
+          tripCode: trip.secretCode,
+          amountDue: req.body.amount
+        })
         await transaction.save()
+        await senderTransaction.save()
 
         const tripKey = trip.secretCode
         const senderKey = tripKey.substring(0, 4)
@@ -310,6 +323,10 @@ const payInsurance = async(req, res) => {
       console.log(err)
     })
 }
+const fetchNotif = async(req, res) => {
+  const user =  await User.findById(req.user._id)
+  res.status(200).json({ notif: user.notifications })
+}
 module.exports = {
   postTransaction,
   fetchTransactions,
@@ -320,6 +337,7 @@ module.exports = {
   respondAction,
   sendConnect,
   redeemCode,
+  fetchNotif,
   addTip,
   payInsurance
 }
