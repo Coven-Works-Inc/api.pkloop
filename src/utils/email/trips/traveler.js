@@ -35,10 +35,10 @@ const sendMail = async (
         <b>${senderusername}'s</b> Phone: ${senderphone}
          <br />
         <br />
-  Also, your secret code for this transaction is [${code}].
+  Also, your secret code for this transaction is <b>[${code}]</b>.
   <br />
   <br />
-  Please, do ensure to obtain the last four digits of this code from the receiver of the parcel upon delivery.
+  Please, do ensure to obtain the first four digits of this code from the receiver of the parcel upon delivery.
   <br/>
   <br />
   Use this to redeem your payment on pkloop.
