@@ -129,14 +129,21 @@ exports.updateMyBalance = catchAsync(async (req, res) => {
 exports.reduceMyBalance = catchAsync(async (req, res) => {
   const amount = parseInt(req.body.amount)
   const user = await User.findById(req.user._id)
+  if(user.balance >= amount) {
+    user.balance = user.balance - amount
 
-  user.balance = user.balance - amount
+    await user.save()
+  
+    res.status(200).json({
+      status: true,
+      message: 'Balance updated successfully',
+      data: user.balance
+    })
+  } else {
+    res.status(400).json({
+      message: 'Insufficient balance',
+      data: user.balance
+    })
+  }
 
-  await user.save()
-
-  res.status(200).json({
-    status: true,
-    message: 'Balance updated successfully',
-    data: user.balance
-  })
 })
