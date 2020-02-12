@@ -26,7 +26,7 @@ const sendMail = async (
             Traveler Phone: ${travelerphone}
         <br />
         <br />
-      Also, your secret code for this transaction is [${code}], ensure this is only given to the traveler upon receipt by the receiver of your parcel.
+      Also, your secret code for this transaction is <b>[${code}]</b>, ensure this is only given to the traveler upon receipt by the receiver of your parcel.
         <br />
         <br />
       Please ensure to keep with all the instructions on the pkloop platform to ensure safe delivery of your parcel.

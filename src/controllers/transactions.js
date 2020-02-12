@@ -178,7 +178,7 @@ const respondAction = async (req, res) => {
       if (action === 'accept') {
         const transaction = new Transaction({
           user: req.user._id,
-          status: 'In Process',
+          status: 'Accepted',
           traveler: traveler.username,
           sender: sender.username,
           date: Date.now(),
@@ -188,7 +188,7 @@ const respondAction = async (req, res) => {
         })
         const senderTransaction = new Transaction({
           user: req.body.senderId,
-          status: 'In Process',
+          status: 'Declined',
           traveler: traveler.username,
           sender: sender.username,
           date: Date.now(),
