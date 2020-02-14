@@ -221,7 +221,7 @@ exports.login = async (req, res, next) => {
         message: 'log in successful, redirecting...'
       })
   } catch (error) {
-    res.status(500).send({ status: false, message: 'Error logging in' })
+    res.status(500).json({ status: false, message: 'Error logging in' })
   }
 }
 
@@ -361,27 +361,31 @@ exports.googleLogin = (req, res) => {
       const { email_verified, name, email } = response.payload
 
       if (email_verified) {
-        const user = await User.findOne({ email: email })
-        if (!user) return res.status(404).json({ message: 'User not found!' })
-        const token = user.generateAuthToken()
-        user.token = token
-        await user.save()
+        try {
+          const user = await User.findOne({ email: email })
+          if (!user) return res.status(404).json({ message: 'User not found!' })
+          const token = user.generateAuthToken()
+          user.token = token
+          await user.save()
 
-        return res
-          .status(200)
-          .header('x-auth-token', token)
-          .json({
-            data: _.pick(user, [
-              '_id',
-              'firstname',
-              'lastname',
-              'email',
-              'balance',
-              'token',
-              'photo'
-            ]),
-            message: 'log in successful, redirecting...'
-          })
+          return res
+            .status(200)
+            .header('x-auth-token', token)
+            .json({
+              data: _.pick(user, [
+                '_id',
+                'firstname',
+                'lastname',
+                'email',
+                'balance',
+                'token',
+                'photo'
+              ]),
+              message: 'log in successful, redirecting...'
+            })
+        } catch (error) {
+          res.status(500).json({ status: false, message: 'Error logging in' })
+        }
       }
       //     // if (email_verified) {
       //     //   User.findOne({ email_verified }).exec(async (err, user) => {
@@ -478,8 +482,6 @@ exports.facebookLogin = async (req, res) => {
         message: 'log in successful, redirecting...'
       })
   } catch (error) {
-    res.json({
-      error: 'Facebook login failed. Try later'
-    })
+    res.status(500).json({ status: false, message: 'Error logging in' })
   }
 }
