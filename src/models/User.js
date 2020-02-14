@@ -153,6 +153,7 @@ const userSchema = new Schema({
   passwordChangedAt: {
     type: Date
   },
+  stripeUserId: String,
   chat: [chatSchema],
   traveler: [travelerSchema],
   sender: [senderSchema],

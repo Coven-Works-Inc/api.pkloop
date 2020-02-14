@@ -1,3 +1,4 @@
+const User = require('../models/User')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 const stripeChargeCallback = res => (stripeErr, stripeRes) => {
@@ -23,4 +24,16 @@ exports.postpay = (req, res) => {
     currency: 'usd'
   }
   stripe.charges.create(body, stripeChargeCallback(res))
+}
+
+exports.connectUser = async (req, res) => {
+  const user = User.findById(req.user._id)
+  stripe.oauth.token({
+    grant_type: 'authorization_code',
+    code: req.body.code,
+    assert_capabilities: ['transfers'],
+  }).then(function(response) {
+    user.stripeUserId = response.stripe_user_id;
+    console.log(response.stripe_user_id)
+  });
 }

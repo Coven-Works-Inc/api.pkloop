@@ -7,6 +7,7 @@ const travelerMail = require('../utils/email/trips/traveler')
 const tipEmail = require('../utils/email/trips/tip')
 const rejectMail = require('../utils/email/trips/reject')
 const sendConnectEmail = require('../utils/email/trips/connect')
+const completeTransactionEmail = require('../utils/email/trips/redeem')
 const uuid = require('uuid/v4')
 const axios = require('axios')
 const qs = require('querystring')
@@ -206,7 +207,8 @@ const respondAction = async (req, res) => {
 
         await trip.save()
         const code = new RedeemCode({
-          userId: req.body.senderId,
+          traveler: traveler.username,
+          sender: sender.username,
           amount: req.body.amount,
           code: tripKey
         })
@@ -293,11 +295,16 @@ const redeemCode = async (req, res) => {
   if(!code){
     res.status(400).json({ error: 'redeem code has been used or invalid'})
   } else {
-    console.log(traveler._id)
     traveler.balance += code.amount
     await RedeemCode.deleteOne({ code: req.body.code })
     await traveler.save()
     res.status(200).json({ status: true, message: `Your balance has been credited with $${code.amount}`})
+    await completeTransactionEmail(
+      code.sender,
+      code.traveler,
+      traveler.email,
+      code.amount
+    )
   }
 
 }
