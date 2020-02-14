@@ -188,7 +188,7 @@ const respondAction = async (req, res) => {
         })
         const senderTransaction = new Transaction({
           user: req.body.senderId,
-          status: 'Declined',
+          status: 'Accepted',
           traveler: traveler.username,
           sender: sender.username,
           date: Date.now(),
@@ -240,6 +240,28 @@ const respondAction = async (req, res) => {
 
       } else if (action === 'decline') {
         trip.requestStatus = 'listed'
+        const transaction = new Transaction({
+          user: req.user._id,
+          status: 'Declined',
+          traveler: traveler.username,
+          sender: sender.username,
+          date: Date.now(),
+          tripId: trip._id,
+          tripCode: trip.secretCode,
+          amountDue: req.body.amount
+        })
+        const senderTransaction = new Transaction({
+          user: req.body.senderId,
+          status: 'Declined',
+          traveler: traveler.username,
+          sender: sender.username,
+          date: Date.now(),
+          tripId: trip._id,
+          tripCode: trip.secretCode,
+          amountDue: req.body.amount
+        })
+        await transaction.save()
+        await senderTransaction.save()
         await trip.save()
         //If Traveler declines transaction, send a mail to sender with rejection notice
         // Do not send any mail to traveler, there is no need for that
