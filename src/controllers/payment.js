@@ -47,11 +47,17 @@ exports.payUser = async (req, res) => {
       destination: req.body.destination,
     },
     function(err, transfer) {
-      user.balance = user.balance - req.body.amount
-     console.log(transfer)
+      user.balance = user.balance - Number(req.body.amount)
+     console.log(transfer, err)
     }
   );
 }
 exports.getStripeId = async(req, res) => {
   const user =  await User.findById(req.user._id)
+  if(user.stripeUserId){
+    const stripeId = user.stripeUserId
+    res.status(200).json({ status: true, stripeId })
+  } else {
+    res.status(400).json({ err: 'Stripe not connected to user'})
+  }
 }
