@@ -176,7 +176,8 @@ userSchema.methods.generateAuthToken = function () {
       balance: this.balance,
       photo: this.photo,
       username: this.username,
-      notifications: this.notifications
+      notifications: this.notifications,
+      stripeUserId: this.stripeUserId
     },
     config.get('jwtPrivateKey'),
     { expiresIn: 3600 }

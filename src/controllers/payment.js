@@ -27,13 +27,14 @@ exports.postpay = (req, res) => {
 }
 
 exports.connectUser = async (req, res) => {
-  const user = User.findById(req.user._id)
+  const user = await User.findById(req.user._id)
   stripe.oauth.token({
     grant_type: 'authorization_code',
     code: req.body.code,
     assert_capabilities: ['transfers'],
   }).then(function(response) {
     user.stripeUserId = response.stripe_user_id;
+    user.save()
     console.log(response.stripe_user_id)
   });
 }
@@ -50,4 +51,7 @@ exports.payUser = async (req, res) => {
      console.log(transfer)
     }
   );
+}
+exports.getStripeId = async(req, res) => {
+  const user =  await User.findById(req.user._id)
 }
