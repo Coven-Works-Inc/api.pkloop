@@ -7,7 +7,7 @@ const transactionSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['Accepted', 'Declined'],
+    enum: ['Accepted', 'Declined', 'Completed'],
     default: 'In Process'
   },
   traveler: {
