@@ -265,9 +265,9 @@ exports.newpassword = async (req, res, next) => {
   console.log(token)
   const resetUser = await User.findOne({
     resetToken: token,
-    // resetTokenExpiration: {
-    //   $gt: Date.now()
-    // }
+    resetTokenExpiration: {
+      $gt: Date.now()
+    }
   })
   console.log(resetUser)
   if (!resetUser)
