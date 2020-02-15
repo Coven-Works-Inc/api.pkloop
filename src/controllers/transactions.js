@@ -208,6 +208,8 @@ const respondAction = async (req, res) => {
         await trip.save()
         const code = new RedeemCode({
           traveler: traveler.username,
+          travelerTrans: transaction._id,
+          senderTrans: senderTransaction._id,
           sender: sender.username,
           amount: req.body.amount,
           code: tripKey
@@ -295,6 +297,12 @@ const redeemCode = async (req, res) => {
   if(!code){
     res.status(400).json({ error: 'redeem code has been used or invalid'})
   } else {
+    const senderTrans = await Transaction.findById(code.senderTrans)
+    const travelerTrans = await Transaction.findById(code.travelerTrans)
+    senderTrans.status = 'Completed'
+    travelerTrans.status = 'Completed'
+    await senderTrans.save()
+    await travelerTrans.save()
     traveler.balance += code.amount
     await RedeemCode.deleteOne({ code: req.body.code })
     await traveler.save()

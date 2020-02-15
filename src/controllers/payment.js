@@ -37,3 +37,17 @@ exports.connectUser = async (req, res) => {
     console.log(response.stripe_user_id)
   });
 }
+exports.payUser = async (req, res) => {
+  const user = await User.findById(req.user._id)
+  stripe.transfers.create(
+    {
+      amount: Number(req.body.amount) * 100,
+      currency: 'usd',
+      destination: req.body.destination,
+    },
+    function(err, transfer) {
+      user.balance = user.balance - req.body.amount
+     console.log(transfer)
+    }
+  );
+}
