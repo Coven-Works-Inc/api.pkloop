@@ -46,8 +46,11 @@ exports.payUser = async (req, res) => {
       currency: 'usd',
       destination: req.body.destination,
     },
-    function(err, transfer) {
+    async function(err, transfer) {
       user.balance = user.balance - Number(req.body.amount)
+      user.amountMade = user.amountMade + Number(req.body.amount)
+      await user.save()
+      res.status(200).json({ transfer, status: true })
      console.log(transfer, err)
     }
   );

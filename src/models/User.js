@@ -143,7 +143,7 @@ const userSchema = new Schema({
     default: 0
   },
   amountMade: {
-    type: String,
+    type: Number,
     default: 0
   },
   referralCount: {
