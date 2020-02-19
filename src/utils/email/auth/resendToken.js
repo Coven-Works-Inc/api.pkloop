@@ -5,10 +5,8 @@ const sendMail = async (email, firstname) => {
   const emailData = {
     from: process.env.EMAIL_FROM,
     to: email,
-    subject: `Password Update`,
-    html: `
-            <p>Hello ${firstname}, <br/> Your password was updated successfully on our platform. If you did not request for a password update, Please contact Pkloop support immediately.</p>
-        `
+    subject: `Token Resend Token`,
+    html: `<p>Hello ${name}, <br/> Someone requested a password reset for your account, if that was you, Click the link below to reset your password, else ignore this message. <br/> <a href="http://mypkloop.com/password/${token}">link</a> to set a new password.</p>`
   }
 
   try {

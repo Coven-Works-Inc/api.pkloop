@@ -1,15 +1,10 @@
 const Trip = require('../models/Trip')
 const User = require('../models/User')
 
-const { validateTrip } = require('../validators/trips')
-
 exports.fetchTrips = async (req, res, next) => {
   const trips = await Trip.find()
     .populate('user', 'photo')
     .exec()
-
-  // .select('user location stopover destination')
-  // .exec()
   if (!trips) {
     return res
       .status(404)
@@ -20,11 +15,6 @@ exports.fetchTrips = async (req, res, next) => {
 }
 
 exports.postTrips = async (req, res, next) => {
-  // const { error } = await validateTrip(req.body)
-  // if (error) {
-  //   return res.status(400).json({ status: false, message: 'Validation Error' })
-  // }
-
   const locationCity = req.body.locationCity
   const locationCountry = req.body.locationCountry
   const destinationCity = req.body.destinationCity
@@ -41,14 +31,6 @@ exports.postTrips = async (req, res, next) => {
 
   let stopOvers = []
 
-  // for (let i = 1; i < 4; i++) {
-  //   if ('stopOver' + i !== '') {
-  //     console.log(typeof ('stopOver' + i))
-  //     stopOvers.push(('stopOver' + i).value)
-  //   }
-  // }
-
-  // console.log(stopOvers)
   stopOvers.push(stopOver1)
   stopOvers.push(stopOver2)
   stopOvers.push(stopOver3)
@@ -131,7 +113,7 @@ exports.getTrip = async (req, res) => {
   res.status(200).json({ status: true, data: trip })
 }
 exports.addReceiver = async (req, res) => {
-  const trip = await Trip.findById(req.body.id) 
+  const trip = await Trip.findById(req.body.id)
   const receiver = {
     fullname: req.body.fullname,
     address: req.body.address,

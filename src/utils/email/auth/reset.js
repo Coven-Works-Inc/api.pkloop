@@ -7,7 +7,7 @@ const sendMail = async (email, firstname, token) => {
     to: email,
     subject: `Password reset`,
     html: `
-            <p>Hello ${name}, <br/> Someone requested a password reset for your account, if that was you, Click the link below to reset your password, else ignore this message. <br/> <a href="https://mypkloop.com/password/${token}">link</a> to set a new password.</p>
+            <p>Hello ${firstname}, <br/> Someone requested a password reset for your account, if that was you, Click the link below to reset your password, else ignore this message. <br/> <a href="https://mypkloop.com/password/${token}">link</a> to set a new password.</p>
         `
   }
 
