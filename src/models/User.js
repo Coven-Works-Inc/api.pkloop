@@ -143,7 +143,7 @@ const userSchema = new Schema({
     default: 0
   },
   amountMade: {
-    type: String,
+    type: Number,
     default: 0
   },
   referralCount: {
@@ -153,6 +153,7 @@ const userSchema = new Schema({
   passwordChangedAt: {
     type: Date
   },
+  stripeUserId: String,
   chat: [chatSchema],
   traveler: [travelerSchema],
   sender: [senderSchema],
@@ -175,7 +176,8 @@ userSchema.methods.generateAuthToken = function () {
       balance: this.balance,
       photo: this.photo,
       username: this.username,
-      notifications: this.notifications
+      notifications: this.notifications,
+      stripeUserId: this.stripeUserId
     },
     config.get('jwtPrivateKey'),
     { expiresIn: 3600 }

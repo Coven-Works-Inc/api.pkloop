@@ -238,10 +238,10 @@ exports.resetpassword = async (req, res, next) => {
 
     const token = crypto.randomBytes(3).toString('hex')
 
-    user.resendToken = token
+    user.resetToken = token
     user.resetTokenExpiration = Date.now() + 3600000
-
     await user.save()
+    console.log(user)
 
     sendReset(user.email, user.firstname, token)
 
@@ -261,25 +261,21 @@ exports.resetpassword = async (req, res, next) => {
 exports.newpassword = async (req, res, next) => {
   const token = req.params.token
   const newpassword = req.body.password
-
-  let resetUser
-
-  resetUser = await User.findOne({
+  console.log(token)
+  const resetUser = await User.findOne({
     resetToken: token,
     resetTokenExpiration: {
       $gt: Date.now()
     }
   })
+  console.log(resetUser)
   if (!resetUser)
     return res.status(200).json({
       status: false,
       message: 'This token is no longer valid.'
     })
 
-  /*
-   * Checking if the supplied password and the former one which was forgotten by the user are the same
-   */
-  bcrypt.compare(newpassword, resetUser.password)
+  const userpassword = await bcrypt.compare(newpassword, resetUser.password)
   if (userpassword)
     return res.status(200).json({
       status: false,
