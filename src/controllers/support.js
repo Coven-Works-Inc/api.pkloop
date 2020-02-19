@@ -1,7 +1,7 @@
 const Support = require('../models/Support')
 const User = require('../models/User')
 const crypto = require('crypto')
-const { sendMail } = require('../utils/email/support')
+const { sendMail } = require('../utils/email/supoort/support')
 
 const postSupport = async (req, res) => {
   const ticketId = crypto.randomBytes(6).toString('hex')

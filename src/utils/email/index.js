@@ -127,6 +127,3 @@ const sendEmail = (to, name, headers, token, type) => {
 }
 
 module.exports = { sendEmail }
-
-// Click the link below to do so.< br /> <a href="http://${headers}/confirmation/${token}">link</a>
-//   <br />Thank you.

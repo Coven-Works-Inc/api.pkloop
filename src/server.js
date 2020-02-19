@@ -1,11 +1,13 @@
 const express = require('express')
-const catchAsync = require('./utils/catchAsync')
 const rateLimit = require('express-rate-limit')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-require('dotenv').config()
+require('custom-env').env('local')
 const multer = require('multer')
+const app = express()
 
+/* Image Upload logic starts here
+/*======================================================*/
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, './public/uploads')
@@ -29,22 +31,24 @@ const upload = multer({
   fileFilter: multerFilter
 })
 
-// const resizeUserPhoto = catchAsync(async (req, res, next) => {
-//   if (!req.file) return next();
-//
-//   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
-//
-//   await sharp(req.file.buffer)
-//       .resize(500, 500)
-//       .toFormat('jpeg')
-//       .jpeg({ quality: 90 })
-//       .toFile(`public/img/users/${req.file.filename}`);
-//
-//   next();
-// });
+/**
+ * const resizeUserPhoto = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
 
-const app = express()
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
+  await sharp(req.file.buffer)
+      .resize(500, 500)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/img/users/${req.file.filename}`);
+
+  next();
+});
+ */
+
+/* Image Upload logic ends here
+/*======================================================*/
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
@@ -59,11 +63,6 @@ if ((process.env.NODE_ENV = 'development')) {
 app.use('/api/profile/upload', upload.single('img'), (req, res) => {
   res.status(200).json({ status: true, message: 'Done' })
 })
-
-const http = require('http')
-setInterval(function () {
-  http.get('http://mypkloop.com/api')
-}, 300000) // every 5 minutes (300000)
 
 require('./startup/logging')()
 require('./startup/routes')(app)
@@ -82,7 +81,7 @@ const limiter = rateLimit({
 //Using the rate middleware to protect the api from multiple requests
 app.use(/^api/, limiter)
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 8000
 
 const server = app.listen(PORT, () =>
   console.log(`App is listening on port ${PORT}`)
