@@ -1,20 +1,22 @@
 const { Schema, model } = require('mongoose')
 
 const transactionSchema = new Schema({
-  user: {
+  sender: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  traveler: {
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
   status: {
     type: String,
-    enum: ['Accepted', 'Declined', 'Completed'],
+    enum: ['Accepted', 'Declined', 'Completed', 'Not Completed'],
     default: 'In Process'
   },
-  traveler: {
-    type: String
-  },
-  sender: {
-    type: String
+  Role: {
+    type: String,
+    enum: ['Sender', 'Traveler']
   },
   date: {
     type: Date,

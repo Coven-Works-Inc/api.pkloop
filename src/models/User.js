@@ -85,7 +85,7 @@ const userSchema = new Schema({
   },
   localCurrency: {
     type: String,
-    default: 'NGN'
+    default: 'USD'
   },
   referralID: {
     type: String,

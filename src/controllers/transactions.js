@@ -108,27 +108,6 @@ const completeSenderTransaction = async (req, res) => {
     })
   }
 }
-// const connectTraveler = async (req, res) => {
-//   const trip = await Trip.findById(req.body.tripId)
-//   const traveler = await User.findOne({ username: req.body.username })
-
-//   trip.requestStatus = 'requested'
-//   await trip.save()
-
-//   const senderMail = req.user.email
-
-//   let headers = req.headers.host
-//   await user.notifications.push({
-//     id: req.body.id,
-//     text: `${req.body.username} has connected with you, respond by accepting or rejecting`
-//   })
-
-//   sendEmail(senderMail, req.user.username, headers, null, 'connectSender')
-//   sendEmail(user.email, req.body.username, headers, null, 'connectTraveler')
-//   await user.save()
-//   await trip.save()
-//   res.status(200).json({ message: 'Connection successful', user, trip })
-// }
 
 const sendConnect = async (req, res) => {
   const trip = await Trip.findById(req.body.tripId)
@@ -241,7 +220,6 @@ const respondAction = async (req, res) => {
         )
         await traveler.notifications.pull(req.body.notifId)
         await traveler.save()
-
       } else if (action === 'decline') {
         trip.requestStatus = 'listed'
         const transaction = new Transaction({
@@ -294,8 +272,8 @@ const respondAction = async (req, res) => {
 const redeemCode = async (req, res) => {
   const traveler = await User.findById(req.user._id)
   const code = await RedeemCode.findOne({ code: req.body.code })
-  if(!code){
-    res.status(400).json({ error: 'redeem code has been used or invalid'})
+  if (!code) {
+    res.status(400).json({ error: 'redeem code has been used or invalid' })
   } else {
     const senderTrans = await Transaction.findById(code.senderTrans)
     const travelerTrans = await Transaction.findById(code.travelerTrans)
@@ -306,7 +284,12 @@ const redeemCode = async (req, res) => {
     traveler.balance += code.amount
     await RedeemCode.deleteOne({ code: req.body.code })
     await traveler.save()
-    res.status(200).json({ status: true, message: `Your balance has been credited with $${code.amount}`})
+    res
+      .status(200)
+      .json({
+        status: true,
+        message: `Your balance has been credited with $${code.amount}`
+      })
     await completeTransactionEmail(
       code.sender,
       code.traveler,
@@ -314,54 +297,59 @@ const redeemCode = async (req, res) => {
       code.amount
     )
   }
-
 }
 const addTip = async (req, res) => {
   const traveler = await User.findOne({ email: req.body.email })
   const sender = await User.findById(req.user._id)
-  if(sender.balance >= req.body.amount) {
+  if (sender.balance >= req.body.amount) {
     traveler.balance += req.body.amount
     sender.balance -= req.body.amount
     await traveler.save()
     await sender.save()
-    res.status(200).json({ status: true, message: 'Tip succesfully added'})
-    await tipEmail(sender.username, traveler.username, traveler.email, req.body.amount)
+    res.status(200).json({ status: true, message: 'Tip succesfully added' })
+    await tipEmail(
+      sender.username,
+      traveler.username,
+      traveler.email,
+      req.body.amount
+    )
   } else {
-    res.status(400).json({ status: true, message: 'insufficient balance'})
+    res.status(400).json({ status: true, message: 'insufficient balance' })
   }
 }
-const payInsurance = async(req, res) => {
+const payInsurance = async (req, res) => {
   const user = await User.findById(req.user._id)
   const parcelItem = req.body.item || 'parcel'
   await axios({
     method: 'post',
     url: URL,
     data: qs.stringify({
-        client_id: process.env.INSURANCE_CLIENT_ID,
-        api_key: process.env.INSURANCE_KEY,
-        customer_name: `${user.firstname} ${user.lastname}`,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        items_ordered: parcelItem,
-        currency: "USD",
-        subtotal: req.body.total,
-        coverage_amount: req.body.amount,
-        order_number: uuid()
+      client_id: process.env.INSURANCE_CLIENT_ID,
+      api_key: process.env.INSURANCE_KEY,
+      customer_name: `${user.firstname} ${user.lastname}`,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      items_ordered: parcelItem,
+      currency: 'USD',
+      subtotal: req.body.total,
+      coverage_amount: req.body.amount,
+      order_number: uuid()
     }),
     headers: {
-        'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
     }
-}).then(response => {
-       res.status(200).json({ data: response.data})
+  })
+    .then(response => {
+      res.status(200).json({ data: response.data })
     })
     .catch(err => {
-      res.status(400).json({ message: 'transaction failed', err})
+      res.status(400).json({ message: 'transaction failed', err })
       console.log(err)
     })
 }
-const fetchNotif = async(req, res) => {
-  const user =  await User.findById(req.user._id)
+const fetchNotif = async (req, res) => {
+  const user = await User.findById(req.user._id)
   res.status(200).json({ notif: user.notifications })
 }
 module.exports = {
