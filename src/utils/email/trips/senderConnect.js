@@ -18,7 +18,7 @@ const sendMail = async (
         This is to notify you that your request to  ${travelerusername} on the pkloop platform was successfully sent
         <br />
         We would let you know when they respond and the next line of action to take.
-        ${totalAmount} has been deducted from your wallet to cover the cost of this transaction.
+        $${totalAmount} has been deducted from your wallet to cover the cost of this transaction.
         <br />
         Thanks
         <br />

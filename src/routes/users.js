@@ -11,7 +11,8 @@ const {
   fetchUser,
   uploadUserPhoto,
   updateMyBalance,
-  reduceMyBalance
+  reduceMyBalance,
+  reduceEscrow
 } = userController
 
 userRouter.get('/', auth, fetchAllUsers)
@@ -19,6 +20,7 @@ userRouter.get('/fetchUser', auth, fetchUser)
 userRouter.post('/updateMe', auth, updateUser)
 userRouter.put('/updateMyBalance', auth, updateMyBalance)
 userRouter.put('/reduceMyBalance', auth, reduceMyBalance)
+userRouter.put('/reduceEscrow', auth, reduceEscrow)
 
 
 
