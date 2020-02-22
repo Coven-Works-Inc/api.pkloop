@@ -222,6 +222,7 @@ const respondAction = async (req, res) => {
         await traveler.save()
       } else if (action === 'decline') {
         trip.requestStatus = 'listed'
+        sender.escrowAmount += Number(req.body.amount)
         const transaction = new Transaction({
           user: req.user._id,
           status: 'Declined',

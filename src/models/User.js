@@ -157,7 +157,11 @@ const userSchema = new Schema({
   chat: [chatSchema],
   traveler: [travelerSchema],
   sender: [senderSchema],
-  notifications: [notificationsSchema]
+  notifications: [notificationsSchema],
+  escrowAmount: {
+    type: Number,
+    default: 0
+  }
 })
 
 // We validate the user here and generate a token for the user
