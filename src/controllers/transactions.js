@@ -7,6 +7,7 @@ const travelerMail = require('../utils/email/trips/traveler')
 const tipEmail = require('../utils/email/trips/tip')
 const rejectMail = require('../utils/email/trips/reject')
 const sendConnectEmail = require('../utils/email/trips/connect')
+const senderConnectEmail = require('../utils/email/trips/senderConnect')
 const completeTransactionEmail = require('../utils/email/trips/redeem')
 const uuid = require('uuid/v4')
 const axios = require('axios')
@@ -115,7 +116,6 @@ const sendConnect = async (req, res) => {
   let traveler = await User.findById(req.body.travelerId)
 
   const message = req.body.message
-
   trip.requestStatus = 'requested'
   await trip.save()
 
@@ -127,7 +127,8 @@ const sendConnect = async (req, res) => {
     tripId: req.body.tripId,
     amount: req.body.amount * 0.76,
     parcelWeight: Number(req.body.parcelWeight),
-    tip: Number(req.body.tip)
+    tip: Number(req.body.tip),
+    totalAmount: Number(req.body.totalAmount)
   })
 
   sendConnectEmail(
@@ -140,6 +141,12 @@ const sendConnect = async (req, res) => {
     '',
     message,
     req.body.tip
+  )
+  senderConnectEmail(
+    sender.username,
+    sender.email,
+    traveler.username,
+    req.body.totalAmount
   )
   await traveler.save()
 }
@@ -222,6 +229,7 @@ const respondAction = async (req, res) => {
         await traveler.save()
       } else if (action === 'decline') {
         trip.requestStatus = 'listed'
+        sender.escrowAmount += Number(req.body.totalAmount)
         const transaction = new Transaction({
           user: req.user._id,
           status: 'Declined',
@@ -243,6 +251,7 @@ const respondAction = async (req, res) => {
           amountDue: req.body.amount
         })
         await transaction.save()
+        await sender.save()
         await senderTransaction.save()
         await trip.save()
         //If Traveler declines transaction, send a mail to sender with rejection notice

@@ -2,12 +2,10 @@ const { Schema, model } = require('mongoose')
 
 const transactionSchema = new Schema({
   sender: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
+    type: String,
   },
   traveler: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
+    type: String,
   },
   status: {
     type: String,
