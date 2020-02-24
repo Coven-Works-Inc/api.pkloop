@@ -14,9 +14,9 @@ const sendMail = async (
   const emailData = {
     from: process.env.EMAIL_FROM,
     to: senderemail,
-    subject: 'Request update',
+    subject: 'Package Request update',
     html: `
-        Hello ${senderusername}, your request to one of the travelers on the pkloop platform has been declined by the traveler. Kindly Login again to take a necessary action concerning your request.`
+        Hello ${senderusername}, your Send package request made on the pkloop platform has been declined by the traveler. Please Login to review further steps necessary to complete your request .`
   }
 
   try {
