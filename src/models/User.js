@@ -38,7 +38,8 @@ const notificationsSchema = new Schema({
   amount: Number,
   username: String,
   parcelWeight: Number,
-  tip: Number
+  tip: Number,
+  totalAmount: Number,
 })
 const userSchema = new Schema({
   UserId: {

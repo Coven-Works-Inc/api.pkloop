@@ -127,7 +127,8 @@ const sendConnect = async (req, res) => {
     tripId: req.body.tripId,
     amount: req.body.amount * 0.76,
     parcelWeight: Number(req.body.parcelWeight),
-    tip: Number(req.body.tip)
+    tip: Number(req.body.tip),
+    totalAmount: Number(req.body.totalAmount)
   })
 
   sendConnectEmail(
@@ -228,7 +229,7 @@ const respondAction = async (req, res) => {
         await traveler.save()
       } else if (action === 'decline') {
         trip.requestStatus = 'listed'
-        sender.escrowAmount += Number(req.body.amount)
+        sender.escrowAmount += Number(req.body.totalAmount)
         const transaction = new Transaction({
           user: req.user._id,
           status: 'Declined',

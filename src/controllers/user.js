@@ -105,7 +105,7 @@ exports.reduceMyBalance = catchAsync(async (req, res) => {
 })
 exports.reduceEscrow = catchAsync(async(req, res) => {
   const amount = Number(req.body.amount)
-  const user = User.findById(req.user._id)
+  const user = await User.findById(req.user._id)
   if(user.escrowAmount >= amount){
     user.escrowAmount -= amount
     user.save()
@@ -114,6 +114,7 @@ exports.reduceEscrow = catchAsync(async(req, res) => {
       data: user.escrowAmount
     }) 
   } else {
+    console.log(user.escrowAmount, amount)
     res.status(400).json({
       message: 'Insufficient balance',
       status: false
