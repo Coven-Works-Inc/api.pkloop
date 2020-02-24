@@ -9,14 +9,16 @@ const sendMail = async (
   traveleremail,
   travelerphone,
   code,
-  message
+  message,
+  amount
 ) => {
   const emailData = {
     from: process.env.EMAIL_FROM,
     to: senderemail,
     subject: 'Package Request update',
     html: `
-        Hello ${senderusername}, your Send package request made on the pkloop platform has been declined by the traveler. Please Login to review further steps necessary to complete your request .`
+        Hello ${senderusername}, your Send package request made on the pkloop platform has been declined by the traveler. Please Login to review further steps necessary to complete your request .
+        Your escrow wallet has been funded with $${amount} to be used for other transactions.`
   }
 
   try {
