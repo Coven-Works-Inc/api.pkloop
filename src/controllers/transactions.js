@@ -265,7 +265,7 @@ const respondAction = async (req, res) => {
           '',
           '',
           '',
-          req.body.totalAmount
+          Number(req.body.totalAmount).toFixed(2)
         )
         await traveler.notifications.pull(req.body.notifId)
         await traveler.save()
