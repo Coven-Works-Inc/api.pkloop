@@ -14,24 +14,23 @@ const sendMail = async (
   const emailData = {
     from: process.env.EMAIL_FROM,
     to: senderemail,
-    subject: 'Request update',
+    subject: 'Request update(Accepted)',
     html: `
         Hello ${senderusername}, 
         <br />
         <br />
-        This is to notify you that your request to ${travelerusername} on the pkloop platform was just accepted. You can reach the traveler via email or phone to decide on meeting point and other necessary details.
+        Congratulations.Your send package request to ${travelerusername} on the mypkloop platform was just accepted.
+        You can now communicate with the traveler via email or phone to agree on a safe meeting place, exchage receiver info and discuss other necessary details to facilitate this transaction
         <br />
         <br />
             Traveler Email: ${traveleremail}
             Traveler Phone: ${travelerphone}
         <br />
         <br />
-      Also, your secret code for this transaction is <b>[${code}]</b>, ensure this is only given to the traveler upon receipt by the receiver of your parcel.
+      Your secret code for this transaction is <b>[${code}]</b>, Your recipient should only disclose this code to the traveler after receiving your parcel.
         <br />
         <br />
-      Please ensure to keep with all the instructions on the pkloop platform to ensure safe delivery of your parcel.
-
-      The gods be with you.`
+      Please remember to follow PKLoop Trust and Safety guidelines and Terms insstructions on the mypkloop platform to ensure smooth and safe delivery of package`
   }
 
   try {
