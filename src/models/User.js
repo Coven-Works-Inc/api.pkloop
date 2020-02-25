@@ -31,6 +31,7 @@ const travelerSchema = new Schema({
   country: String
 })
 const notificationsSchema = new Schema({
+  transactionId: String,
   sender: String,
   message: String,
   notify: String,

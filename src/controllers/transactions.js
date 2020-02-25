@@ -118,17 +118,6 @@ const sendConnect = async (req, res) => {
   trip.requestStatus = 'requested'
   await trip.save()
 
-  await traveler.notifications.push({
-    sender: sender._id,
-    username: sender.username,
-    notify: `${sender.username} has a pending request for you, respond or reject by accepting`,
-    message,
-    tripId: req.body.tripId,
-    amount: req.body.amount * 0.76,
-    parcelWeight: Number(req.body.parcelWeight),
-    tip: Number(req.body.tip),
-    totalAmount: Number(req.body.totalAmount)
-  })
   const transaction = new Transaction({
     user: req.user._id,
     role: 'Sender',
@@ -139,6 +128,18 @@ const sendConnect = async (req, res) => {
     tripId: trip._id,
     tripCode: trip.secretCode,
     amountDue: req.body.amount
+  })
+  await traveler.notifications.push({
+    transactionId: transaction._id,
+    sender: sender._id,
+    username: sender.username,
+    notify: `${sender.username} has a pending request for you, respond or reject by accepting`,
+    message,
+    tripId: req.body.tripId,
+    amount: req.body.amount * 0.76,
+    parcelWeight: Number(req.body.parcelWeight),
+    tip: Number(req.body.tip),
+    totalAmount: Number(req.body.totalAmount)
   })
   await transaction.save()
   sendConnectEmail(
@@ -186,7 +187,7 @@ const respondAction = async (req, res) => {
           amountDue: req.body.amount
         })
         await Transaction.updateMany(
-          { tripId: trip._id },
+          { tripId: trip._id, transId: req.body.transId }, 
           { $set: { status: 'Accepted' } }
         )
         await transaction.save()
@@ -247,7 +248,7 @@ const respondAction = async (req, res) => {
           amountDue: req.body.amount
         })
         await Transaction.updateMany(
-          { tripId: trip._id },
+          { tripId: trip._id, transId: req.body.transId },
           { $set: { status: 'Declined' } }
         )
         await transaction.save()
