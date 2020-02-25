@@ -1,6 +1,9 @@
 const { Schema, model } = require('mongoose')
 
 const transactionSchema = new Schema({
+  user: {
+    type: String
+  }, 
   sender: {
     type: String,
   },

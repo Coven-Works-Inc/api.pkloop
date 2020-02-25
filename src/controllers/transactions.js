@@ -163,6 +163,7 @@ const sendConnect = async (req, res) => {
 
 const respondAction = async (req, res) => {
   const traveler = await User.findById(req.user._id)
+  const senderTransaction = await Transaction.find({ user: req.body.senderId, tripId: req.body.tripId})
   const sender = await User.findById(req.body.senderId)
   const trip = await Trip.findById(req.body.tripId)
   const action = req.body.action
@@ -176,6 +177,7 @@ const respondAction = async (req, res) => {
         const transaction = new Transaction({
           user: req.user._id,
           status: 'Accepted',
+          role: 'Traveler',
           traveler: traveler.username,
           sender: sender.username,
           date: Date.now(),
@@ -183,18 +185,11 @@ const respondAction = async (req, res) => {
           tripCode: trip.secretCode,
           amountDue: req.body.amount
         })
-        const senderTransaction = new Transaction({
-          user: req.body.senderId,
-          status: 'Accepted',
-          traveler: traveler.username,
-          sender: sender.username,
-          date: Date.now(),
-          tripId: trip._id,
-          tripCode: trip.secretCode,
-          amountDue: req.body.amount
-        })
+        await Transaction.updateMany(
+          { tripId: trip._id },
+          { $set: { status: 'Accepted' } }
+        )
         await transaction.save()
-        await senderTransaction.save()
 
         const tripKey = trip.secretCode
         const senderKey = tripKey.substring(0, 4)
@@ -245,24 +240,18 @@ const respondAction = async (req, res) => {
           status: 'Declined',
           traveler: traveler.username,
           sender: sender.username,
+          role: 'Traveler',
           date: Date.now(),
           tripId: trip._id,
           tripCode: trip.secretCode,
           amountDue: req.body.amount
         })
-        const senderTransaction = new Transaction({
-          user: req.body.senderId,
-          status: 'Declined',
-          traveler: traveler.username,
-          sender: sender.username,
-          date: Date.now(),
-          tripId: trip._id,
-          tripCode: trip.secretCode,
-          amountDue: req.body.amount
-        })
+        await Transaction.updateMany(
+          { tripId: trip._id },
+          { $set: { status: 'Declined' } }
+        )
         await transaction.save()
         await sender.save()
-        await senderTransaction.save()
         await trip.save()
         //If Traveler declines transaction, send a mail to sender with rejection notice
         // Do not send any mail to traveler, there is no need for that
