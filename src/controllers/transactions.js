@@ -65,8 +65,7 @@ const fetchTransactions = async (req, res, next) => {
 }
 
 const fetchMyTransactions = async (req, res, next) => {
-  const transactions = await Transaction.find({ user: req.user._id })
-
+  const transactions = await Transaction.find({ user : req.user._id })
   res.status(200).json({ status: true, data: transactions })
 }
 
@@ -119,7 +118,19 @@ const sendConnect = async (req, res) => {
   trip.requestStatus = 'requested'
   await trip.save()
 
+  const transaction = new Transaction({
+    user: req.user._id,
+    role: 'Sender',
+    status: 'Pending',
+    traveler: traveler.username,
+    sender: sender.username,
+    date: Date.now(),
+    tripId: trip._id,
+    tripCode: trip.secretCode,
+    amountDue: req.body.amount
+  })
   await traveler.notifications.push({
+    transactionId: transaction._id,
     sender: sender._id,
     username: sender.username,
     notify: `${sender.username} has a pending request for you, respond or reject by accepting`,
@@ -130,7 +141,7 @@ const sendConnect = async (req, res) => {
     tip: Number(req.body.tip),
     totalAmount: Number(req.body.totalAmount)
   })
-
+  await transaction.save()
   sendConnectEmail(
     '',
     '',
@@ -153,6 +164,7 @@ const sendConnect = async (req, res) => {
 
 const respondAction = async (req, res) => {
   const traveler = await User.findById(req.user._id)
+  const senderTransaction = await Transaction.find({ user: req.body.senderId, tripId: req.body.tripId})
   const sender = await User.findById(req.body.senderId)
   const trip = await Trip.findById(req.body.tripId)
   const action = req.body.action
@@ -166,6 +178,7 @@ const respondAction = async (req, res) => {
         const transaction = new Transaction({
           user: req.user._id,
           status: 'Accepted',
+          role: 'Traveler',
           traveler: traveler.username,
           sender: sender.username,
           date: Date.now(),
@@ -173,18 +186,11 @@ const respondAction = async (req, res) => {
           tripCode: trip.secretCode,
           amountDue: req.body.amount
         })
-        const senderTransaction = new Transaction({
-          user: req.body.senderId,
-          status: 'Accepted',
-          traveler: traveler.username,
-          sender: sender.username,
-          date: Date.now(),
-          tripId: trip._id,
-          tripCode: trip.secretCode,
-          amountDue: req.body.amount
-        })
+        await Transaction.updateMany(
+          { tripId: trip._id, transId: req.body.transId }, 
+          { $set: { status: 'Accepted' } }
+        )
         await transaction.save()
-        await senderTransaction.save()
 
         const tripKey = trip.secretCode
         const senderKey = tripKey.substring(0, 4)
@@ -235,24 +241,18 @@ const respondAction = async (req, res) => {
           status: 'Declined',
           traveler: traveler.username,
           sender: sender.username,
+          role: 'Traveler',
           date: Date.now(),
           tripId: trip._id,
           tripCode: trip.secretCode,
           amountDue: req.body.amount
         })
-        const senderTransaction = new Transaction({
-          user: req.body.senderId,
-          status: 'Declined',
-          traveler: traveler.username,
-          sender: sender.username,
-          date: Date.now(),
-          tripId: trip._id,
-          tripCode: trip.secretCode,
-          amountDue: req.body.amount
-        })
+        await Transaction.updateMany(
+          { tripId: trip._id, transId: req.body.transId },
+          { $set: { status: 'Declined' } }
+        )
         await transaction.save()
         await sender.save()
-        await senderTransaction.save()
         await trip.save()
         //If Traveler declines transaction, send a mail to sender with rejection notice
         // Do not send any mail to traveler, there is no need for that
