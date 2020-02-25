@@ -65,8 +65,7 @@ const fetchTransactions = async (req, res, next) => {
 }
 
 const fetchMyTransactions = async (req, res, next) => {
-  const transactions = await Transaction.find({ user: req.user._id })
-
+  const transactions = await Transaction.find({ user : req.user._id })
   res.status(200).json({ status: true, data: transactions })
 }
 
@@ -130,7 +129,18 @@ const sendConnect = async (req, res) => {
     tip: Number(req.body.tip),
     totalAmount: Number(req.body.totalAmount)
   })
-
+  const transaction = new Transaction({
+    user: req.user._id,
+    role: 'Sender',
+    status: 'Pending',
+    traveler: traveler.username,
+    sender: sender.username,
+    date: Date.now(),
+    tripId: trip._id,
+    tripCode: trip.secretCode,
+    amountDue: req.body.amount
+  })
+  await transaction.save()
   sendConnectEmail(
     '',
     '',
