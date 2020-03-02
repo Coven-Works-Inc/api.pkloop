@@ -38,7 +38,7 @@ const sendMail = async (
   Also, your secret code for this transaction is <b>[${code}]</b>.
   <br />
   <br />
-  Please, remember to obtain the last four digits of this code from the recipient upon delivery.
+  Please, remember to obtain the first four digits of this code from the recipient upon delivery.
   <br/>
   <br />
   Enter the 8 digit code to confirm the package delivery and to redeem your payment on the pkloop platform.
