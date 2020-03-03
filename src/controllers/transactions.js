@@ -124,7 +124,7 @@ const sendConnect = async (req, res) => {
     status: 'Pending',
     traveler: traveler.username,
     sender: sender.username,
-    date: Date.now(),
+    date: trip.arrivalDate,
     tripId: trip._id,
     tripCode: trip.secretCode,
     amountDue: req.body.amount
@@ -181,7 +181,7 @@ const respondAction = async (req, res) => {
           role: 'Traveler',
           traveler: traveler.username,
           sender: sender.username,
-          date: Date.now(),
+          date: trip.arrivalDate,
           tripId: trip._id,
           tripCode: trip.secretCode,
           amountDue: req.body.amount
@@ -201,7 +201,7 @@ const respondAction = async (req, res) => {
         const code = new RedeemCode({
           traveler: traveler.username,
           travelerTrans: transaction._id,
-          senderTrans: senderTransaction._id,
+          senderTrans: req.body.transId,
           sender: sender.username,
           amount: req.body.amount,
           code: tripKey
@@ -243,7 +243,7 @@ const respondAction = async (req, res) => {
           sender: sender.username,
           role: 'Traveler',
           date: Date.now(),
-          tripId: trip._id,
+          tripId: trip.arrivalDate,
           tripCode: trip.secretCode,
           amountDue: req.body.amount
         })
@@ -285,10 +285,11 @@ const redeemCode = async (req, res) => {
   if (!code) {
     res.status(400).json({ error: 'redeem code has been used or invalid' })
   } else {
+    console.log(code)
     const senderTrans = await Transaction.findById(code.senderTrans)
     const travelerTrans = await Transaction.findById(code.travelerTrans)
-    senderTrans.status = 'Completed'
-    travelerTrans.status = 'Completed'
+    senderTrans.status = 'Delivered'
+    travelerTrans.status = 'Delivered'
     await senderTrans.save()
     await travelerTrans.save()
     traveler.balance += code.amount
