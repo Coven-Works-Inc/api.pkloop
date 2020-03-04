@@ -242,8 +242,8 @@ const respondAction = async (req, res) => {
           traveler: traveler.username,
           sender: sender.username,
           role: 'Traveler',
-          date: Date.now(),
-          tripId: trip.arrivalDate,
+          date: trip.arrivalDate,
+          tripId: trip._id,
           tripCode: trip.secretCode,
           amountDue: req.body.amount
         })
