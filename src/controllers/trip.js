@@ -15,19 +15,21 @@ exports.fetchTrips = async (req, res, next) => {
 }
 
 exports.postTrips = async (req, res, next) => {
-  const locationCity = req.body.locationCity
-  const locationCountry = req.body.locationCountry
-  const destinationCity = req.body.destinationCity
-  const destinationCountry = req.body.destinationCountry
-  const arrivalDate = req.body.arrivalDate
-  const stopOver1 = req.body.stopOver1
-  const stopOver2 = req.body.stopOver2
-  const stopOver3 = req.body.stopOver3
-  const stopOver4 = req.body.stopOver4
-  const parcelSize = req.body.parcelSize
-  const parcelWeight = req.body.parcelWeight
-  const transport = req.body.transport
-  const additionalInfo = req.body.additionalInfo
+  const {
+    locationCity,
+    locationCountry,
+    destinationCity,
+    destinationCountry,
+    arrivalDate,
+    stopOver1,
+    stopOver2,
+    stopOver3,
+    stopOver4,
+    parcelSize,
+    parcelWeight,
+    transport,
+    additionalInfo
+  } = req.body
 
   let stopOvers = []
 

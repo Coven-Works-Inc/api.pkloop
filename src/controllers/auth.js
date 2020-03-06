@@ -7,7 +7,6 @@ const bcrypt = require('bcryptjs')
 const { OAuth2Client } = require('google-auth-library')
 const passport = require('passport')
 const signUp = require('../utils/email/auth/signup')
-const sendLogin = require('../utils/email/auth/login')
 const sendReset = require('../utils/email/auth/reset')
 const client = new OAuth2Client(process.env.clientID)
 
@@ -200,8 +199,6 @@ exports.login = async (req, res, next) => {
     const token = user.generateAuthToken()
 
     user.token = token
-
-    await sendLogin(user.email, user.firstname)
 
     await user.save()
 

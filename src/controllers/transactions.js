@@ -20,24 +20,7 @@ const postTransaction = async (req, res, next) => {
   const user = await User.findById(req.user._id)
   const trip = await Trip.findById(req.body.tripId)
 
-  const transaction = new Transaction({
-    user: user.id,
-    status: req.body.status,
-    with: req.body.with,
-    role: req.body.role,
-    tripId: req.body.tripId
-  })
-
-  const travelerTransaction = new Transaction({
-    user: req.body.travelerId,
-    status: req.body.status,
-    with: req.body.senderName,
-    role: 'Traveller',
-    tripId: req.body.tripId
-  })
-
-  await transaction.save()
-  await travelerTransaction.save()
+  
 
   res.status(200).json({
     status: true,

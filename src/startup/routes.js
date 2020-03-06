@@ -1,3 +1,4 @@
+require('express-async-errors')
 const express = require('express')
 const cors = require('cors')
 const error = require('../middleware/error')
@@ -18,7 +19,6 @@ const proxy = require('http-proxy-middleware')
 module.exports = function (app) {
   app.use(cors())
   app.use(express.json())
-  app.use(error)
   app.use(formData.parse())
   app.use('/api/users', users)
   app.use('/api/auth', auth)
@@ -28,15 +28,5 @@ module.exports = function (app) {
   app.use('/api/chat', chat)
   app.use('/api/parcel', parcel)
   app.use('/api/support', support)
-  // app.use('/chat', 
-  //         proxy({
-  //           target: 'http://localhost:5000',
-  //           changeOrigin: true,
-  //         }))
-  // app.all('*', (req, res, next) => {
-  //   next(
-  //     new AppError(`Can't find the url ${req.originalUrl} on the server`, 404)
-  //   )
-  // })
-  // app.use(globalErrorHandler)
+  app.use(error)
 }
