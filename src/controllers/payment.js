@@ -42,7 +42,7 @@ exports.payUser = async (req, res) => {
   const user = await User.findById(req.user._id)
   stripe.transfers.create(
     {
-      amount: Number(req.body.amount),
+      amount: Number(req.body.amount) * 100,
       currency: 'usd',
       destination: req.body.destination,
     },

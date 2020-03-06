@@ -7,6 +7,7 @@ const travelerMail = require('../utils/email/trips/traveler')
 const tipEmail = require('../utils/email/trips/tip')
 const rejectMail = require('../utils/email/trips/reject')
 const sendConnectEmail = require('../utils/email/trips/connect')
+const senderConnectEmail = require('../utils/email/trips/senderConnect')
 const completeTransactionEmail = require('../utils/email/trips/redeem')
 const uuid = require('uuid/v4')
 const axios = require('axios')
@@ -47,8 +48,7 @@ const fetchTransactions = async (req, res, next) => {
 }
 
 const fetchMyTransactions = async (req, res, next) => {
-  const transactions = await Transaction.find({ user: req.user._id })
-
+  const transactions = await Transaction.find({ user : req.user._id })
   res.status(200).json({ status: true, data: transactions })
 }
 
@@ -98,11 +98,22 @@ const sendConnect = async (req, res) => {
   let traveler = await User.findById(req.body.travelerId)
 
   const message = req.body.message
-
   trip.requestStatus = 'requested'
   await trip.save()
 
+  const transaction = new Transaction({
+    user: req.user._id,
+    role: 'Sender',
+    status: 'Pending',
+    traveler: traveler.username,
+    sender: sender.username,
+    date: trip.arrivalDate,
+    tripId: trip._id,
+    tripCode: trip.secretCode,
+    amountDue: req.body.amount
+  })
   await traveler.notifications.push({
+    transactionId: transaction._id,
     sender: sender._id,
     username: sender.username,
     notify: `${sender.username} has a pending request for you, respond or reject by accepting`,
@@ -110,9 +121,10 @@ const sendConnect = async (req, res) => {
     tripId: req.body.tripId,
     amount: req.body.amount * 0.76,
     parcelWeight: Number(req.body.parcelWeight),
-    tip: Number(req.body.tip)
+    tip: Number(req.body.tip),
+    totalAmount: Number(req.body.totalAmount)
   })
-
+  await transaction.save()
   sendConnectEmail(
     '',
     '',
@@ -124,11 +136,18 @@ const sendConnect = async (req, res) => {
     message,
     req.body.tip
   )
+  senderConnectEmail(
+    sender.username,
+    sender.email,
+    traveler.username,
+    req.body.totalAmount
+  )
   await traveler.save()
 }
 
 const respondAction = async (req, res) => {
   const traveler = await User.findById(req.user._id)
+  const senderTransaction = await Transaction.find({ user: req.body.senderId, tripId: req.body.tripId})
   const sender = await User.findById(req.body.senderId)
   const trip = await Trip.findById(req.body.tripId)
   const action = req.body.action
@@ -142,25 +161,19 @@ const respondAction = async (req, res) => {
         const transaction = new Transaction({
           user: req.user._id,
           status: 'Accepted',
+          role: 'Traveler',
           traveler: traveler.username,
           sender: sender.username,
-          date: Date.now(),
+          date: trip.arrivalDate,
           tripId: trip._id,
           tripCode: trip.secretCode,
           amountDue: req.body.amount
         })
-        const senderTransaction = new Transaction({
-          user: req.body.senderId,
-          status: 'Accepted',
-          traveler: traveler.username,
-          sender: sender.username,
-          date: Date.now(),
-          tripId: trip._id,
-          tripCode: trip.secretCode,
-          amountDue: req.body.amount
-        })
+        await Transaction.updateMany(
+          { tripId: trip._id, transId: req.body.transId }, 
+          { $set: { status: 'Accepted' } }
+        )
         await transaction.save()
-        await senderTransaction.save()
 
         const tripKey = trip.secretCode
         const senderKey = tripKey.substring(0, 4)
@@ -171,7 +184,7 @@ const respondAction = async (req, res) => {
         const code = new RedeemCode({
           traveler: traveler.username,
           travelerTrans: transaction._id,
-          senderTrans: senderTransaction._id,
+          senderTrans: req.body.transId,
           sender: sender.username,
           amount: req.body.amount,
           code: tripKey
@@ -205,28 +218,24 @@ const respondAction = async (req, res) => {
         await traveler.save()
       } else if (action === 'decline') {
         trip.requestStatus = 'listed'
+        sender.escrowAmount += Number(req.body.totalAmount)
         const transaction = new Transaction({
           user: req.user._id,
           status: 'Declined',
           traveler: traveler.username,
           sender: sender.username,
-          date: Date.now(),
+          role: 'Traveler',
+          date: trip.arrivalDate,
           tripId: trip._id,
           tripCode: trip.secretCode,
           amountDue: req.body.amount
         })
-        const senderTransaction = new Transaction({
-          user: req.body.senderId,
-          status: 'Declined',
-          traveler: traveler.username,
-          sender: sender.username,
-          date: Date.now(),
-          tripId: trip._id,
-          tripCode: trip.secretCode,
-          amountDue: req.body.amount
-        })
+        await Transaction.updateMany(
+          { tripId: trip._id, transId: req.body.transId },
+          { $set: { status: 'Declined' } }
+        )
         await transaction.save()
-        await senderTransaction.save()
+        await sender.save()
         await trip.save()
         //If Traveler declines transaction, send a mail to sender with rejection notice
         // Do not send any mail to traveler, there is no need for that
@@ -238,7 +247,8 @@ const respondAction = async (req, res) => {
           '',
           '',
           '',
-          ''
+          '',
+          Number(req.body.totalAmount).toFixed(2)
         )
         await traveler.notifications.pull(req.body.notifId)
         await traveler.save()
@@ -258,10 +268,11 @@ const redeemCode = async (req, res) => {
   if (!code) {
     res.status(400).json({ error: 'redeem code has been used or invalid' })
   } else {
+    console.log(code)
     const senderTrans = await Transaction.findById(code.senderTrans)
     const travelerTrans = await Transaction.findById(code.travelerTrans)
-    senderTrans.status = 'Completed'
-    travelerTrans.status = 'Completed'
+    senderTrans.status = 'Delivered'
+    travelerTrans.status = 'Delivered'
     await senderTrans.save()
     await travelerTrans.save()
     traveler.balance += code.amount

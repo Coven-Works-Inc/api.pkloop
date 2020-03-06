@@ -31,6 +31,7 @@ const travelerSchema = new Schema({
   country: String
 })
 const notificationsSchema = new Schema({
+  transactionId: String,
   sender: String,
   message: String,
   notify: String,
@@ -38,7 +39,8 @@ const notificationsSchema = new Schema({
   amount: Number,
   username: String,
   parcelWeight: Number,
-  tip: Number
+  tip: Number,
+  totalAmount: Number,
 })
 const userSchema = new Schema({
   UserId: {
@@ -157,7 +159,11 @@ const userSchema = new Schema({
   chat: [chatSchema],
   traveler: [travelerSchema],
   sender: [senderSchema],
-  notifications: [notificationsSchema]
+  notifications: [notificationsSchema],
+  escrowAmount: {
+    type: Number,
+    default: 0
+  }
 })
 
 // We validate the user here and generate a token for the user
@@ -177,7 +183,8 @@ userSchema.methods.generateAuthToken = function () {
       photo: this.photo,
       username: this.username,
       notifications: this.notifications,
-      stripeUserId: this.stripeUserId
+      stripeUserId: this.stripeUserId,
+      escrowAmount: this.escrowAmount
     },
     config.get('jwtPrivateKey'),
     { expiresIn: 3600 }

@@ -24,11 +24,11 @@ const sendMail = async (
     to: traveleremail,
     subject: 'Trip Details',
     html: `
-         Hello ${travelerusername}, Thank you for accepting to help 
-         ${senderusername}  carry a parcel.
+         Hello ${travelerusername}, Thank you for accepting to help transport
+         ${senderusername}'s package
          <br />
          <br />
-         Here are some contact details you may be needing for your client.
+         Please, find below the contact information you may need to facilitate this transaction.
         <br />
         <br />
         <b>${senderusername}'s</b> Mail: ${senderemail}<br/>
@@ -38,13 +38,13 @@ const sendMail = async (
   Also, your secret code for this transaction is <b>[${code}]</b>.
   <br />
   <br />
-  Please, do ensure to obtain the first four digits of this code from the receiver of the parcel upon delivery.
+  Please, remember to obtain the first four digits of this code from the recipient upon delivery.
   <br/>
   <br />
-  Use this to redeem your payment on pkloop.
+  Enter the 8 digit code to confirm the package delivery and to redeem your payment on the pkloop platform.
          <br />
         <br />
-  Please ensure to keep with all the instructions on the pkloop platform to ensure safe delivery of your parcel.`
+        Please remember to follow PKLoop Trust and Safety guidelines and Terms insstructions on the mypkloop platform to ensure smooth and safe delivery of package.`
   }
 
   try {
