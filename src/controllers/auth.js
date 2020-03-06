@@ -13,7 +13,6 @@ const client = new OAuth2Client(process.env.clientID)
 require('dotenv').config()
 
 const { validateUser, validateLogin } = require('../validators/user')
-const { sendEmail } = require('../utils/email')
 
 /** @route    POST /api/user/register
  * @desc     registers a user to the database if all the required information is sent.
