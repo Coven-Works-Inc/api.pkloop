@@ -1,6 +1,7 @@
 const Trip = require('../models/Trip')
 const User = require('../models/User')
 const Reservation = require('../models/Reservation')
+
 const reservationMail = require('../utils/email/trips/reservation')
 
 exports.fetchTrips = async (req, res, next) => {
@@ -153,4 +154,15 @@ exports.completeTrip = async (req, res) => {
   trip.complete = true
   await trip.save()
   res.status(200).json({ status: true, trip })
+}
+
+/**
+ * @private
+ * Reserve a Trip/ a Search for a Trip
+ */
+
+exports.reserve = async (req, res) => {
+  await Reservation.create(req.body)
+
+  res.status(200).json({ message: 'Successfully booked a trip ahead' })
 }

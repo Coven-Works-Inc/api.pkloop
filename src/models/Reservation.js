@@ -21,6 +21,9 @@ const reserveSchema = new Schema(
     destinationCountry: {
       type: String,
       required: true
+    },
+    date: {
+      type: Date
     }
   },
   { timestamps: true }

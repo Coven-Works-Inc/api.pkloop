@@ -9,6 +9,7 @@ tripRouter.post('/', auth, tripController.postTrips)
 tripRouter.get('/trip/:id', tripController.getTrip)
 tripRouter.post('/trip/receiver', tripController.addReceiver)
 tripRouter.post('/earning', tripController.addEarning)
+tripRouter.post('/reserve', tripController.reserve)
 tripRouter.post('/complete', tripController.completeTrip)
 
 //The fetch shippers route is not an authenticated route
