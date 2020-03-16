@@ -8,6 +8,12 @@ const sendMail = async (email, firstname) => {
     subject: `Password Update`,
     html: `
             <p>Hello ${firstname}, <br/> Your password was updated successfully on our platform. If you did not request for a password update, Please contact Pkloop support immediately.</p>
+
+            <br />
+            <br />
+            <br />
+            
+            <img src="../../images/Logo.png" alt="pkloop logo" />
         `
   }
 

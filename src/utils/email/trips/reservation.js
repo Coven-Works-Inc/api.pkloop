@@ -18,6 +18,13 @@ const sendMail = async (
             <br /> 
             <br />
              Click <a href="https://mypkloop.com" style="text-decoration: none;">here</a> to log on to the platform.
+
+
+          <br />
+          <br />
+          <br />
+          
+          <img src="../../images/Logo.png" alt="pkloop logo" />
         `
   }
 

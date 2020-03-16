@@ -6,7 +6,13 @@ const sendMail = async (email, firstname) => {
     from: process.env.EMAIL_FROM,
     to: email,
     subject: `Token Resend Token`,
-    html: `<p>Hello ${name}, <br/> Someone requested a password reset for your account, if that was you, Click the link below to reset your password, else ignore this message. <br/> <a href="http://mypkloop.com/password/${token}">link</a> to set a new password.</p>`
+    html: `<p>Hello ${name}, <br/> Someone requested a password reset for your account, if that was you, Click the link below to reset your password, else ignore this message. <br/> <a href="http://mypkloop.com/password/${token}">link</a> to set a new password.</p>
+    
+    <br />
+    <br />
+    <br />
+    
+    <img src="../../images/Logo.png" alt="pkloop logo" />`
   }
 
   try {
