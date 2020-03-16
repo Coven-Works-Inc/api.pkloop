@@ -28,6 +28,6 @@ transRouter.post('/redeemcode', auth, transController.redeemCode)
 transRouter.post('/addtip', auth, transController.addTip)
 transRouter.post('/payinsurance', auth, transController.payInsurance)
 transRouter.get('/notif', auth, transController.fetchNotif)
-transRouter.get('/cancel', auth, transController.cancelAction)
+transRouter.post('/cancel', auth, transController.cancelAction)
 
 module.exports = transRouter
