@@ -21,8 +21,6 @@ const postTransaction = async (req, res, next) => {
   const user = await User.findById(req.user._id)
   const trip = await Trip.findById(req.body.tripId)
 
-  
-
   res.status(200).json({
     status: true,
     sender: transaction,
@@ -48,7 +46,7 @@ const fetchTransactions = async (req, res, next) => {
 }
 
 const fetchMyTransactions = async (req, res, next) => {
-  const transactions = await Transaction.find({ user : req.user._id })
+  const transactions = await Transaction.find({ user: req.user._id })
   res.status(200).json({ status: true, data: transactions })
 }
 
@@ -136,7 +134,7 @@ const sendConnect = async (req, res) => {
     message,
     req.body.tip
   )
-  senderConnectEmail(
+  await senderConnectEmail(
     sender.username,
     sender.email,
     traveler.username,
@@ -147,7 +145,10 @@ const sendConnect = async (req, res) => {
 
 const respondAction = async (req, res) => {
   const traveler = await User.findById(req.user._id)
-  const senderTransaction = await Transaction.find({ user: req.body.senderId, tripId: req.body.tripId})
+  const senderTransaction = await Transaction.find({
+    user: req.body.senderId,
+    tripId: req.body.tripId
+  })
   const sender = await User.findById(req.body.senderId)
   const trip = await Trip.findById(req.body.tripId)
   const action = req.body.action
@@ -170,7 +171,7 @@ const respondAction = async (req, res) => {
           amountDue: req.body.amount
         })
         await Transaction.updateMany(
-          { tripId: trip._id, transId: req.body.transId }, 
+          { tripId: trip._id, transId: req.body.transId },
           { $set: { status: 'Accepted' } }
         )
         await transaction.save()
@@ -278,12 +279,10 @@ const redeemCode = async (req, res) => {
     traveler.balance += code.amount
     await RedeemCode.deleteOne({ code: req.body.code })
     await traveler.save()
-    res
-      .status(200)
-      .json({
-        status: true,
-        message: `Your balance has been credited with $${code.amount}`
-      })
+    res.status(200).json({
+      status: true,
+      message: `Your balance has been credited with $${code.amount}`
+    })
     await completeTransactionEmail(
       code.sender,
       code.traveler,
@@ -346,6 +345,31 @@ const fetchNotif = async (req, res) => {
   const user = await User.findById(req.user._id)
   res.status(200).json({ notif: user.notifications })
 }
+
+/**
+ * @private
+ * Cancels a transaction
+ *
+ */
+
+const cancelAction = async (req, res) => {
+  try {
+    const transaction = await Transaction.find({
+      $and: [
+        { user: req.user._id },
+        { tripId: req.body.tripId },
+        { status: 'pending' },
+        { _id: req.body.transactionId }
+      ]
+    })
+
+    await transaction.delete()
+
+    res.status(200).json({ message: 'successfully deleted transaction' })
+  } catch (error) {
+    res.status(400).json({ message: 'Error deleting transaction' })
+  }
+}
 module.exports = {
   postTransaction,
   fetchTransactions,
@@ -358,5 +382,6 @@ module.exports = {
   redeemCode,
   fetchNotif,
   addTip,
-  payInsurance
+  payInsurance,
+  cancelAction
 }

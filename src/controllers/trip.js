@@ -1,5 +1,7 @@
 const Trip = require('../models/Trip')
 const User = require('../models/User')
+const Reservation = require('../models/Reservation')
+const reservationMail = require('../utils/email/trips/reservation')
 
 exports.fetchTrips = async (req, res, next) => {
   const trips = await Trip.find()
@@ -33,10 +35,16 @@ exports.postTrips = async (req, res, next) => {
 
   let stopOvers = []
 
-  stopOvers.push(stopOver1)
-  stopOvers.push(stopOver2)
-  stopOvers.push(stopOver3)
-  stopOvers.push(stopOver4)
+  stopOvers.push(stopOver1, stopOver2, stopOver3, stopOver4)
+
+  const reserved = await Reservation.find({
+    $and: [
+      { locationCity: locationCity },
+      { locationCountry: locationCountry },
+      { destinationCity: destinationCity },
+      { destinationCountry: destinationCountry }
+    ]
+  })
 
   const user = await User.findById(req.user._id)
   if (!user) {
@@ -63,6 +71,14 @@ exports.postTrips = async (req, res, next) => {
   })
 
   await trip.save()
+
+  await reservationMail(
+    reserved.email,
+    locationCity,
+    locationCountry,
+    destinationCity,
+    destinationCountry
+  )
 
   res.status(200).json({
     status: true,
