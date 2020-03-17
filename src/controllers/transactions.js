@@ -354,19 +354,31 @@ const fetchNotif = async (req, res) => {
 
 const cancelAction = async (req, res) => {
   try {
-    const transaction = await Transaction.find({
-      $and: [
-        { user: req.user._id },
-        { tripId: req.body.tripId },
-        { status: 'pending' },
-        { _id: req.body.transactionId }
-      ]
-    })
+    // const transaction = await Transaction.find({
+    //   $and: [
+    //     { user: req.user._id },
+    //     { tripId: req.body.tripId },
+    //     { status: 'Pending' },
+    //     { _id: req.body.transactionId }
+    //   ]
+    // })
 
-    await transaction.delete()
+    Transaction.remove({
+          user: req.user._id ,
+           tripId: req.body.tripId ,
+           status: 'Pending' ,
+           _id: req.body.transactionId
+    }).exec()
+    // const transaction = await Transaction.find({
+    //      user: req.user._id ,
+    //      tripId: req.body.tripId ,
+    //      status: 'Pending' ,
+    //      _id: req.body.transactionId
+    // })
 
     res.status(200).json({ message: 'successfully deleted transaction' })
   } catch (error) {
+    console.log(error)
     res.status(400).json({ message: 'Error deleting transaction' })
   }
 }
