@@ -73,13 +73,17 @@ exports.postTrips = async (req, res, next) => {
 
   await trip.save()
 
-  await reservationMail(
-    reserved.email,
-    locationCity,
-    locationCountry,
-    destinationCity,
-    destinationCountry
-  )
+  if(reserved){
+    await reservationMail(
+      reserved.email,
+      locationCity,
+      locationCountry,
+      destinationCity,
+      destinationCountry
+    )
+    console.log(reserved)
+  }
+
 
   res.status(200).json({
     status: true,
